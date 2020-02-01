@@ -1,0 +1,6 @@
+libft
+obj
+*.o
+*.DS_Store
+.vscode
+test*
