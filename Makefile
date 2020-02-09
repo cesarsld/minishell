@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2020/02/01 13:47:07 by cjaimes          ###   ########.fr        #
+#    Updated: 2020/02/06 11:14:56 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ INCLUDE		=	includes
 SRC			=	main.c \
 				pwd.c \
 				parsing.c \
-				cd.c
+				cd.c \
+				env.c
 				
 
 SRCS		=	${addprefix ${SRC_DIR}, ${SRC}}
