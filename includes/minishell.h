@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/06 12:08:22 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/18 17:42:53 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,28 @@
 # include <string.h>
 #include <stdio.h>
 
+typedef enum		e_token_type
+{
+	e_command = 0, e_option = 1, e_input = 2, e_prog = 3
+}					t_oken_type;
+
 typedef struct	s_env_var
 {
 	char		*name;
 	char		*value;
 	int			is_env;
 }				t_var;
+
+typedef struct	s_token
+{
+	char*		value;
+	int			type;
+	int			literal;
+}				t_oken;
+
+
+char	*get_next_word(char *input, char *q_type);
+t_list *lex_parse_line(char *line);
 
 int				is_white_space(char c);
 void			skip_whitespace(char **line);
