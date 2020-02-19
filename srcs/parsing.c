@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:29:41 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/18 18:26:33 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/19 13:09:11 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,12 @@ char	*get_next_word(char **input, char *q_type)
 	cur = 0;
 	count = 0;
 	temp = 0;
+	new_input = 0;
 	first = *input;
+	// 'e'\"c\"\"\"'ho'\" boo
 	while (**input)
 	{
-		if ((**input == '\'' || **input == '"') &&!cur)
+		if ((**input == '\'' || **input == '"') && !cur)
 			cur = **input;
 		else if ((**input == '\'' || **input == '"') && **input  == cur)
 			cur = 0;
@@ -81,15 +83,20 @@ char	*get_next_word(char **input, char *q_type)
 		count++;
 	}
 	if (!(word = ft_strndup(first, count)))
-				return (0);
+		return (0);
 	if (cur)
 	{
-		*q_type = cur;
+		*q_type = 0;
 		ft_putstr("> ");
 		if (!get_next_line(0, &new_input))
 	 		return (0);
 		if (!(temp = ft_strjoin_input(word, new_input)))
 			return (0);
+		free(new_input);
+		free(word);
+		free(first);
+		*input = temp;
+		return (get_next_word(input, q_type));
 	}
 	return (word);
 }
@@ -140,22 +147,22 @@ void filter_word(char *word)
 	}
 }
 
-t_list *lex_parse_line(char *line)
+t_list *lex_parse_line(char **line)
 {
 	char *word;
 	char open;
-	char *user_input;
+	//char *user_input;
 	
 	open = 0;
 	if (!(word = get_next_word(line, &open)))
 		return (0);
-	if (open)
-	{
-		ft_putstr("> ");
-		if (!get_next_line(0, &user_input))
-	 		return (0);
+	// if (open)
+	// {
+	// 	ft_putstr("> ");
+	// 	if (!get_next_line(0, &user_input))
+	//  		return (0);
 		
-	}
+	// }
 	filter_word(word);
 	printf("%s\n", word);
 	return 0;

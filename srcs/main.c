@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/18 17:40:19 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/19 13:11:45 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,8 @@ int main(int ac, char **av, char **envac)
 	user_input = 0;
 	//printf("word: |%s|\n", get_next_word("test'so'mm\"hhhhhhiiii\"h\\    this is the first line"));
 	//lex_parse_line("test'so'mm\"hhhhhhiiii\"h\\    this is the first line");
-	lex_parse_line("'e'\"c\"\"\"'ho'\" boo\"   koki");
+	char *test = ft_strdup("'e'\"c\"\"\"'ho'\" boo\" \"   koki");
+	lex_parse_line(&test);
 	copy = 0;
 	// while (1)
 	// {

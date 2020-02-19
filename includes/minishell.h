@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/18 17:42:53 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/19 11:40:07 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ typedef struct	s_token
 }				t_oken;
 
 
-char	*get_next_word(char *input, char *q_type);
-t_list *lex_parse_line(char *line);
+char	*get_next_word(char **input, char *q_type);
+t_list *lex_parse_line(char **line);
 
 int				is_white_space(char c);
 void			skip_whitespace(char **line);
