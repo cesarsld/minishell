@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:29:41 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/19 13:09:11 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/20 18:50:57 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,19 +65,25 @@ char	*get_next_word(char **input, char *q_type)
 	char *new_input;
 	char *temp;
 	char cur;
+	int beg;
 
+	beg = 0;
 	cur = 0;
 	count = 0;
 	temp = 0;
 	new_input = 0;
 	first = *input;
-	// 'e'\"c\"\"\"'ho'\" boo
 	while (**input)
 	{
 		if ((**input == '\'' || **input == '"') && !cur)
+		{
+			beg = count;
 			cur = **input;
+		}
 		else if ((**input == '\'' || **input == '"') && **input  == cur)
+		{
 			cur = 0;
+		}
 		if (is_white_space(*(*input)++) && !cur)
 			break ;
 		count++;
@@ -99,6 +105,116 @@ char	*get_next_word(char **input, char *q_type)
 		return (get_next_word(input, q_type));
 	}
 	return (word);
+}
+
+t_char	*create_sub_word(char *word)
+{
+	t_char *sub;
+
+	if (!(sub = malloc(sizeof(t_char))))
+		return (0);
+	sub->value = word;
+	return (sub);
+}
+
+void update_state(int *current, int *previous, int new)
+{
+	*previous= *current;
+	*current = new;
+}
+
+t_list	*lex_it(char **input)
+{
+	int p_state;
+	int state;
+	int word_start;
+	int counter;
+
+	char *word;
+	t_list *temp;
+	t_list *list;
+
+	list = 0;
+	word = 0;
+	word_start = -1;
+	counter = 0;
+	p_state = 0;
+	state = e_general;
+	while (**input)
+	{
+		if ((**input == '\'' || **input == '"'))
+		{
+			if (state == e_general)
+			{
+				word_start = word_start == -1 ? counter: word_start;
+				update_state(&state, &p_state, **input == '"' ? e_d_quote : e_s_quote);
+			}
+			else if ((state == e_d_quote && **input == '"') || (state == e_s_quote && **input == '\''))
+			{
+				update_state(&state, &p_state, e_general);
+			}
+		}
+		else if (**input == '\\' && (state == e_d_quote || state == e_general || state == e_backslash))
+		{
+			if (state == e_backslash)
+				update_state(&state, &p_state, p_state);
+			else
+				update_state(&state, &p_state, e_backslash);
+		}
+		else if (is_white_space(**input) && state == e_general && word_start != -1)
+		{	// word_start != -1 to check that we have started a word handles spree of white spaces
+			if (!(word = ft_strndup(*input - counter + word_start, counter - word_start)))
+				return (0);
+			if (!(temp = ft_lstnew(word)))
+				return (0);
+			ft_lstadd_back(&list, temp);
+			word_start = -1;
+		}
+		else if (**input == '|')
+		{
+			if (state == e_general)
+			{
+				update_state(&state, &p_state, e_in_or);
+			}
+			else if (state == e_in_or)
+			{
+				if (!(word = ft_strdup("||")))
+					return (0);
+				if (!(temp = ft_lstnew(word)))
+					return (0);
+				ft_lstadd_back(&list, temp);
+				update_state(&state, &p_state, e_general);
+			}
+		}
+		else if (state == e_in_or && **input != '|')
+		{
+			if (!(word = ft_strdup("|")))
+					return (0);
+				if (!(temp = ft_lstnew(word)))
+					return (0);
+				ft_lstadd_back(&list, temp);
+				update_state(&state, &p_state, e_general);
+				continue ;
+		}
+		else if (state == e_general && word_start == -1 && !is_white_space(**input))
+		{
+			word_start = counter;
+		}
+		if (state == e_backslash && **input != '\\')
+			update_state(&state, &p_state, p_state);
+
+		counter++;
+		(*input)++;
+	}
+	if (state == e_general && word_start != -1)
+	{
+		if (!(word = ft_strndup(*input - counter + word_start, counter - word_start)))
+			return (0);
+		if (!(temp = ft_lstnew(word)))
+			return (0);
+		ft_lstadd_back(&list, temp);
+	}
+	return (list);
 }
 
 void shift_from_index(char *line, int index)
