@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:29:41 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/21 12:06:00 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/21 13:45:35 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ t_list	*lex_it(char **input)
 	state = e_general;
 	while (**input)
 	{
-		//printf("checking char `%c`\n", **input);
+		printf("checking char `%c`\n", **input);
 		if ((**input == '\'' || **input == '"') && (state == e_general || state == e_d_quote || state == e_s_quote))
 		{
 			if (state == e_general)
@@ -154,12 +154,18 @@ t_list	*lex_it(char **input)
 			{
 				update_state(&state, &p_state, e_general);
 			}
-			//printf("state is %d\n", state);
+			printf("state is %d\n", state);
 		}
 		else if (**input == '\\' && (state == e_d_quote || state == e_general || state == e_backslash))
 		{
 			if (state == e_backslash)
 				update_state(&state, &p_state, p_state);
+			else if (state == e_general)
+			{
+				if (word_start == -1)
+					word_start = counter;
+				update_state(&state, &p_state, e_backslash);
+			}
 			else
 				update_state(&state, &p_state, e_backslash);
 		}
@@ -173,7 +179,7 @@ t_list	*lex_it(char **input)
 			ft_lstadd_back(&list, temp);
 			word_start = -1;
 		}
-		else if (**input == '|')
+		else if (**input == '|' && state != e_backslash)
 		{
 			if (state == e_general)
 			{
@@ -215,13 +221,13 @@ t_list	*lex_it(char **input)
 		{
 			word_start = counter;
 		}
-		if (state == e_backslash && **input != '\\')
+		else if (state == e_backslash && **input != '\\')
 			update_state(&state, &p_state, p_state);
-
+		printf("state is `%d`\n", state);
 		counter++;
 		(*input)++;
 	}
-	if (state == e_general && word_start != -1)
+	if ( /*state == e_general &&*/ word_start != -1)
 	{
 		if (!(word = ft_strndup(*input - counter + word_start, counter - word_start)))
 			return (0);
@@ -229,6 +235,7 @@ t_list	*lex_it(char **input)
 			return (0);
 		ft_lstadd_back(&list, temp);
 	}
+
 	return (list);
 }
 
