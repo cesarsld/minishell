@@ -1,0 +1,21 @@
+LEXER\
+Recoit input
+Return input 'lexé' i.e decoupe en tokens
+
+Decouper input en tokens
+
+TOKEN = ??
+    element de syntaxe bash (chaine de caracteres)
+    separes par du whitespace
+    + on doit garder info sur la nature litteral/non des caracteres
+
+Solution: utilisation d'une Finite State Machine (automate)
+
+La FSM lit l'input caractere par caractere. Suivant le caractere lu et l'etat dan lequel elle est,
+elle effectue une action et change d'etat
+Exemple : depuis l'etat e_s_quote (qui indique qu'on se situe dans un simple quote), si le caractere lu est `'`,
+On revient a l'etat neutre e_general, et on push_back le token qui etait en cours de creation dans la liste des tokens
+Ainsi le lexer fonctionne proprement et peut etre etendu relativement simplement
+Autre exemple : cela detecte les erreurs de syntaxe. Si l'input est fini lors que la machine est dans l'etat e_s_quote
+c'est qu'un mot entre simple quotes est non termine. (Pour l'instant pas d'input multi-lignes -> c'est une erreur de syntaxe)
+
