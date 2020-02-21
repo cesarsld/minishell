@@ -234,7 +234,7 @@ int main(int ac, char **av, char **envac)
 	// char *test = ft_strdup("'e'\"c\"\"\"'ho'\" boo\" \"   koki");
 
 
-	char *test = ft_strdup("e'c'h\"l\"o boo what\\\'s up ||suis je arrive ici |le pipe |c\\\'est cool  |\"Le cheval c'est trop genial\"'senpai'|end  ");
+	char *test = ft_strdup("e'c'h\"l\"o boo what\\\'s up ||suis je arrive ici |le pipe |c\\\'est cool  |\"Le cheval c'est trop genial\"'senpai'|  \\t    end  ");
 
 
 
