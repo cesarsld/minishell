@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/19 11:40:07 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/20 17:50:56 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,19 @@
 # include <errno.h>
 # include <string.h>
 #include <stdio.h>
+#include <signal.h>
 
 typedef enum		e_token_type
 {
 	e_command = 0, e_option = 1, e_input = 2, e_prog = 3
 }					t_oken_type;
+
+typedef enum		e_lex_states
+{
+	e_general = 0, e_s_quote = 1, e_d_quote = 2, e_backslash = 3, e_in_and = 4,
+	e_in_or = 5, e_in_semi_colon = 6, e_in_redir_supp = 7, e_in_redir_inf = 8
+}					t_lex_states;
+
 
 typedef struct	s_env_var
 {
@@ -29,16 +37,15 @@ typedef struct	s_env_var
 	int			is_env;
 }				t_var;
 
-typedef struct	s_token
+typedef struct	s_char
 {
 	char*		value;
-	int			type;
-	int			literal;
-}				t_oken;
+}				t_char;
 
 
 char	*get_next_word(char **input, char *q_type);
 t_list *lex_parse_line(char **line);
+t_list	*lex_it(char **input);
 
 int				is_white_space(char c);
 void			skip_whitespace(char **line);

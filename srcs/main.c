@@ -6,12 +6,13 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/19 13:11:45 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/20 18:53:30 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdio.h>
+#include <sys/errno.h>
 
 int starts_with(const char *input, const char *match)
 {
@@ -179,6 +180,44 @@ t_list *get_env_vars(char **env)
 	return (first);
 }
 
+pid_t get_set_pid(int opt, pid_t value)
+{
+	static pid_t id = 0;
+
+	if (opt == 0)
+		return id;
+	else if (opt == 1)
+	{
+		id = value;
+		return (0);
+	}
+	else if (opt == 2)
+	{
+		id = 0;
+		return (0);
+	}
+	return (0);
+}
+
+void kill_current_process(int signal)
+{
+	pid_t pid;
+
+	printf("Killing process... signal %d\n", signal);
+	if ((pid = get_set_pid(0, 0)) != 0)
+		kill(pid, signal);
+		
+	// if (id == 0)
+	// {
+	// 	kill(id, signal);
+	// }
+}
+
+void print_words(void *content)
+{
+	printf("Word: `%s`\n", (char *)content);
+}
+
 int main(int ac, char **av, char **envac)
 {
 	char *user_input;
@@ -192,11 +231,46 @@ int main(int ac, char **av, char **envac)
 		return (0);
 
 	user_input = 0;
+	// char *test = ft_strdup("'e'\"c\"\"\"'ho'\" boo\" \"   koki");
+
+
+	char *test = ft_strdup("e'c'h\"l\"o boo what\\\'s up ||suis je arrive ici |le pipe |c\\\'est cool    ");
+
+
+	
 	//printf("word: |%s|\n", get_next_word("test'so'mm\"hhhhhhiiii\"h\\    this is the first line"));
-	//lex_parse_line("test'so'mm\"hhhhhhiiii\"h\\    this is the first line");
-	char *test = ft_strdup("'e'\"c\"\"\"'ho'\" boo\" \"   koki");
-	lex_parse_line(&test);
+	t_list *words = lex_it(&test);
+	ft_lstiter(words, &print_words);
+	//char *test = ft_strdup("'e'\"c\"\"\"'ho'\" boo\" \"   koki");
+	//lex_parse_line(&test);
 	copy = 0;
+
+	
+	// pid_t new_id = fork();
+	// if (new_id == 0)
+	// {
+	// 	printf("id is %d\n", new_id);
+	// 	char *name = strdup("infinite");
+	// 	char **arg = malloc(sizeof(char *) * 2);
+	// 	arg[1] = 0;
+	// 	arg[0] = name;
+
+	// 	execve("hi:hi", arg, envac);
+	// 	perror("");
+		
+	// }
+	// else
+	// {
+	// 	int a = 0;
+	// 	get_set_pid(1, new_id);
+	// 	signal(SIGINT, &kill_current_process);
+	// 	signal(SIGQUIT, &kill_current_process);
+	// 	//signal(SIG, &kill_current_process);
+	// 	waitpid(new_id, &a , 0);
+
+	// }
+
+	
 	// while (1)
 	// {
 	// 	ft_putstr("> ");
