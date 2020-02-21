@@ -34,14 +34,14 @@ typedef enum			e_lex_state
 /*
 ** These functions switch the lexer states depending on input
 ** typedef void			(*t_lex_transition)(char, t_lexer *);
+** typedef int				(*t_lex_action)(char, t_list **);
 */
-typedef int				(*t_lex_action)(char, t_list **);
 
 typedef struct			s_lexer
 {
 	t_lex_state			prev_state;
 	t_lex_state			state;
-	t_lex_action		actions[LEX_STATES];
+	int					(*actions[LEX_STATES])(char, t_list **);
 	void				(*transitions[LEX_STATES])(char, struct s_lexer *);
 }						t_lexer;
 
@@ -95,5 +95,16 @@ void					from_in_semi_colon(char c, t_lexer *lex);
 void					from_in_redir_supp(char c, t_lexer *lex);
 void					from_in_redir_inf(char c, t_lexer *lex);
 void					from_error(char c, t_lexer *lex);
+
+int						act_general(char c, t_list **tokens);
+int						act_s_quote(char c, t_list **tokens);
+int						act_d_quote(char c, t_list **tokens);
+int						act_backslash(char c, t_list **tokens);
+int						act_in_and(char c, t_list **tokens);
+int						act_in_or(char c, t_list **tokens);
+int						act_in_semi_colon(char c, t_list **tokens);
+int						act_in_redir_supp(char c, t_list **tokens);
+int						act_in_redir_inf(char c, t_list **tokens);
+int						act_error(char c, t_list **tokens);
 
 #endif
