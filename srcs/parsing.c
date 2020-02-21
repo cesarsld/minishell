@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:29:41 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/20 18:50:57 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/21 12:06:00 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,8 @@ t_list	*lex_it(char **input)
 	state = e_general;
 	while (**input)
 	{
-		if ((**input == '\'' || **input == '"'))
+		//printf("checking char `%c`\n", **input);
+		if ((**input == '\'' || **input == '"') && (state == e_general || state == e_d_quote || state == e_s_quote))
 		{
 			if (state == e_general)
 			{
@@ -153,6 +154,7 @@ t_list	*lex_it(char **input)
 			{
 				update_state(&state, &p_state, e_general);
 			}
+			//printf("state is %d\n", state);
 		}
 		else if (**input == '\\' && (state == e_d_quote || state == e_general || state == e_backslash))
 		{
@@ -165,6 +167,7 @@ t_list	*lex_it(char **input)
 		{	// word_start != -1 to check that we have started a word handles spree of white spaces
 			if (!(word = ft_strndup(*input - counter + word_start, counter - word_start)))
 				return (0);
+			//printf("word is %s\n", word);
 			if (!(temp = ft_lstnew(word)))
 				return (0);
 			ft_lstadd_back(&list, temp);
@@ -175,6 +178,15 @@ t_list	*lex_it(char **input)
 			if (state == e_general)
 			{
 				update_state(&state, &p_state, e_in_or);
+				if (word_start != -1)
+				{
+					if (!(word = ft_strndup(*input - counter + word_start, counter - word_start)))
+						return (0);
+					if (!(temp = ft_lstnew(word)))
+						return (0);
+					ft_lstadd_back(&list, temp);
+					word_start = -1;
+				}
 			}
 			else if (state == e_in_or)
 			{
@@ -184,17 +196,20 @@ t_list	*lex_it(char **input)
 					return (0);
 				ft_lstadd_back(&list, temp);
 				update_state(&state, &p_state, e_general);
+				word_start = -1;
 			}
 		}
 		else if (state == e_in_or && **input != '|')
 		{
+			//printf("pipe\n");
 			if (!(word = ft_strdup("|")))
 					return (0);
-				if (!(temp = ft_lstnew(word)))
-					return (0);
-				ft_lstadd_back(&list, temp);
-				update_state(&state, &p_state, e_general);
-				continue ;
+			if (!(temp = ft_lstnew(word)))
+				return (0);
+			ft_lstadd_back(&list, temp);
+			update_state(&state, &p_state, e_general);
+			word_start = -1;
+			continue ;
 		}
 		else if (state == e_general && word_start == -1 && !is_white_space(**input))
 		{

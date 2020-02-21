@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/20 18:53:30 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/21 11:56:40 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,10 +234,10 @@ int main(int ac, char **av, char **envac)
 	// char *test = ft_strdup("'e'\"c\"\"\"'ho'\" boo\" \"   koki");
 
 
-	char *test = ft_strdup("e'c'h\"l\"o boo what\\\'s up ||suis je arrive ici |le pipe |c\\\'est cool    ");
+	char *test = ft_strdup("e'c'h\"l\"o boo what\\\'s up ||suis je arrive ici |le pipe |c\\\'est cool  |\"Le cheval c'est trop genial\"'senpai'|end  ");
 
 
-	
+
 	//printf("word: |%s|\n", get_next_word("test'so'mm\"hhhhhhiiii\"h\\    this is the first line"));
 	t_list *words = lex_it(&test);
 	ft_lstiter(words, &print_words);
@@ -245,7 +245,7 @@ int main(int ac, char **av, char **envac)
 	//lex_parse_line(&test);
 	copy = 0;
 
-	
+
 	// pid_t new_id = fork();
 	// if (new_id == 0)
 	// {
@@ -257,7 +257,7 @@ int main(int ac, char **av, char **envac)
 
 	// 	execve("hi:hi", arg, envac);
 	// 	perror("");
-		
+
 	// }
 	// else
 	// {
@@ -270,7 +270,7 @@ int main(int ac, char **av, char **envac)
 
 	// }
 
-	
+
 	// while (1)
 	// {
 	// 	ft_putstr("> ");
