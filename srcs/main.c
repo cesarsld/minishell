@@ -71,7 +71,7 @@ char	*get_first_word(char *input)
 				return (0);
 	return (word);
 }
-
+//TODO delete this? leaks + unused elsewhere
 void wrong_command(char **input)
 {
 	get_first_word(*input);
@@ -208,4 +208,5 @@ int main(int ac, char **av, char **envac)
 	// 	free (copy);
 
 	// }
+	return (0);
 }
