@@ -1,20 +1,21 @@
 #include "minishell.h"
 
 
-int     lex_it_(t_list **tokens, char *input, t_lexer *lex)
+int     lex_it_(t_lexer *lex)
 {
     int res;
 
-    if (!(*input))
+    if (!(*lex->input))
     {
 
         //CHECK if state can be an end state
     }
 
-    if (res = lex->actions[lex->state](*input, tokens))
+    if (res = lex->actions[lex->state](lex->input, &lex->tokens))
     {
         
     }
-    lex->transitions[lex->state](*input, lex);
-    return (lex_it_(tokens, input + 1, lex));
+    lex->transitions[lex->state](*lex->input, lex);
+    ++(lex->input);
+    return (lex_it_(lex));
 }

@@ -23,14 +23,23 @@ typedef enum			e_token_type
 	e_command = 0, e_option = 1, e_input = 2, e_prog = 3
 }						t_oken_type;
 
-# define LEX_STATES 10
+# define LEX_STATES 11
 
 typedef enum			e_lex_state
 {
-	e_general = 0, e_s_quote = 1, e_d_quote = 2, e_backslash = 3, e_in_and = 4,
-	e_in_or = 5, e_in_semi_colon = 6, e_in_redir_supp = 7, e_in_redir_inf = 8,
-	e_error = 9
+	e_general,
+	e_word,
+	e_s_quote,
+	e_d_quote,
+	e_backslash,
+	e_and,
+	e_or,
+	e_semi_colon,
+	e_supp,
+	e_inf,
+	e_error
 }						t_lex_state;
+
 /*
 ** These functions switch the lexer states depending on input
 ** typedef void			(*t_lex_transition)(char, t_lexer *);
@@ -43,6 +52,10 @@ typedef struct			s_lexer
 	t_lex_state			state;
 	int					(*actions[LEX_STATES])(char, t_list **);
 	void				(*transitions[LEX_STATES])(char, struct s_lexer *);
+	t_list				*tokens;
+	char				*input;
+	int					token_start;
+	int					;
 }						t_lexer;
 
 typedef struct			s_env_var
@@ -52,15 +65,10 @@ typedef struct			s_env_var
 	int					is_env;
 }						t_var;
 
-typedef struct			s_char
-{
-	char*				value;
-}						t_char;
-
 char					*get_next_word(char **input, char *q_type);
 t_list					*lex_parse_line(char **line);
 t_list					*lex_it(char **input);
-int						lex_it_(t_list **alst, char *input, t_lexer *lex);
+int						lex_it_(t_lexer *lex);
 
 int						is_white_space(char c);
 void					skip_whitespace(char **line);
@@ -85,26 +93,29 @@ t_var					*get_var(t_list *env_list, char *key);
 /*
 ** Transitions and actions
 */
+
 void					from_general(char c, t_lexer *lex);
+void					from_word(char c, t_lexer *lex);
 void					from_s_quote(char c, t_lexer *lex);
 void					from_d_quote(char c, t_lexer *lex);
 void					from_backslash(char c, t_lexer *lex);
-void					from_in_and(char c, t_lexer *lex);
-void					from_in_or(char c, t_lexer *lex);
-void					from_in_semi_colon(char c, t_lexer *lex);
-void					from_in_redir_supp(char c, t_lexer *lex);
-void					from_in_redir_inf(char c, t_lexer *lex);
+void					from_and(char c, t_lexer *lex);
+void					from_or(char c, t_lexer *lex);
+void					from_semi_colon(char c, t_lexer *lex);
+void					from_supp(char c, t_lexer *lex);
+void					from_inf(char c, t_lexer *lex);
 void					from_error(char c, t_lexer *lex);
 
 int						act_general(char c, t_list **tokens);
+int						act_word(char c, t_list **tokens);
 int						act_s_quote(char c, t_list **tokens);
 int						act_d_quote(char c, t_list **tokens);
 int						act_backslash(char c, t_list **tokens);
-int						act_in_and(char c, t_list **tokens);
-int						act_in_or(char c, t_list **tokens);
-int						act_in_semi_colon(char c, t_list **tokens);
-int						act_in_redir_supp(char c, t_list **tokens);
-int						act_in_redir_inf(char c, t_list **tokens);
+int						act_and(char c, t_list **tokens);
+int						act_or(char c, t_list **tokens);
+int						act_semi_colon(char c, t_list **tokens);
+int						act_supp(char c, t_list **tokens);
+int						act_inf(char c, t_list **tokens);
 int						act_error(char c, t_list **tokens);
 
 #endif
