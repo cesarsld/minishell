@@ -7,15 +7,17 @@ int     lex_it_(t_lexer *lex)
 
     if (!(*lex->input))
     {
+        if (push_token(lex))
+        {
 
-        //CHECK if state can be an end state
+        }
     }
 
-    if (res = lex->actions[lex->state](lex->input, &lex->tokens))
+    if (res = lex->actions[lex->state](lex->input[lex->i], &lex->tokens))
     {
         
     }
-    lex->transitions[lex->state](*lex->input, lex);
+    lex->transitions[lex->state](lex->input, lex);
     ++(lex->input);
     return (lex_it_(lex));
 }

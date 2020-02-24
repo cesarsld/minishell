@@ -54,8 +54,8 @@ typedef struct			s_lexer
 	void				(*transitions[LEX_STATES])(char, struct s_lexer *);
 	t_list				*tokens;
 	char				*input;
-	int					token_start;
-	int					;
+	size_t				token_start;
+	size_t				i;
 }						t_lexer;
 
 typedef struct			s_env_var
