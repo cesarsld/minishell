@@ -50,12 +50,12 @@ typedef struct			s_lexer
 {
 	t_lex_state			prev_state;
 	t_lex_state			state;
-	int					(*actions[LEX_STATES])(char, t_list **);
+	int					(*actions[LEX_STATES])(struct s_lexer *);
 	void				(*transitions[LEX_STATES])(char, struct s_lexer *);
 	t_list				*tokens;
 	char				*input;
 	size_t				token_start;
-	size_t				i;
+	size_t				token_len;
 }						t_lexer;
 
 typedef struct			s_env_var
@@ -106,16 +106,16 @@ void					from_supp(char c, t_lexer *lex);
 void					from_inf(char c, t_lexer *lex);
 void					from_error(char c, t_lexer *lex);
 
-int						act_general(char c, t_list **tokens);
-int						act_word(char c, t_list **tokens);
-int						act_s_quote(char c, t_list **tokens);
-int						act_d_quote(char c, t_list **tokens);
-int						act_backslash(char c, t_list **tokens);
-int						act_and(char c, t_list **tokens);
-int						act_or(char c, t_list **tokens);
-int						act_semi_colon(char c, t_list **tokens);
-int						act_supp(char c, t_list **tokens);
-int						act_inf(char c, t_list **tokens);
-int						act_error(char c, t_list **tokens);
+int						act_general(t_lexer *lex);
+int						act_word(t_lexer *lex);
+int						act_s_quote(t_lexer *lex);
+int						act_d_quote(t_lexer *lex);
+int						act_backslash(t_lexer *lex);
+int						act_and(t_lexer *lex);
+int						act_or(t_lexer *lex);
+int						act_semi_colon(t_lexer *lex);
+int						act_supp(t_lexer *lex);
+int						act_inf(t_lexer *lex);
+int						act_error(t_lexer *lex);
 
 #endif

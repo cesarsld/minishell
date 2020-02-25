@@ -52,6 +52,7 @@ void		from_d_quote(char c, t_lexer *lex)
 
 
 }
+
 void					from_backslash(char c, t_lexer *lex);
 void					from_and(char c, t_lexer *lex);
 void					from_or(char c, t_lexer *lex);
