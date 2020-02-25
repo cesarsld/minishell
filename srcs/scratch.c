@@ -12,30 +12,15 @@
 
 #include "minishell.h"
 
-int         push_token(t_lexer *lex)
-{
-    char    *str;
-
-    str = ft_substr(lex->input, lex->token_start, lex->i - );
-}
-
 int         lex_it_(t_lexer *lex)
 {
     int     res;
 
-    // if (!(*lex->input))
-    // {
-    //     if (push_token(lex))
-    //     {
-            
-    //     }
-    // }
-
-    if (res = lex->actions[lex->state](lex->input[lex->i], &lex->tokens))
+    if (res = lex->actions[lex->state](lex))
     {
         
     }
-    lex->transitions[lex->state](lex->input, lex);
+    lex->transitions[lex->state](lex);
     ++(lex->input);
     return (lex_it_(lex));
 }

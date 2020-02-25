@@ -4,23 +4,37 @@ int         push_token(t_lexer *lex)
 {
     char    *str;
     t_list  *token;
-
+    if (lex->token_len == 0)
+        return (0);
     if (!(str = ft_substr(lex->input, lex->token_start, lex->token_len)))
-    {
-        //ERROR
-    }
+        return (1);
     if (!(token = ft_lstnew(str)))
     {
-        //ERROR
+        free(str);
+        return(1);
     }
     ft_lstadd_back(lex->tokens, token);
-    lex->token_start += lex->token_len;
+    lex->token_start += ft_strlen(str);
     lex->token_len = 0;
+    return (0);
+}
+
+int         discard_one(t_lexer *lex)
+{
+    lex->token_start += 1;
+    lex->token_len = 0;
+    return (0);
+}
+
+int         grow_token(t_lexer *lex)
+{
+    lex->token_len += 1;
+    return (0);
 }
 
 int			act_general(t_lexer *lex)
 {
-
+    
 }
 
 int			act_word(t_lexer *lex)

@@ -51,7 +51,7 @@ typedef struct			s_lexer
 	t_lex_state			prev_state;
 	t_lex_state			state;
 	int					(*actions[LEX_STATES])(struct s_lexer *);
-	void				(*transitions[LEX_STATES])(char, struct s_lexer *);
+	void				(*transitions[LEX_STATES])(struct s_lexer *);
 	t_list				*tokens;
 	char				*input;
 	size_t				token_start;
