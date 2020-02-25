@@ -94,17 +94,17 @@ t_var					*get_var(t_list *env_list, char *key);
 ** Transitions and actions
 */
 
-void					from_general(char c, t_lexer *lex);
-void					from_word(char c, t_lexer *lex);
-void					from_s_quote(char c, t_lexer *lex);
-void					from_d_quote(char c, t_lexer *lex);
-void					from_backslash(char c, t_lexer *lex);
-void					from_and(char c, t_lexer *lex);
-void					from_or(char c, t_lexer *lex);
-void					from_semi_colon(char c, t_lexer *lex);
-void					from_supp(char c, t_lexer *lex);
-void					from_inf(char c, t_lexer *lex);
-void					from_error(char c, t_lexer *lex);
+void					from_general(t_lexer *lex);
+void					from_word(t_lexer *lex);
+void					from_s_quote(t_lexer *lex);
+void					from_d_quote(t_lexer *lex);
+void					from_backslash(t_lexer *lex);
+void					from_and(t_lexer *lex);
+void					from_or(t_lexer *lex);
+void					from_semi_colon(t_lexer *lex);
+void					from_supp(t_lexer *lex);
+void					from_inf(t_lexer *lex);
+void					from_error(t_lexer *lex);
 
 int						act_general(t_lexer *lex);
 int						act_word(t_lexer *lex);
