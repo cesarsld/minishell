@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:29:41 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/21 13:45:35 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/25 11:26:29 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ t_list	*lex_it(char **input)
 		{
 			if (state == e_general)
 			{
-				update_state(&state, &p_state, e_in_or);
+				update_state(&state, &p_state, e_or);
 				if (word_start != -1)
 				{
 					if (!(word = ft_strndup(*input - counter + word_start, counter - word_start)))
@@ -194,7 +194,7 @@ t_list	*lex_it(char **input)
 					word_start = -1;
 				}
 			}
-			else if (state == e_in_or)
+			else if (state == e_or)
 			{
 				if (!(word = ft_strdup("||")))
 					return (0);
@@ -205,7 +205,7 @@ t_list	*lex_it(char **input)
 				word_start = -1;
 			}
 		}
-		else if (state == e_in_or && **input != '|')
+		else if (state == e_or && **input != '|')
 		{
 			//printf("pipe\n");
 			if (!(word = ft_strdup("|")))
