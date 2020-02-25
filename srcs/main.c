@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/25 17:53:32 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/25 19:15:21 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,9 +262,10 @@ int fetch_input_words(t_lexer *lex)
 	input_len = (size_t)ft_strlen(lex->input);
 	while (lex->token_start < input_len)
 	{
-		lex->transitions[lex->state](lex);
+		//lex->transitions[lex->state](lex);
 		if (lex->actions[lex->state](lex))
 			return (1);
+		lex->transitions[lex->state](lex);
 	}
 	return (0);
 }
@@ -285,7 +286,7 @@ int main(int ac, char **av, char **envac)
 	// char *test = ft_strdup("'e'\"c\"\"\"'ho'\" boo\" \"   koki");
 
 
-	char *test = ft_strdup("e'c'h\"l\"o boo what\\\'s up||suis je arrive ici |le pipe |c\\\'est cool  |\"Le cheval c'est trop genial\"'senpai'|  \\t    end  ");
+	char *test = ft_strdup("e'c'h\"l\"o boo what\\\'s  babe;;I;got;thestyle  up|||||su|is je a>r>>rive ici |le pipe |c\\\'est cool  |\"Le cheval c'est trop genial\"'senpai'|  \\t    end  ");
 	//char *test = ft_strdup("echo boo");
 
 	//t_list *words = lex_it(&test);
@@ -294,11 +295,11 @@ int main(int ac, char **av, char **envac)
 	init_lexer(&lex, test);
 	fetch_input_words(&lex);
 
-	t_list *words = lex_it(&test);
+	//t_list *words = lex_it(&test);
 	//printf("word: |%s|\n", get_next_word("test'so'mm\"hhhhhhiiii\"h\\    this is the first line"));
 	ft_lstiter(lex.tokens, &print_words);
 	printf("\n\n");
-	ft_lstiter(words, &print_words);
+	//ft_lstiter(words, &print_words);
 	//char *test = ft_strdup("'e'\"c\"\"\"'ho'\" boo\" \"   koki");
 	//lex_parse_line(&test);
 	copy = 0;

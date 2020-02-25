@@ -42,18 +42,27 @@ int			act_general(t_lexer *lex)
 
 int			act_word(t_lexer *lex)
 {
+	if (lex->prev_state == e_supp || lex->prev_state == e_inf || lex->prev_state == e_or || lex->prev_state == e_and)
+		if (push_token(lex))
+			return (1);
 	grow_token(lex);
 	return (0);
 }
 
 int			act_s_quote(t_lexer *lex)
 {
+	if (lex->prev_state == e_supp || lex->prev_state == e_inf || lex->prev_state == e_or || lex->prev_state == e_and)
+		if (push_token(lex))
+			return (1);
 	grow_token(lex);
 	return (0);
 }
 
 int			act_d_quote(t_lexer *lex)
 {
+	if (lex->prev_state == e_supp || lex->prev_state == e_inf || lex->prev_state == e_or || lex->prev_state == e_and)
+		if (push_token(lex))
+			return (1);
 	grow_token(lex);
 	return (0);
 }
@@ -78,14 +87,16 @@ int			act_and(t_lexer *lex)
 
 int			act_or(t_lexer *lex)
 {
-	//if (lex->token_len)
-	//	lex->token_len--;
-	if (lex->token_len)
+	if (lex->token_len && lex->prev_state != e_or)
 		if (push_token(lex))
 			return (1);
 	grow_token(lex);
-	if (push_token(lex))
-		return (1);
+	if (lex->prev_state == e_or)
+	{
+		if (push_token(lex))
+			return (1);
+		lex->state = e_general;
+	}
 	return (0);
 }
 
@@ -102,13 +113,16 @@ int			act_semi_colon(t_lexer *lex)
 
 int			act_supp(t_lexer *lex)
 {
-	if (lex->token_len)
+	if (lex->token_len && lex->prev_state != e_supp)
 		if (push_token(lex))
 			return (1);
-	//discard_one(lex);
 	grow_token(lex);
-	if (push_token(lex))
-		return (1);
+	if (lex->prev_state == e_supp)
+	{
+		if (push_token(lex))
+			return (1);
+		lex->state = e_general;
+	}
 	return (0);
 }
 
@@ -117,7 +131,6 @@ int			act_inf(t_lexer *lex)
 	if (lex->token_len)
 		if (push_token(lex))
 			return (1);
-	//discard_one(lex);
 	grow_token(lex);
 	if (push_token(lex))
 		return (1);
@@ -129,7 +142,6 @@ int			act_error(t_lexer *lex)
 	if (lex->token_len)
 		if (push_token(lex))
 			return (1);
-	//discard_one(lex);
 	grow_token(lex);
 	if (push_token(lex))
 		return (1);
