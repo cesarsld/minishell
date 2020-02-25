@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:29:41 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/25 11:26:29 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/25 16:12:12 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,15 +107,6 @@ char	*get_next_word(char **input, char *q_type)
 	return (word);
 }
 
-t_char	*create_sub_word(char *word)
-{
-	t_char *sub;
-
-	if (!(sub = malloc(sizeof(t_char))))
-		return (0);
-	sub->value = word;
-	return (sub);
-}
 
 void update_state(int *current, int *previous, int new)
 {
@@ -142,7 +133,7 @@ t_list	*lex_it(char **input)
 	state = e_general;
 	while (**input)
 	{
-		printf("checking char `%c`\n", **input);
+		//printf("checking char `%c`\n", **input);
 		if ((**input == '\'' || **input == '"') && (state == e_general || state == e_d_quote || state == e_s_quote))
 		{
 			if (state == e_general)
@@ -154,7 +145,7 @@ t_list	*lex_it(char **input)
 			{
 				update_state(&state, &p_state, e_general);
 			}
-			printf("state is %d\n", state);
+			//printf("state is %d\n", state);
 		}
 		else if (**input == '\\' && (state == e_d_quote || state == e_general || state == e_backslash))
 		{
@@ -223,7 +214,7 @@ t_list	*lex_it(char **input)
 		}
 		else if (state == e_backslash && **input != '\\')
 			update_state(&state, &p_state, p_state);
-		printf("state is `%d`\n", state);
+		//printf("state is `%d`\n", state);
 		counter++;
 		(*input)++;
 	}

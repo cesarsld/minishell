@@ -13,7 +13,7 @@ int         push_token(t_lexer *lex)
         free(str);
         return(1);
     }
-    ft_lstadd_back(lex->tokens, token);
+    ft_lstadd_back(&(lex->tokens), token);
     lex->token_start += ft_strlen(str);
     lex->token_len = 0;
     return (0);
@@ -34,55 +34,104 @@ int         grow_token(t_lexer *lex)
 
 int			act_general(t_lexer *lex)
 {
-    
+	if (lex->token_len)
+		return (push_token(lex));
+	else
+		return (discard_one(lex));
 }
 
 int			act_word(t_lexer *lex)
 {
-
+	grow_token(lex);
+	return (0);
 }
 
 int			act_s_quote(t_lexer *lex)
 {
-
+	grow_token(lex);
+	return (0);
 }
 
 int			act_d_quote(t_lexer *lex)
 {
-
+	grow_token(lex);
+	return (0);
 }
 
 int			act_backslash(t_lexer *lex)
 {
-
+	grow_token(lex);
+	return (0);
 }
 
 int			act_and(t_lexer *lex)
 {
-
+	if (lex->token_len)
+		if (push_token(lex))
+			return (1);
+	discard_one(lex);
+	grow_token(lex);
+	if (push_token(lex))
+		return (1);
+	return (0);
 }
 
 int			act_or(t_lexer *lex)
 {
-
+	//if (lex->token_len)
+	//	lex->token_len--;
+	if (lex->token_len)
+		if (push_token(lex))
+			return (1);
+	grow_token(lex);
+	if (push_token(lex))
+		return (1);
+	return (0);
 }
 
 int			act_semi_colon(t_lexer *lex)
 {
-
+	if (lex->token_len)
+		if (push_token(lex))
+			return (1);
+	grow_token(lex);
+	if (push_token(lex))
+		return (1);
+	return (0);
 }
 
 int			act_supp(t_lexer *lex)
 {
-
+	if (lex->token_len)
+		if (push_token(lex))
+			return (1);
+	//discard_one(lex);
+	grow_token(lex);
+	if (push_token(lex))
+		return (1);
+	return (0);
 }
 
 int			act_inf(t_lexer *lex)
 {
-
+	if (lex->token_len)
+		if (push_token(lex))
+			return (1);
+	//discard_one(lex);
+	grow_token(lex);
+	if (push_token(lex))
+		return (1);
+	return (0);
 }
 
 int			act_error(t_lexer *lex)
 {
-
+	if (lex->token_len)
+		if (push_token(lex))
+			return (1);
+	//discard_one(lex);
+	grow_token(lex);
+	if (push_token(lex))
+		return (1);
+	return (0);
 }

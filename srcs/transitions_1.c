@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/24 18:58:10 by lgrellie          #+#    #+#             */
-/*   Updated: 2020/02/25 14:01:43 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/25 16:52:23 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,19 +66,20 @@ void		from_s_quote(t_lexer *lex)
 {
 	lex->prev_state = e_s_quote;
 	if (lex->input[lex->token_start + lex->token_len] == '\'')
-		lex->state = e_general;
+		lex->state = e_word;
 }
 
 void		from_d_quote(t_lexer *lex)
 {
 	lex->prev_state = e_d_quote;
 	if (lex->input[lex->token_start + lex->token_len] == '"')
-		lex->state = e_general;
+		lex->state = e_word;
 
 }
 void					from_backslash(t_lexer *lex)
 {
-	lex->state = lex->prev_state;
+	//lex->state = lex->prev_state;
+	lex->state = e_word;
 	lex->prev_state = e_backslash;
 }
 
@@ -108,7 +109,7 @@ void					from_and(t_lexer *lex)
 }
 void					from_or(t_lexer *lex)
 {
-	lex->prev_state = e_and;
+	lex->prev_state = e_or;
 	if (lex->input[lex->token_start + lex->token_len] == '\'')
 		lex->state = e_s_quote;
 	else if (lex->input[lex->token_start + lex->token_len] == '"')

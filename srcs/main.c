@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/21 11:56:40 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/25 17:53:32 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,6 +218,57 @@ void print_words(void *content)
 	printf("Word: `%s`\n", (char *)content);
 }
 
+void init_lexer_functions(t_lexer *lex)
+{
+	lex->actions[e_general] = &act_general;
+	lex->actions[e_word] = &act_word;
+	lex->actions[e_s_quote] = &act_s_quote;
+	lex->actions[e_d_quote] = &act_d_quote;
+	lex->actions[e_backslash] = &act_backslash;
+	lex->actions[e_and] = &act_and;
+	lex->actions[e_or] = &act_or;
+	lex->actions[e_semi_colon] = &act_semi_colon;
+	lex->actions[e_supp] = &act_supp;
+	lex->actions[e_inf] = &act_inf;
+	lex->actions[e_error] = &act_error;
+	lex->transitions[e_general] = &from_general;
+	lex->transitions[e_word] = &from_word;
+	lex->transitions[e_s_quote] = &from_s_quote;
+	lex->transitions[e_d_quote] = &from_d_quote;
+	lex->transitions[e_backslash] = &from_backslash;
+	lex->transitions[e_and] = &from_and;
+	lex->transitions[e_or] = &from_or;
+	lex->transitions[e_semi_colon] = &from_semi_colon;
+	lex->transitions[e_supp] = &from_supp;
+	lex->transitions[e_inf] = &from_inf;
+	lex->transitions[e_error] = &from_error;
+}
+
+void init_lexer(t_lexer *lex, char *input)
+{
+	init_lexer_functions(lex);
+	lex->tokens = 0;
+	lex->token_start = 0;
+	lex->token_len = 0;
+	lex->input = input;
+	lex->state = e_general;
+	lex->prev_state = lex->state;
+}
+
+int fetch_input_words(t_lexer *lex)
+{
+	size_t input_len;
+
+	input_len = (size_t)ft_strlen(lex->input);
+	while (lex->token_start < input_len)
+	{
+		lex->transitions[lex->state](lex);
+		if (lex->actions[lex->state](lex))
+			return (1);
+	}
+	return (0);
+}
+
 int main(int ac, char **av, char **envac)
 {
 	char *user_input;
@@ -234,12 +285,19 @@ int main(int ac, char **av, char **envac)
 	// char *test = ft_strdup("'e'\"c\"\"\"'ho'\" boo\" \"   koki");
 
 
-	char *test = ft_strdup("e'c'h\"l\"o boo what\\\'s up ||suis je arrive ici |le pipe |c\\\'est cool  |\"Le cheval c'est trop genial\"'senpai'|  \\t    end  ");
+	char *test = ft_strdup("e'c'h\"l\"o boo what\\\'s up||suis je arrive ici |le pipe |c\\\'est cool  |\"Le cheval c'est trop genial\"'senpai'|  \\t    end  ");
+	//char *test = ft_strdup("echo boo");
 
+	//t_list *words = lex_it(&test);
 
+	t_lexer lex;
+	init_lexer(&lex, test);
+	fetch_input_words(&lex);
 
-	//printf("word: |%s|\n", get_next_word("test'so'mm\"hhhhhhiiii\"h\\    this is the first line"));
 	t_list *words = lex_it(&test);
+	//printf("word: |%s|\n", get_next_word("test'so'mm\"hhhhhhiiii\"h\\    this is the first line"));
+	ft_lstiter(lex.tokens, &print_words);
+	printf("\n\n");
 	ft_lstiter(words, &print_words);
 	//char *test = ft_strdup("'e'\"c\"\"\"'ho'\" boo\" \"   koki");
 	//lex_parse_line(&test);
