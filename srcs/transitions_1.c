@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/24 18:58:10 by lgrellie          #+#    #+#             */
-/*   Updated: 2020/02/25 13:48:19 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/25 14:01:43 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,18 @@ void					from_semi_colon(t_lexer *lex)
 	lex->prev_state = e_semi_colon;
 	lex->state = e_general;
 }
-void					from_supp(t_lexer *lex);
-void					from_inf(t_lexer *lex);
-void					from_error(t_lexer *lex);
+void					from_supp(t_lexer *lex)
+{
+	lex->prev_state = e_supp;
+	lex->state = e_general;
+}
+void					from_inf(t_lexer *lex)
+{
+	lex->prev_state = e_inf;
+	lex->state = e_general;
+}
+void					from_error(t_lexer *lex)
+{
+	lex->prev_state = e_error;
+	lex->state = e_general;
+}
