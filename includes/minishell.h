@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/20 17:50:56 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/27 18:59:49 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,6 @@
 # include <string.h>
 # include <stdio.h>
 # include <signal.h>
-
-typedef enum			e_token_type
-{
-	e_command = 0, e_option = 1, e_input = 2, e_prog = 3
-}						t_oken_type;
 
 # define LEX_STATES 11
 
@@ -39,6 +34,33 @@ typedef enum			e_lex_state
 	e_inf,
 	e_error
 }						t_lex_state;
+
+typedef enum			e_token_type
+{
+	e_word,
+	e_cmd_word,
+	e_cmd_name,
+	e_assignment_word,
+	e_pipe,
+	e_name,
+	e_semi_colon,
+	e_supp,
+	e_inf,
+	e_append,
+	e_cd, 
+	e_echo,
+	e_export,
+	e_env,
+	e_pwd
+}						t_oken_type;
+
+typedef struct			s_node
+{
+	t_oken_type			type;
+	struct s_node		*left;
+	struct s_node		*right;
+	void*				*content;
+}						t_node;
 
 /*
 ** These functions switch the lexer states depending on input
