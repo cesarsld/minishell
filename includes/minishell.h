@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/27 18:59:49 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/28 14:05:49 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,21 @@ typedef enum			e_lex_state
 
 typedef enum			e_token_type
 {
-	e_word,
-	e_cmd_word,
-	e_cmd_name,
-	e_assignment_word,
-	e_pipe,
-	e_name,
-	e_semi_colon,
-	e_supp,
-	e_inf,
-	e_append,
-	e_cd, 
-	e_echo,
-	e_export,
-	e_env,
-	e_pwd
+	e_t_word,
+	e_t_cmd_word,
+	e_t_cmd_name,
+	e_t_assignment_word,
+	e_t_pipe,
+	e_t_name,
+	e_t_semi_colon,
+	e_t_supp,
+	e_t_inf,
+	e_t_append,
+	e_t_cd, 
+	e_t_echo,
+	e_t_export,
+	e_t_env,
+	e_t_pwd
 }						t_oken_type;
 
 typedef struct			s_node
@@ -139,5 +139,8 @@ int						act_semi_colon(t_lexer *lex);
 int						act_supp(t_lexer *lex);
 int						act_inf(t_lexer *lex);
 int						act_error(t_lexer *lex);
+
+t_node					*generate_tree(t_lexer *lex);
+int         push_token(t_lexer *lex);
 
 #endif

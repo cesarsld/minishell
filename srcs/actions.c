@@ -36,8 +36,9 @@ int			act_general(t_lexer *lex)
 {
 	if (lex->token_len)
 		return (push_token(lex));
-	else
+	else if (is_white_space(lex->input[lex->token_start + lex->token_len]))
 		return (discard_one(lex));
+	return (0);
 }
 
 int			act_word(t_lexer *lex)

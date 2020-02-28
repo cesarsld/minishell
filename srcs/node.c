@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 18:03:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/27 19:04:30 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/28 14:12:10 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_node	*create_new_node(t_oken_type type)
 	return (node);
 }
 
-void	generate_tree(t_lexer *lex)
+t_node	*generate_tree(t_lexer *lex)
 {
 	t_list *token;
 	t_node *tree;
@@ -59,30 +59,79 @@ void	generate_tree(t_lexer *lex)
 			// if tree and stack is null, throw parse error
 			
 		}
+		if (ft_strcmp(";", token->content) == 0)
+		{
+			// if tree and stack is null, throw parse error
+			if (!stack_head && !tree)
+			{
+				// throw error
+				break ;
+			}
+			if (!(temp = create_new_node(e_t_semi_colon)))
+					return (0);
+			if (tree && tree->type == e_t_semi_colon)
+			{
+				temp->left = tree;
+				tree->right = stack_head;
+				tree = temp;
+				stack_head = 0;
+				stack = 0;
+			}
+			// else if (stack_head->type == e_t_semi_colon)
+			// {
+			// 	temp->left = stack_head;
+			// 	//tree->right = stack_head;
+			// 	tree = temp;
+			// 	stack_head = 0;
+			// 	stack = 0;
+			// }
+			else
+			{
+				temp->left = stack_head;
+				tree = temp;
+				stack = 0;
+				stack_head = 0;
+			}
+		}
 		else
 		{
 			if (!stack)
 			{
-				if (!(stack = create_new_node(e_cmd_name)))
+				if (!(stack = create_new_node(e_t_cmd_name)))
 					return (0);
 				stack->content = token->content;
 				stack_head = stack;
 			}
 			else
 			{
-				if (stack->type == e_cmd_name)
+				//printf("boo\n");
+				if (stack->type == e_t_cmd_name)
 				{
-					if (!(temp = create_new_node(e_cmd_word)))
+					if (!(temp = create_new_node(e_t_cmd_word)))
+					return (0);
+					temp->content = token->content;
+					stack->left = temp;
+					stack = stack->left;
+				}
+				else if (stack->type == e_t_cmd_word)
+				{
+					if (!(temp = create_new_node(e_t_cmd_word)))
 					return (0);
 					temp->content = token->content;
 					stack->left = temp;
 					stack = stack->left;
 				}
 			}
-			
-			
 		}
-		
 		token = token->next;
 	}
+	if (!tree && stack_head)
+	{
+		tree = stack_head;
+		stack_head = 0;
+	}
+	if (stack_head)
+		if (tree->type == e_t_semi_colon)
+			tree->right = stack_head;
+	return (tree);
 }
