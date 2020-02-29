@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 18:03:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/28 14:12:10 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/29 17:22:06 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,27 +44,42 @@ t_node	*generate_tree(t_lexer *lex)
 			// to handle later, for now is error
 			break ;
 		}
-		if (ft_strcmp("<", token->content) == 0)
+		else if (ft_strcmp("<", token->content) == 0)
 		{
 			// to handle later, for now is error
 			break ;
 		}
-		if (ft_strcmp(">>", token->content) == 0)
+		else if (ft_strcmp(">>", token->content) == 0)
 		{
 			// to handle later, for now is error
 			break ;
 		}
-		if (ft_strcmp("|", token->content) == 0)
+		else if (ft_strcmp("|", token->content) == 0)
 		{
 			// if tree and stack is null, throw parse error
-			
+			if (!stack_head)
+			{
+				ft_putstr("minishell: syntax error near unexpected token `|'\n: ");
+				break ;
+			}
+			if (!(temp = create_new_node(e_t_pipe)))
+				return (0);
+			// if (stack_head->type == e_t_pipe)
+			// {
+
+			// }
+			temp->left = stack_head;
+			stack_head = temp;
+			stack = 0;
+
 		}
-		if (ft_strcmp(";", token->content) == 0)
+		else if (ft_strcmp(";", token->content) == 0)
 		{
 			// if tree and stack is null, throw parse error
 			if (!stack_head && !tree)
 			{
 				// throw error
+				ft_putstr("minishell: syntax error near unexpected token `;'\n: ");
 				break ;
 			}
 			if (!(temp = create_new_node(e_t_semi_colon)))
@@ -99,8 +114,11 @@ t_node	*generate_tree(t_lexer *lex)
 			{
 				if (!(stack = create_new_node(e_t_cmd_name)))
 					return (0);
+				if (stack_head && stack_head->type == e_t_pipe)
+					stack_head->right = stack;
+				else
+					stack_head = stack;
 				stack->content = token->content;
-				stack_head = stack;
 			}
 			else
 			{

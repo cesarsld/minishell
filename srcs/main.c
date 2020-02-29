@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/28 14:12:58 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/29 17:25:29 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,7 +294,9 @@ void print_tree(t_node *node, int level, int lr)
 	if(lr == 2)
 		printf("Level %d | %-10s | token type is %s\n", level, "root",get_token_type(node->type));
 	else
-		printf("Level %d | %-5s side | token type is %s\n", level, lr? "Right" : "Left", get_token_type(node->type));
+		printf("Level %d | %-5s side | token type is %s%s%s\n",
+				level, lr? "Right" : "Left", get_token_type(node->type),
+				node->content? "->":"", node->content ? node->content:"");
 	if (node->left)
 		print_tree(node->left, level + 1, 0);
 	if (node->right)
@@ -318,16 +320,18 @@ int main(int ac, char **av, char **envac)
 
 
 	//char *test = ft_strdup("e'c'h\"l\"o boo what\\\'s  babe;;I;got;thestyle  up|||||su|is je a>r>>rive ici |le pipe |c\\\'est cool  |\"Le cheval c'est trop genial\"'senpai'|  \\t    end  ");
-	char *test = ft_strdup("echo boo haha bingo ; echo boo haha ; echo top");
-
+	//char *test = ft_strdup("echo boo haha bingo ; echo boo haha ; echo top; echo boom peck");
+	char *test = ft_strdup("echo boo haha bingo | echo boo haha | echo boo ; echo top | echo boom peck ; echo tech beck");
+	
 	//t_list *words = lex_it(&test);
 
 	t_lexer lex;
 	init_lexer(&lex, test);
 	fetch_input_words(&lex);
 	t_node *tree = generate_tree(&lex);
-	printf("%p\n", tree);
-	print_tree(tree, 0, 2);
+	//printf("%p\n", tree);
+	if (tree)
+		print_tree(tree, 0, 2);
 
 
 	//t_list *words = lex_it(&test);

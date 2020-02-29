@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/28 14:05:49 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/29 17:21:12 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ typedef struct			s_node
 	t_oken_type			type;
 	struct s_node		*left;
 	struct s_node		*right;
-	void*				*content;
+	void				*content;
 }						t_node;
 
 /*
