@@ -114,7 +114,15 @@ int			act_semi_colon(t_lexer *lex)
 
 int			act_supp(t_lexer *lex)
 {
-	if (lex->token_len && lex->prev_state != e_supp)
+	if (lex->token_len && lex->prev_state != e_supp && is_number_n(lex->input + lex->token_start, lex->token_len))
+	{
+		grow_token(lex);
+		lex->state = e_general;
+		if (push_token(lex))
+			return (1);
+		return (0);
+	}
+	else if (lex->token_len && lex->prev_state != e_supp)
 		if (push_token(lex))
 			return (1);
 	grow_token(lex);

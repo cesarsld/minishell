@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/29 17:21:12 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/29 20:34:08 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ void					cd_dir_error(char *err, const char *dir);
 void					print_env_vars(t_list *env_list);
 void					env_error();
 t_var					*get_var(t_list *env_list, char *key);
+
+int	is_number_n(char *input, int size);
 
 /*
 ** Transitions and actions

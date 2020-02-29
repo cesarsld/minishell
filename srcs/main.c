@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/29 17:25:29 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/02/29 21:11:52 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -321,22 +321,22 @@ int main(int ac, char **av, char **envac)
 
 	//char *test = ft_strdup("e'c'h\"l\"o boo what\\\'s  babe;;I;got;thestyle  up|||||su|is je a>r>>rive ici |le pipe |c\\\'est cool  |\"Le cheval c'est trop genial\"'senpai'|  \\t    end  ");
 	//char *test = ft_strdup("echo boo haha bingo ; echo boo haha ; echo top; echo boom peck");
-	char *test = ft_strdup("echo boo haha bingo | echo boo haha | echo boo ; echo top | echo boom peck ; echo tech beck");
-	
+	//char *test = ft_strdup("echo boo haha bingo | echo boo haha | echo boo ; echo top | echo boom peck ; echo tech beck");
+	char *test = ft_strdup("33> gaa echo boo 45 >boo");
 	//t_list *words = lex_it(&test);
 
 	t_lexer lex;
 	init_lexer(&lex, test);
 	fetch_input_words(&lex);
-	t_node *tree = generate_tree(&lex);
+	//t_node *tree = generate_tree(&lex);
 	//printf("%p\n", tree);
-	if (tree)
-		print_tree(tree, 0, 2);
+	//if (tree)
+	//	print_tree(tree, 0, 2);
 
 
 	//t_list *words = lex_it(&test);
 	//printf("word: |%s|\n", get_next_word("test'so'mm\"hhhhhhiiii\"h\\    this is the first line"));
-	//ft_lstiter(lex.tokens, &print_words);
+	ft_lstiter(lex.tokens, &print_words);
 	//printf("\n\n");
 	//ft_lstiter(words, &print_words);
 	//char *test = ft_strdup("'e'\"c\"\"\"'ho'\" boo\" \"   koki");
