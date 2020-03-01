@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/29 20:34:08 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/01 17:34:11 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct			s_node
 	struct s_node		*left;
 	struct s_node		*right;
 	void				*content;
+	int					fd;
 }						t_node;
 
 /*
@@ -113,6 +114,7 @@ void					env_error();
 t_var					*get_var(t_list *env_list, char *key);
 
 int	is_number_n(char *input, int size);
+int	get_number(char *input, int size);
 
 /*
 ** Transitions and actions

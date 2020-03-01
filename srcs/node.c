@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 18:03:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/29 17:22:06 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/01 17:37:58 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,20 @@ t_node	*create_new_node(t_oken_type type)
 	node->left = 0;
 	node->right = 0;
 	node->type = type;
+	node->fd = -1;
 	return (node);
+}
+
+int	is_redirection(const char *redir, char *token)
+{
+	int len;
+
+	if (ft_strcmp(redir, token) == 0)
+		return (1);
+	len = ft_strlen(token);
+	if (token[len - 1] == *redir && is_number_n(token, len - 1))
+		return (1);
+	return (0);
 }
 
 t_node	*generate_tree(t_lexer *lex)
@@ -39,17 +52,22 @@ t_node	*generate_tree(t_lexer *lex)
 	stack_head = 0;
 	while (token)
 	{
-		if (ft_strcmp(">", token->content) == 0)
+		if (is_redirection(">", token->content))
+		{
+			// to handle later, for now is error
+			if (!(temp = create_new_node(e_t_supp)))
+				return (0);
+			temp->fd = get_number(token->content, ft_strlen(token) - 1);
+			if (stack_head && stack_head->type == e_t_pipe)
+				;
+			break ;
+		}
+		else if (is_redirection("<", token->content))
 		{
 			// to handle later, for now is error
 			break ;
 		}
-		else if (ft_strcmp("<", token->content) == 0)
-		{
-			// to handle later, for now is error
-			break ;
-		}
-		else if (ft_strcmp(">>", token->content) == 0)
+		else if (is_redirection(">>", token->content))
 		{
 			// to handle later, for now is error
 			break ;
