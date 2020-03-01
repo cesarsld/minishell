@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/01 17:34:11 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/01 23:49:04 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,9 @@ typedef struct			s_lexer
 	char				*input;
 	size_t				token_start;
 	size_t				token_len;
+
+	t_node				*tree;
+	t_oken_type			previous_token;
 }						t_lexer;
 
 typedef struct			s_env_var
@@ -144,7 +147,7 @@ int						act_supp(t_lexer *lex);
 int						act_inf(t_lexer *lex);
 int						act_error(t_lexer *lex);
 
-t_node					*generate_tree(t_lexer *lex);
+int						generate_tree(t_lexer *lex);
 int         push_token(t_lexer *lex);
 
 #endif

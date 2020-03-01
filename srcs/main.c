@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/01 16:35:32 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/02 00:12:04 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,6 +253,8 @@ void init_lexer(t_lexer *lex, char *input)
 	lex->input = input;
 	lex->state = e_general;
 	lex->prev_state = lex->state;
+	lex->tree = 0;
+	lex->previous_token = e_t_word;
 }
 
 int fetch_input_words(t_lexer *lex)
@@ -284,6 +286,8 @@ const char* get_token_type(t_oken_type type)
 		return ("SEMI_COLON");
 	case e_t_pipe:
 		return ("PIPE");
+	case e_t_supp:
+		return ("SUPP");
 	default:
 		return ("");
 	}
@@ -322,20 +326,23 @@ int main(int ac, char **av, char **envac)
 	//char *test = ft_strdup("e'c'h\"l\"o boo what\\\'s  babe;;I;got;thestyle  up|||||su|is je a>r>>rive ici |le pipe |c\\\'est cool  |\"Le cheval c'est trop genial\"'senpai'|  \\t    end  ");
 	//char *test = ft_strdup("echo boo haha bingo ; echo boo haha ; echo top; echo boom peck");
 	//char *test = ft_strdup("echo boo haha bingo | echo boo haha | echo boo ; echo top | echo boom peck ; echo tech beck");
-	char *test = ft_strdup("33>>>boo 3> gaa >> > >>>>> echo boo 45 >boo");
+	//char *test = ft_strdup("33>>>boo 3> gaa >> > >>>>> echo boo 45 >boo");
+	char *test = ft_strdup(">foo >bar echo meh >tap boo | >boom echo tech ; echo bass >bee | >mambo echo tree   ");
+	//char *test = ft_strdup("tech    ");
 	//t_list *words = lex_it(&test);
 	t_lexer lex;
 	init_lexer(&lex, test);
 	fetch_input_words(&lex);
+	generate_tree(&lex);
 	//t_node *tree = generate_tree(&lex);
 	//printf("%p\n", tree);
-	//if (tree)
-	//	print_tree(tree, 0, 2);
+	if (lex.tree)
+		print_tree(lex.tree, 0, 2);
 
 
 	//t_list *words = lex_it(&test);
 	//printf("word: |%s|\n", get_next_word("test'so'mm\"hhhhhhiiii\"h\\    this is the first line"));
-	ft_lstiter(lex.tokens, &print_words);
+	//ft_lstiter(lex.tokens, &print_words);
 	//printf("\n\n");
 	//ft_lstiter(words, &print_words);
 	//char *test = ft_strdup("'e'\"c\"\"\"'ho'\" boo\" \"   koki");

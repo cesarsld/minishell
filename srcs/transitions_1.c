@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/24 18:58:10 by lgrellie          #+#    #+#             */
-/*   Updated: 2020/02/25 18:35:27 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/02 00:08:38 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void		from_general(t_lexer *lex)
 		lex->state = e_and;
 	else if (lex->input[lex->token_start + lex->token_len] == '|')
 		lex->state = e_or;
-	else
+	else if (lex->input[lex->token_start + lex->token_len])
 		lex->state = e_word;
 }
 
