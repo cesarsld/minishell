@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/02 00:12:04 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/02 17:27:43 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -314,20 +314,21 @@ int main(int ac, char **av, char **envac)
 	t_list *env_list;
 
 	ac = 0;
-	av = 0;
+	while (*av)
+		printf("%s\n", *av++);
 
 	if(!(env_list = get_env_vars(envac)))
 		return (0);
 
 	user_input = 0;
 	// char *test = ft_strdup("'e'\"c\"\"\"'ho'\" boo\" \"   koki");
-
+	//get_command_path(get_var(env_list, "PATH")->value, "cat");
 
 	//char *test = ft_strdup("e'c'h\"l\"o boo what\\\'s  babe;;I;got;thestyle  up|||||su|is je a>r>>rive ici |le pipe |c\\\'est cool  |\"Le cheval c'est trop genial\"'senpai'|  \\t    end  ");
 	//char *test = ft_strdup("echo boo haha bingo ; echo boo haha ; echo top; echo boom peck");
 	//char *test = ft_strdup("echo boo haha bingo | echo boo haha | echo boo ; echo top | echo boom peck ; echo tech beck");
 	//char *test = ft_strdup("33>>>boo 3> gaa >> > >>>>> echo boo 45 >boo");
-	char *test = ft_strdup(">foo >bar echo meh >tap boo | >boom echo tech ; echo bass >bee | >mambo echo tree   ");
+	char *test = ft_strdup(">>foo >bar echo meh >tap boo | >boom echo tech ; echo bass >bee | >mambo echo tree  | echo trump >boo ");
 	//char *test = ft_strdup("tech    ");
 	//t_list *words = lex_it(&test);
 	t_lexer lex;

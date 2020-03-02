@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/01 23:49:04 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/02 15:59:08 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,5 +149,6 @@ int						act_error(t_lexer *lex);
 
 int						generate_tree(t_lexer *lex);
 int         push_token(t_lexer *lex);
+char	*get_command_path(char *path_line, char *command);
 
 #endif
