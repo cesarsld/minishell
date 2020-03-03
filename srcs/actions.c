@@ -36,8 +36,10 @@ int			act_general(t_lexer *lex)
 {
 	if (lex->token_len)
 		return (push_token(lex));
-	else
+	else if (is_white_space(lex->input[lex->token_start + lex->token_len]) ||
+			!lex->input[lex->token_start + lex->token_len])
 		return (discard_one(lex));
+	return (0);
 }
 
 int			act_word(t_lexer *lex)
@@ -113,7 +115,13 @@ int			act_semi_colon(t_lexer *lex)
 
 int			act_supp(t_lexer *lex)
 {
-	if (lex->token_len && lex->prev_state != e_supp)
+	if (lex->token_len && lex->prev_state != e_supp &&
+		is_number_n(lex->input + lex->token_start, lex->token_len))
+	{
+		grow_token(lex);
+		return (0);
+	}
+	else if (lex->token_len && lex->prev_state != e_supp)
 		if (push_token(lex))
 			return (1);
 	grow_token(lex);

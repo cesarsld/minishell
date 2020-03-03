@@ -1,30 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   infinite.c                                         :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/19 15:40:15 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/02 18:07:50 by cjaimes          ###   ########.fr       */
+/*   Created: 2020/02/29 20:31:11 by cjaimes           #+#    #+#             */
+/*   Updated: 2020/03/01 17:33:55 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <signal.h>
+#include "minishell.h"
 
-void unkillable(int sig)
+int	is_number_n(char *input, int size)
 {
-	sig = 0;
-	printf("I can't be killed muahaha >:D\n");
+	while (size-- > 0)
+		if (!ft_isdigit(*input++))
+			return (0);
+	return (1);
 }
 
-int main()
+int	get_number(char *input, int size)
 {
-	// signal(SIGINT, &unkillable);
-	// signal(SIGQUIT, &unkillable);
-	// signal(SIGKILL, &unkillable);
-	printf("Hello World!\n");
-
-	return (0);
+	if (!is_number_n(input, size))
+		return (1);
+	return (ft_atoi(input));
 }

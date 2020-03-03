@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/25 19:15:21 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/03 15:42:20 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,7 +244,7 @@ void init_lexer_functions(t_lexer *lex)
 	lex->transitions[e_error] = &from_error;
 }
 
-void init_lexer(t_lexer *lex, char *input)
+void init_lexer(t_lexer *lex, char *input, char **envac, t_list *env_list)
 {
 	init_lexer_functions(lex);
 	lex->tokens = 0;
@@ -253,6 +253,23 @@ void init_lexer(t_lexer *lex, char *input)
 	lex->input = input;
 	lex->state = e_general;
 	lex->prev_state = lex->state;
+	lex->tree = 0;
+	lex->previous_token = e_t_word;
+	lex->envac = envac;
+	lex->env_list = env_list;
+}
+
+void reset_lexer(t_lexer *lex, char *input)
+{
+	lex->token_start = 0;
+	lex->token_len = 0;
+	ft_lstclear(&(lex->tokens), &free);
+	free(lex->input);
+	lex->input = input;
+	lex->state = e_general;
+	lex->prev_state = lex->state;
+	lex->tree = 0;
+	lex->previous_token = e_t_word;
 }
 
 int fetch_input_words(t_lexer *lex)
@@ -260,14 +277,49 @@ int fetch_input_words(t_lexer *lex)
 	size_t input_len;
 
 	input_len = (size_t)ft_strlen(lex->input);
-	while (lex->token_start < input_len)
+	while (lex->token_start + lex->token_len <= input_len /*&& lex->input[lex->token_start + lex->token_len]*/)
 	{
 		//lex->transitions[lex->state](lex);
 		if (lex->actions[lex->state](lex))
 			return (1);
 		lex->transitions[lex->state](lex);
 	}
+	if (lex->token_len)
+		push_token(lex);
 	return (0);
+}
+
+const char* get_token_type(t_oken_type type)
+{
+	switch (type)
+	{
+	case e_t_cmd_name:
+		return ("CMD_NAME");
+	case e_t_cmd_word:
+		return ("CMD_WORD");
+	case e_t_semi_colon:
+		return ("SEMI_COLON");
+	case e_t_pipe:
+		return ("PIPE");
+	case e_t_supp:
+		return ("SUPP");
+	default:
+		return ("");
+	}
+}
+
+void print_tree(t_node *node, int level, int lr)
+{
+	if(lr == 2)
+		printf("Level %d | %-10s | token type is %s\n", level, "root",get_token_type(node->type));
+	else
+		printf("Level %d | %-5s side | token type is %s%s%s\n",
+				level, lr? "Right" : "Left", get_token_type(node->type),
+				node->content? "->":"", node->content ? node->content:"");
+	if (node->left)
+		print_tree(node->left, level + 1, 0);
+	if (node->right)
+		print_tree(node->right, level + 1, 1);
 }
 
 int main(int ac, char **av, char **envac)
@@ -278,27 +330,53 @@ int main(int ac, char **av, char **envac)
 
 	ac = 0;
 	av = 0;
+	//while (*av)
+		//printf("%s\n", *av++);
 
 	if(!(env_list = get_env_vars(envac)))
 		return (0);
 
 	user_input = 0;
 	// char *test = ft_strdup("'e'\"c\"\"\"'ho'\" boo\" \"   koki");
+	//get_command_path(get_var(env_list, "PATH")->value, "cat");
 
-
-	char *test = ft_strdup("e'c'h\"l\"o boo what\\\'s  babe;;I;got;thestyle  up|||||su|is je a>r>>rive ici |le pipe |c\\\'est cool  |\"Le cheval c'est trop genial\"'senpai'|  \\t    end  ");
-	//char *test = ft_strdup("echo boo");
-
+	//char *test = ft_strdup("e'c'h\"l\"o boo what\\\'s  babe;;I;got;thestyle  up|||||su|is je a>r>>rive ici |le pipe |c\\\'est cool  |\"Le cheval c'est trop genial\"'senpai'|  \\t    end  ");
+	//char *test = ft_strdup("echo boo haha bingo ; echo boo haha ; echo top; echo boom peck");
+	//char *test = ft_strdup("echo boo haha bingo | echo boo haha | echo boo ; echo top | echo boom peck ; echo tech beck");
+	//char *test = ft_strdup("33>>>boo 3> gaa >> > >>>>> echo boo 45 >boo");
+	//char *test = ft_strdup(">foo >bar echo meh >tap boo | >boom echo tech ; echo bass >bee | >mambo echo tree  | echo trump >boo ");
+	//char *test = ft_strdup("tech    ");
 	//t_list *words = lex_it(&test);
-
 	t_lexer lex;
-	init_lexer(&lex, test);
-	fetch_input_words(&lex);
+	//init_lexer(&lex, test, envac);
+	//fetch_input_words(&lex);
+	//generate_tree(&lex);
+	//t_node *tree = generate_tree(&lex);
+	//printf("%p\n", tree);
+	//if (lex.tree)
+	//	print_tree(lex.tree, 0, 2);
+	//printf("boo");
+
+	init_lexer(&lex, 0, envac, env_list);
+	while (1)
+	{
+		ft_putstr("> ");
+		if (!get_next_line(0, &user_input))
+			return (0);
+		copy = user_input;
+		skip_whitespace(&user_input);
+		reset_lexer(&lex, copy);
+		fetch_input_words(&lex);
+		generate_tree(&lex);
+		execute_tree(&lex);
+	}
+
+
 
 	//t_list *words = lex_it(&test);
 	//printf("word: |%s|\n", get_next_word("test'so'mm\"hhhhhhiiii\"h\\    this is the first line"));
-	ft_lstiter(lex.tokens, &print_words);
-	printf("\n\n");
+	//ft_lstiter(lex.tokens, &print_words);
+	//printf("\n\n");
 	//ft_lstiter(words, &print_words);
 	//char *test = ft_strdup("'e'\"c\"\"\"'ho'\" boo\" \"   koki");
 	//lex_parse_line(&test);
@@ -309,12 +387,12 @@ int main(int ac, char **av, char **envac)
 	// if (new_id == 0)
 	// {
 	// 	printf("id is %d\n", new_id);
-	// 	char *name = strdup("infinite");
-	// 	char **arg = malloc(sizeof(char *) * 2);
-	// 	arg[1] = 0;
-	// 	arg[0] = name;
+		// char *name = strdup("echo");
+		// char **arg = malloc(sizeof(char *) * 2);
+		// arg[1] = 0;
+		// arg[0] = name;
 
-	// 	execve("hi:hi", arg, envac);
+		// execve("echo", arg, envac);
 	// 	perror("");
 
 	// }

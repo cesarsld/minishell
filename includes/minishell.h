@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/20 17:50:56 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/03 15:22:43 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,6 @@
 # include <string.h>
 # include <stdio.h>
 # include <signal.h>
-
-typedef enum			e_token_type
-{
-	e_command = 0, e_option = 1, e_input = 2, e_prog = 3
-}						t_oken_type;
 
 # define LEX_STATES 11
 
@@ -40,6 +35,34 @@ typedef enum			e_lex_state
 	e_error
 }						t_lex_state;
 
+typedef enum			e_token_type
+{
+	e_t_word,
+	e_t_cmd_word,
+	e_t_cmd_name,
+	e_t_assignment_word,
+	e_t_pipe,
+	e_t_name,
+	e_t_semi_colon,
+	e_t_supp,
+	e_t_inf,
+	e_t_append,
+	e_t_cd, 
+	e_t_echo,
+	e_t_export,
+	e_t_env,
+	e_t_pwd
+}						t_oken_type;
+
+typedef struct			s_node
+{
+	t_oken_type			type;
+	struct s_node		*left;
+	struct s_node		*right;
+	void				*content;
+	int					fd;
+}						t_node;
+
 /*
 ** These functions switch the lexer states depending on input
 ** typedef void			(*t_lex_transition)(char, t_lexer *);
@@ -56,6 +79,11 @@ typedef struct			s_lexer
 	char				*input;
 	size_t				token_start;
 	size_t				token_len;
+
+	t_node				*tree;
+	t_oken_type			previous_token;
+	char				**envac;
+	t_list				*env_list;
 }						t_lexer;
 
 typedef struct			s_env_var
@@ -90,6 +118,9 @@ void					print_env_vars(t_list *env_list);
 void					env_error();
 t_var					*get_var(t_list *env_list, char *key);
 
+int	is_number_n(char *input, int size);
+int	get_number(char *input, int size);
+
 /*
 ** Transitions and actions
 */
@@ -117,5 +148,10 @@ int						act_semi_colon(t_lexer *lex);
 int						act_supp(t_lexer *lex);
 int						act_inf(t_lexer *lex);
 int						act_error(t_lexer *lex);
+
+int						generate_tree(t_lexer *lex);
+int         push_token(t_lexer *lex);
+char	*get_command_path(char *path_line, char *command);
+void	execute_tree(t_lexer *lex);
 
 #endif
