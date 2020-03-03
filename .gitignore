@@ -6,3 +6,4 @@ test*
 minishell
 *.a
 grammar
+infinite
