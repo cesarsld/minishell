@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2020/03/02 16:01:21 by cjaimes          ###   ########.fr        #
+#    Updated: 2020/03/03 15:20:02 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,8 @@ SRC			=	main.c \
 				actions.c\
 				node.c \
 				utils.c \
-				command.c
+				command.c \
+				execution.c
 				
 
 SRCS		=	${addprefix ${SRC_DIR}, ${SRC}}

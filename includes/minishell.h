@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/02 15:59:08 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/03 15:22:43 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ typedef struct			s_lexer
 
 	t_node				*tree;
 	t_oken_type			previous_token;
+	char				**envac;
+	t_list				*env_list;
 }						t_lexer;
 
 typedef struct			s_env_var
@@ -150,5 +152,6 @@ int						act_error(t_lexer *lex);
 int						generate_tree(t_lexer *lex);
 int         push_token(t_lexer *lex);
 char	*get_command_path(char *path_line, char *command);
+void	execute_tree(t_lexer *lex);
 
 #endif

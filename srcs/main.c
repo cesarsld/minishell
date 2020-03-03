@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/02 17:27:43 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/03 15:42:20 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,12 +244,27 @@ void init_lexer_functions(t_lexer *lex)
 	lex->transitions[e_error] = &from_error;
 }
 
-void init_lexer(t_lexer *lex, char *input)
+void init_lexer(t_lexer *lex, char *input, char **envac, t_list *env_list)
 {
 	init_lexer_functions(lex);
 	lex->tokens = 0;
 	lex->token_start = 0;
 	lex->token_len = 0;
+	lex->input = input;
+	lex->state = e_general;
+	lex->prev_state = lex->state;
+	lex->tree = 0;
+	lex->previous_token = e_t_word;
+	lex->envac = envac;
+	lex->env_list = env_list;
+}
+
+void reset_lexer(t_lexer *lex, char *input)
+{
+	lex->token_start = 0;
+	lex->token_len = 0;
+	ft_lstclear(&(lex->tokens), &free);
+	free(lex->input);
 	lex->input = input;
 	lex->state = e_general;
 	lex->prev_state = lex->state;
@@ -314,8 +329,9 @@ int main(int ac, char **av, char **envac)
 	t_list *env_list;
 
 	ac = 0;
-	while (*av)
-		printf("%s\n", *av++);
+	av = 0;
+	//while (*av)
+		//printf("%s\n", *av++);
 
 	if(!(env_list = get_env_vars(envac)))
 		return (0);
@@ -328,17 +344,33 @@ int main(int ac, char **av, char **envac)
 	//char *test = ft_strdup("echo boo haha bingo ; echo boo haha ; echo top; echo boom peck");
 	//char *test = ft_strdup("echo boo haha bingo | echo boo haha | echo boo ; echo top | echo boom peck ; echo tech beck");
 	//char *test = ft_strdup("33>>>boo 3> gaa >> > >>>>> echo boo 45 >boo");
-	char *test = ft_strdup(">>foo >bar echo meh >tap boo | >boom echo tech ; echo bass >bee | >mambo echo tree  | echo trump >boo ");
+	//char *test = ft_strdup(">foo >bar echo meh >tap boo | >boom echo tech ; echo bass >bee | >mambo echo tree  | echo trump >boo ");
 	//char *test = ft_strdup("tech    ");
 	//t_list *words = lex_it(&test);
 	t_lexer lex;
-	init_lexer(&lex, test);
-	fetch_input_words(&lex);
-	generate_tree(&lex);
+	//init_lexer(&lex, test, envac);
+	//fetch_input_words(&lex);
+	//generate_tree(&lex);
 	//t_node *tree = generate_tree(&lex);
 	//printf("%p\n", tree);
-	if (lex.tree)
-		print_tree(lex.tree, 0, 2);
+	//if (lex.tree)
+	//	print_tree(lex.tree, 0, 2);
+	//printf("boo");
+
+	init_lexer(&lex, 0, envac, env_list);
+	while (1)
+	{
+		ft_putstr("> ");
+		if (!get_next_line(0, &user_input))
+			return (0);
+		copy = user_input;
+		skip_whitespace(&user_input);
+		reset_lexer(&lex, copy);
+		fetch_input_words(&lex);
+		generate_tree(&lex);
+		execute_tree(&lex);
+	}
+
 
 
 	//t_list *words = lex_it(&test);
@@ -355,12 +387,12 @@ int main(int ac, char **av, char **envac)
 	// if (new_id == 0)
 	// {
 	// 	printf("id is %d\n", new_id);
-	// 	char *name = strdup("infinite");
-	// 	char **arg = malloc(sizeof(char *) * 2);
-	// 	arg[1] = 0;
-	// 	arg[0] = name;
+		// char *name = strdup("echo");
+		// char **arg = malloc(sizeof(char *) * 2);
+		// arg[1] = 0;
+		// arg[0] = name;
 
-	// 	execve("hi:hi", arg, envac);
+		// execve("echo", arg, envac);
 	// 	perror("");
 
 	// }

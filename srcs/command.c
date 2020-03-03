@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/29 21:45:38 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/02 17:00:04 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/03 15:37:50 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,34 +34,39 @@ char	*ft_strjoin_path(char const *s1, char const *s2)
 
 void	free_split(char **split)
 {
+	char **copy;
+
+	copy = split;
 	while (*split)
 		free(*split++);
 	free(*split);
-	free(split);
+	free(copy);
 }
 
 char	*get_command_path(char *path_line, char *command)
 {
 	char **paths;
+	char **copy;
 	struct stat buf;
 	char *full;
 	
+	if(stat(command, &buf) == 0)
+		return (command);
 	if (!(paths = ft_split(path_line, ':')))
-	{
-		free_split(paths);
 		return (0);
-	}
+	copy = paths;
 	while (*paths)
 	{
 		full = ft_strjoin_path(*paths, command);
 		if (stat(full, &buf) == 0)
 		{
-			free_split(paths);
+			free_split(copy);
 			return (full);
 		}
 		free(full);
 		paths++;
 	}
-	free_split(paths);
+	free_split(copy);
+	//command not found
 	return (0);
 }
