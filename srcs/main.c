@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/03 15:42:20 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/03 16:39:55 by lgrellie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -360,7 +360,7 @@ int main(int ac, char **av, char **envac)
 	init_lexer(&lex, 0, envac, env_list);
 	while (1)
 	{
-		ft_putstr("> ");
+		ft_putstr("*:･ﾟ✧(=✪ ᆺ ✪=)*:･ﾟ✧ >");
 		if (!get_next_line(0, &user_input))
 			return (0);
 		copy = user_input;
