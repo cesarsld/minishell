@@ -83,12 +83,21 @@ void	execute_tree(t_lexer *lex)
 	t_node	*tree;
 
 	tree = lex->tree;
-	if (tree && tree->type == e_t_cmd_name)
-		execute_command(tree, lex);
+	if (!tree)
+		return ;
+	if (tree->type == e_t_cmd_name)
+		return (execute_command(tree, lex));
+	if (tree->type == e_t_pipe)
+		return (execute_pipe(tree, lex));
 }
 
 
-void	execute_pipe()
+void	execute_pipe(t_node *tree, t_lexer *lex)
 {
+	/*
+	** Have to pipe output of left child to right child
+	** HOW ?
+	** 
+	*/
 	
 }
