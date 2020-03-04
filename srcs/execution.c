@@ -74,7 +74,6 @@ void handle_inf_redir(t_node *node)
 		ft_printf("minishell: %s: %s", strerror(errno), node->content);
 		return ;
 	}
-	printf("fd is %d\n", fd);
 	if (node->left)
 	{
 		close(fd);
