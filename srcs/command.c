@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/29 21:45:38 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/03 15:37:50 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/04 13:05:15 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,6 @@ char	*get_command_path(char *path_line, char *command)
 		paths++;
 	}
 	free_split(copy);
-	//command not found
+	ft_printf("minishell: %s: command not found\n", command);
 	return (0);
 }

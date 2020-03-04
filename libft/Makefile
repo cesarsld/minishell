@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/19 14:55:10 by cjaimes           #+#    #+#              #
-#    Updated: 2019/11/22 12:39:49 by cjaimes          ###   ########.fr        #
+#    Updated: 2020/03/04 12:56:12 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,7 +82,17 @@ FILES	=	ft_memset.c \
 			ft_strequ_bonus.c \
 			ft_strnequ_bonus.c \
 			get_next_line.c \
-			get_next_line_utils.c
+			get_next_line_utils.c \
+			ft_printf/ft_printf.c \
+			ft_printf/ft_itoa_base.c \
+			ft_printf/utils.c \
+			ft_printf/utils_2.c \
+			ft_printf/handlers.c \
+			ft_printf/flushers.c \
+			ft_printf/safe_appends.c \
+			ft_printf/flag_handlers.c \
+			ft_printf/flag_handlers_2.c \
+			ft_printf/flag_checkers.c
 
 SRCS	=	$(addprefix ${ROOT}, ${FILES})
 

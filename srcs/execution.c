@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 17:24:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/03 15:41:45 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/04 12:42:30 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,37 +50,45 @@ char **generate_arguments(t_node *args)
 	return (arg_list);
 }
 
+void	execute_command(t_node *cmd_node, t_lexer *lex)
+{
+	char	**args;
+	char	*ex_name;
+	pid_t	new_id;
+	int		a;
+
+	if (starts_with(cmd_node->content, "./"))
+	{
+		if (!(args = generate_arguments(cmd_node)))
+			return ; //malloc fail
+		if (!(ex_name = ft_strdup(cmd_node->content)))
+			return ;
+		pop_word(ex_name, 2);
+	}
+	else
+	{
+		if (!(args = generate_arguments(cmd_node)))
+			return ; //malloc fail
+		if (!(ex_name = get_command_path(get_var(lex->env_list, "PATH")->value, cmd_node->content)))
+			return ;
+	}
+	if((new_id = fork()) == 0)
+		execve(ex_name, args, lex->envac);
+	else
+		waitpid(new_id, &a, 0);
+}
+
 void	execute_tree(t_lexer *lex)
 {
 	t_node	*tree;
-	char	**args;
-	char	*ex_name;
-	pid_t new_id;
-	int a;
 
 	tree = lex->tree;
 	if (tree && tree->type == e_t_cmd_name)
-	{
-		if (starts_with(tree->content, "./"))
-		{
-			if (!(args = generate_arguments(tree)))
-				return ; //malloc fail
-			if (!(ex_name = ft_strdup(tree->content)))
-				return ;
-			pop_word(ex_name, 2);
-			if((new_id = fork()) == 0)
-				execve(ex_name, args, lex->envac);
-		}
-		else
-		{
-			if (!(args = generate_arguments(tree)))
-				return ; //malloc fail
-			if (!(ex_name = get_command_path(get_var(lex->env_list, "PATH")->value, tree->content)))
-				return ;
-			if((new_id = fork()) == 0)
-				execve(ex_name, args, lex->envac);
-			else
-				waitpid(new_id, &a, 0);
-		}
-	}
+		execute_command(tree, lex);
+}
+
+
+void	execute_pipe()
+{
+	
 }

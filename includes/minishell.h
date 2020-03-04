@@ -6,13 +6,14 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/03 15:22:43 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/04 13:02:50 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include "libft.h"
+# include "ft_printf.h"
 # include <errno.h>
 # include <string.h>
 # include <stdio.h>
