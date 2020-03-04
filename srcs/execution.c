@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 17:24:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/04 17:45:34 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/04 22:47:09 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,21 @@ char **generate_arguments(t_node *args)
 	return (arg_list);
 }
 
+void handle_d_supp_redir(t_node *node)
+{
+	int fd;
+
+	if ((fd = open(node->content, O_CREAT | O_WRONLY | O_APPEND, 0644)) == -1)
+		return (perror("open()"));
+
+	if (node->left)
+	{
+		close(fd);
+		return (handle_redir(node->left));
+	}
+	dup2(fd, STDOUT_FILENO);
+}
+
 void handle_supp_redir(t_node *node)
 {
 	int fd;
@@ -88,6 +103,8 @@ void handle_redir(t_node *node)
 		handle_supp_redir(node);
 	else if (node->type == e_t_inf)
 		handle_inf_redir(node);
+	else if (node->type == e_t_d_supp)
+		handle_d_supp_redir(node);
 }
 
 void	execute_command(t_node *cmd_node, t_lexer *lex)

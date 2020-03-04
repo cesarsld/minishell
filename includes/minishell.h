@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/04 17:28:52 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/04 22:40:17 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef enum			e_token_type
 	e_t_name,
 	e_t_semi_colon,
 	e_t_supp,
+	e_t_d_supp,
 	e_t_inf,
 	e_t_append,
 	e_t_cd, 
