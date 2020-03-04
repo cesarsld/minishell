@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 17:24:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/04 15:47:36 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/04 17:45:34 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,26 +53,42 @@ char **generate_arguments(t_node *args)
 void handle_supp_redir(t_node *node)
 {
 	int fd;
-	char *line;
 
-
-	line = 0;
-	if (!(fd = open(node->content, O_CREAT | O_WRONLY)))
+	if ((fd = open(node->content, O_CREAT | O_WRONLY | O_TRUNC, 0644)) == -1)
 		return (perror("open()"));
+
 	if (node->left)
 	{
 		close(fd);
-		return (handle_supp_redir(node->left));
+		return (handle_redir(node->left));
 	}
-	while (!get_next_line(node->fd, &line))
+	dup2(fd, STDOUT_FILENO);
+}
+
+void handle_inf_redir(t_node *node)
+{
+	int fd;
+
+	if ((fd = open(node->content, O_RDONLY)) == -1)
 	{
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
-		free(line);
+		ft_printf("minishell: %s: %s", strerror(errno), node->content);
+		return ;
 	}
-	if (line)
-		write(fd, line, ft_strlen(line));
-	free(line);
+	printf("fd is %d\n", fd);
+	if (node->left)
+	{
+		close(fd);
+		return (handle_redir(node->left));
+	}
+	dup2(fd, STDIN_FILENO);
+}
+
+void handle_redir(t_node *node)
+{
+	if (node->type == e_t_supp)
+		handle_supp_redir(node);
+	else if (node->type == e_t_inf)
+		handle_inf_redir(node);
 }
 
 void	execute_command(t_node *cmd_node, t_lexer *lex)
@@ -80,6 +96,8 @@ void	execute_command(t_node *cmd_node, t_lexer *lex)
 	char	**args;
 	char	*ex_name;
 
+	if(cmd_node->right)
+		handle_redir(cmd_node->right);
 	if (starts_with(cmd_node->content, "./"))
 	{
 		if (!(args = generate_arguments(cmd_node)))

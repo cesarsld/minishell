@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 18:03:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/01 23:49:24 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/04 17:23:25 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,22 @@ int	generate_tree(t_lexer *lex)
 		}
 		else if (is_redirection("<", token->content))
 		{
-			// to handle later, for now is error
-			break ;
+			if (!(temp = create_new_node(e_t_inf)))
+				return (0);
+			temp->fd = get_number(token->content, ft_strlen(token->content) - 1);
+			if (!redir_head)
+			{
+				redir_head = temp;
+				redir = temp;
+			}
+			else 
+			{
+				redir->left = temp;
+				redir = temp;
+			}
+			if (cur_cmd)
+				cur_cmd->right = redir_head;
+			lex->previous_token = e_t_inf;
 		}
 		else if (is_redirection(">>", token->content))
 		{
@@ -141,7 +155,7 @@ int	generate_tree(t_lexer *lex)
 		}
 		else
 		{
-			if (lex->previous_token == e_t_supp)
+			if (lex->previous_token == e_t_supp || lex->previous_token == e_t_inf)
 			{
 				redir->content = token->content;
 				lex->previous_token = e_t_word;
