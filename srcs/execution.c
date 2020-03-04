@@ -52,14 +52,14 @@ char **generate_arguments(t_node *args)
 
 void	execute_tree(t_lexer *lex)
 {
-	t_node *tree;
+	t_node	*tree;
 	char	**args;
 	char	*ex_name;
 	pid_t new_id;
 	int a;
 
 	tree = lex->tree;
-	if (tree->type == e_t_cmd_name)
+	if (tree && tree->type == e_t_cmd_name)
 	{
 		if (starts_with(tree->content, "./"))
 		{
