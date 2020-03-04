@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 17:24:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/04 13:49:18 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/04 15:47:36 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,35 @@ char **generate_arguments(t_node *args)
 	return (arg_list);
 }
 
+void handle_supp_redir(t_node *node)
+{
+	int fd;
+	char *line;
+
+
+	line = 0;
+	if (!(fd = open(node->content, O_CREAT | O_WRONLY)))
+		return (perror("open()"));
+	if (node->left)
+	{
+		close(fd);
+		return (handle_supp_redir(node->left));
+	}
+	while (!get_next_line(node->fd, &line))
+	{
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
+		free(line);
+	}
+	if (line)
+		write(fd, line, ft_strlen(line));
+	free(line);
+}
+
 void	execute_command(t_node *cmd_node, t_lexer *lex)
 {
 	char	**args;
 	char	*ex_name;
-	pid_t	new_id;
-	int		a;
 
 	if (starts_with(cmd_node->content, "./"))
 	{
@@ -72,10 +95,7 @@ void	execute_command(t_node *cmd_node, t_lexer *lex)
 		if (!(ex_name = get_command_path(get_var(lex->env_list, "PATH")->value, cmd_node->content)))
 			return ;
 	}
-	if((new_id = fork()) == 0)
-		execve(ex_name, args, lex->envac);
-	else
-		waitpid(new_id, &a, 0);
+	execve(ex_name, args, lex->envac);
 }
 
 void	execute_pipe(t_node *tree, t_lexer *lex)
@@ -121,6 +141,9 @@ void	execute_pipe(t_node *tree, t_lexer *lex)
 
 void	execute_tree(t_lexer *lex, t_node *node)
 {
+	pid_t	new_id;
+	int		a;
+
 	if (!node)
 		return ;
 	if (node->type == e_t_semi_colon)
@@ -128,8 +151,13 @@ void	execute_tree(t_lexer *lex, t_node *node)
 		execute_tree(lex, node->left);
 		execute_tree(lex, node->right);
 	}
-	if (node->type == e_t_cmd_name)
-		return (execute_command(node, lex));
+	else if (node->type == e_t_cmd_name)
+	{
+		if((new_id = fork()) == 0)
+			execute_command(node, lex);
+		else
+			waitpid(new_id, &a, 0);	
+	}
 	if (node->type == e_t_pipe)
 		return (execute_pipe(node, lex));
 }
