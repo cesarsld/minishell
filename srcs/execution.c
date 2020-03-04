@@ -98,45 +98,56 @@ void	execute_command(t_node *cmd_node, t_lexer *lex)
 	execve(ex_name, args, lex->envac);
 }
 
-void	execute_pipe(t_node *tree, t_lexer *lex)
+void	execute_pipe(t_node *tree, t_lexer *lex, int out_fd)
 {
     int status;
 	int pfd[2];
     int pid_left, pid_right;
 
-    if (pipe(pfd) == -1)
+    if (pipe(pfd) == -1) // create pipe
     {
         perror("pipe");
         exit(1);
     }
-    if ((pid_left = fork()) < 0)
-    {
-        perror("fork");
-        exit(1);
-    }
-    if (pid_left == 0)
-    {
-        dup2(pfd[1], STDOUT_FILENO);
-        close(pfd[0]);
-        close(pfd[1]);
-        return (execute_tree(lex, tree->left));
-    }
-    if ((pid_right = fork()) == -1)
-    {
-        perror("fork");
-        exit(1);
-    }
-    if (pid_right == 0)
-    {
-        dup2(pfd[0], STDIN_FILENO);
-        close(pfd[0]);
-        close(pfd[1]);
-        return (execute_tree(lex, tree->right));
-    }
-    close(pfd[0]);
-    close(pfd[1]);
-    waitpid(pid_left, &status, 0);
-    waitpid(pid_right, &status, 0);
+	if ((pid_right = fork()) == -1) //create right fork child
+    	{
+        	perror("fork");
+        	exit(1);
+    	}
+    if (pid_right == 0)		// executes if in right child
+	{
+		dup2(out_fd, STDOUT_FILENO); //bind output to out_fd which would be input of superior level or 1 if level 0
+        dup2(pfd[0], STDIN_FILENO); // bind input to end of pipe
+    	close(pfd[1]);				// ignore pipe pipe entry
+    	return (execute_command(tree->right, lex)); //right child end
+   	}
+	if (tree->left->type == e_t_cmd_name) // if left side is cmd, we are in deepest level
+	{
+    	if ((pid_left = fork()) < 0) //fork left child
+    	{
+    	    perror("fork");
+    	    exit(1);
+    	}
+   		if (pid_left == 0) // executes if in left child
+    	{
+    	    dup2(pfd[1], STDOUT_FILENO);	// bind output to pipe entry
+			close(out_fd);					// close out_fd not used by left child (only by right)
+			close(pfd[0]);					// close end of pipe as left child sends output to right child
+    	    return (execute_command(tree->left, lex)); // left child end
+    	}
+		// we are in parent process, child will never reach this line,  ENF OF FLOW
+		close(out_fd); 
+		close(pfd[0]);
+		close(pfd[1]);
+		waitpid(pid_left, &status, 0);
+		waitpid(pid_right, &status, 0);
+	}
+	else // left is a pipe
+	{
+		close(pfd[0]); // close end of pipe data lost
+		execute_pipe(tree->left, lex, pfd[1]); // recursion
+		waitpid(pid_right, &status, 0);
+	}
 }
 
 void	execute_tree(t_lexer *lex, t_node *node)
@@ -159,5 +170,5 @@ void	execute_tree(t_lexer *lex, t_node *node)
 			waitpid(new_id, &a, 0);	
 	}
 	if (node->type == e_t_pipe)
-		return (execute_pipe(node, lex));
+		return (execute_pipe(node, lex, STDOUT_FILENO));
 }
