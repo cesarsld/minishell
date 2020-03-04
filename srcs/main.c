@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/03 17:04:41 by lgrellie         ###   ########.fr       */
+/*   Updated: 2020/03/04 13:40:18 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -362,13 +362,16 @@ int main(int ac, char **av, char **envac)
 	{
 		ft_putstr("(｡◕‿◕｡✿) ");
 		if (!get_next_line(0, &user_input))
+		{
+			ft_printf("exit\n");
 			return (0);
+		}
 		copy = user_input;
 		skip_whitespace(&user_input);
 		reset_lexer(&lex, copy);
 		fetch_input_words(&lex);
 		generate_tree(&lex);
-		execute_tree(&lex);
+		execute_tree(&lex, lex.tree);
 	}
 
 

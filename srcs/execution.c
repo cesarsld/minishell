@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 17:24:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/04 12:42:30 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/04 13:49:18 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,26 +78,29 @@ void	execute_command(t_node *cmd_node, t_lexer *lex)
 		waitpid(new_id, &a, 0);
 }
 
-void	execute_tree(t_lexer *lex)
-{
-	t_node	*tree;
-
-	tree = lex->tree;
-	if (!tree)
-		return ;
-	if (tree->type == e_t_cmd_name)
-		return (execute_command(tree, lex));
-	if (tree->type == e_t_pipe)
-		return (execute_pipe(tree, lex));
-}
-
-
 void	execute_pipe(t_node *tree, t_lexer *lex)
 {
+	tree = 0;
+	lex = 0;
 	/*
 	** Have to pipe output of left child to right child
 	** HOW ?
 	** 
 	*/
 	
+}
+
+void	execute_tree(t_lexer *lex, t_node *node)
+{
+	if (!node)
+		return ;
+	if (node->type == e_t_semi_colon)
+	{
+		execute_tree(lex, node->left);
+		execute_tree(lex, node->right);
+	}
+	if (node->type == e_t_cmd_name)
+		return (execute_command(node, lex));
+	if (node->type == e_t_pipe)
+		return (execute_pipe(node, lex));
 }
