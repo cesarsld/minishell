@@ -80,14 +80,43 @@ void	execute_command(t_node *cmd_node, t_lexer *lex)
 
 void	execute_pipe(t_node *tree, t_lexer *lex)
 {
-	tree = 0;
-	lex = 0;
-	/*
-	** Have to pipe output of left child to right child
-	** HOW ?
-	** 
-	*/
-	
+    int status;
+	int pfd[2];
+    int pid_left, pid_right;
+
+    if (pipe(pfd) == -1)
+    {
+        perror("pipe");
+        exit(1);
+    }
+    if ((pid_left = fork()) < 0)
+    {
+        perror("fork");
+        exit(1);
+    }
+    if (pid_left == 0)
+    {
+        dup2(pfd[1], STDOUT_FILENO);
+        close(pfd[0]);
+        close(pfd[1]);
+        return (execute_tree(lex, tree->left));
+    }
+    if ((pid_right = fork()) == -1)
+    {
+        perror("fork");
+        exit(1);
+    }
+    if (pid_right == 0)
+    {
+        dup2(pfd[0], STDIN_FILENO);
+        close(pfd[0]);
+        close(pfd[1]);
+        return (execute_tree(lex, tree->right));
+    }
+    close(pfd[0]);
+    close(pfd[1]);
+    waitpid(pid_left, &status, 0);
+    waitpid(pid_right, &status, 0);
 }
 
 void	execute_tree(t_lexer *lex, t_node *node)
