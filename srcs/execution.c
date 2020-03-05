@@ -117,19 +117,21 @@ void	execute_command(t_node *cmd_node, t_lexer *lex)
 	if (starts_with(cmd_node->content, "./"))
 	{
 		if (!(args = generate_arguments(cmd_node)))
-			return ; //malloc fail
+			exit(1);
 		if (!(ex_name = ft_strdup(cmd_node->content)))
-			return ;
+			exit(1);
 		pop_word(ex_name, 2);
 	}
 	else
 	{
 		if (!(args = generate_arguments(cmd_node)))
-			return ; //malloc fail
+			exit(1);
 		if (!(ex_name = get_command_path(get_var(lex->env_list, "PATH")->value, cmd_node->content)))
-			return ;
+			exit(1);
 	}
 	execve(ex_name, args, lex->envac);
+	ft_printf("execve failed\n");
+	exit(1);
 }
 
 void	execute_pipe(t_node *tree, t_lexer *lex, int out_fd)
@@ -202,7 +204,7 @@ void	execute_tree(t_lexer *lex, t_node *node)
 		if((new_id = fork()) == 0)
 			execute_command(node, lex);
 		else
-			waitpid(new_id, &a, 0);	
+			waitpid(new_id, &a, 0);
 	}
 	if (node->type == e_t_pipe)
 		return (execute_pipe(node, lex, STDOUT_FILENO));
