@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/06 14:03:45 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/06 21:02:00 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -353,7 +353,8 @@ int main(int ac, char **av, char **envac)
 		return (0);
 
 	user_input = 0;
-	// char *test = ft_strdup("'e'\"c\"\"\"'ho'\" boo\" \"   koki");
+	//char *test = ft_strdup("'e'\"c\"\"\"'ho'\" boo\" \"");
+	char *test = ft_strdup("e$34cho$USER\"boo \\$nope here mal$ok\"$yo'hello''i wont be $called'");
 	//get_command_path(get_var(env_list, "PATH")->value, "cat");
 
 	//char *test = ft_strdup("e'c'h\"l\"o boo what\\\'s  babe;;I;got;thestyle  up|||||su|is je a>r>>rive ici |le pipe |c\\\'est cool  |\"Le cheval c'est trop genial\"'senpai'|  \\t    end  ");
@@ -377,9 +378,14 @@ int main(int ac, char **av, char **envac)
 	// t_node *n = create_new_node(e_t_supp);
 	// n->content = ft_strdup("hello");
 	// handle_supp_redir(n);
-
+	
 	init_lexer(&lex, 0, envac, env_list);
-	while (1)
+	lex.state = e_word;
+	lex.prev_state = e_word;
+	expand_word(&lex, test, &test);
+	filter_word(test);
+	printf("word is %s\n", test);
+	while (0)
 	{
 		ft_putstr("(｡◕‿◕｡✿) ");
 		if (!get_next_line(0, &user_input))
@@ -432,19 +438,6 @@ int main(int ac, char **av, char **envac)
 	// 	signal(SIGQUIT, &kill_current_process);
 	// 	//signal(SIG, &kill_current_process);
 	// 	waitpid(new_id, &a , 0);
-
-	// }
-
-
-	// while (1)
-	// {
-	// 	ft_putstr("> ");
-	// 	if (!get_next_line(0, &user_input))
-	// 		return (0);
-	// 	copy = user_input;
-	// 	skip_whitespace(&user_input);
-	// 	handle_command(&user_input, env_list);
-	// 	free (copy);
 
 	// }
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/04 22:40:17 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/06 21:01:53 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <signal.h>
 
 # define LEX_STATES 11
+# define FAILURE 1
+# define SUCCESS 0
 
 typedef enum			e_lex_state
 {
@@ -122,6 +124,10 @@ t_var					*get_var(t_list *env_list, char *key);
 
 int	is_number_n(char *input, int size);
 int	get_number(char *input, int size);
+
+char	*get_var_value(t_list *env_list, char *key);
+int expand_word(t_lexer *lex, char *word, char **first);
+void filter_word(char *word);
 
 /*
 ** Transitions and actions

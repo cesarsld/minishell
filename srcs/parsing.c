@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:29:41 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/06 13:32:02 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/06 21:00:24 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,128 +108,6 @@ char	*get_next_word(char **input, char *q_type)
 }
 
 
-void update_state(int *current, int *previous, int new)
-{
-	*previous= *current;
-	*current = new;
-}
-
-t_list	*lex_it(char **input)
-{
-	int p_state;
-	int state;
-	int word_start;
-	int counter;
-
-	char *word;
-	t_list *temp;
-	t_list *list;
-
-	list = 0;
-	word = 0;
-	word_start = -1;
-	counter = 0;
-	p_state = 0;
-	state = e_general;
-	while (**input)
-	{
-		//printf("checking char `%c`\n", **input);
-		if ((**input == '\'' || **input == '"') && (state == e_general || state == e_d_quote || state == e_s_quote))
-		{
-			if (state == e_general)
-			{
-				word_start = word_start == -1 ? counter: word_start;
-				update_state(&state, &p_state, **input == '"' ? e_d_quote : e_s_quote);
-			}
-			else if ((state == e_d_quote && **input == '"') || (state == e_s_quote && **input == '\''))
-			{
-				update_state(&state, &p_state, e_general);
-			}
-			//printf("state is %d\n", state);
-		}
-		else if (**input == '\\' && (state == e_d_quote || state == e_general || state == e_backslash))
-		{
-			if (state == e_backslash)
-				update_state(&state, &p_state, p_state);
-			else if (state == e_general)
-			{
-				if (word_start == -1)
-					word_start = counter;
-				update_state(&state, &p_state, e_backslash);
-			}
-			else
-				update_state(&state, &p_state, e_backslash);
-		}
-		else if (is_white_space(**input) && state == e_general && word_start != -1)
-		{	// word_start != -1 to check that we have started a word handles spree of white spaces
-			if (!(word = ft_strndup(*input - counter + word_start, counter - word_start)))
-				return (0);
-			//printf("word is %s\n", word);
-			if (!(temp = ft_lstnew(word)))
-				return (0);
-			ft_lstadd_back(&list, temp);
-			word_start = -1;
-		}
-		else if (**input == '|' && state != e_backslash)
-		{
-			if (state == e_general)
-			{
-				update_state(&state, &p_state, e_or);
-				if (word_start != -1)
-				{
-					if (!(word = ft_strndup(*input - counter + word_start, counter - word_start)))
-						return (0);
-					if (!(temp = ft_lstnew(word)))
-						return (0);
-					ft_lstadd_back(&list, temp);
-					word_start = -1;
-				}
-			}
-			else if (state == e_or)
-			{
-				if (!(word = ft_strdup("||")))
-					return (0);
-				if (!(temp = ft_lstnew(word)))
-					return (0);
-				ft_lstadd_back(&list, temp);
-				update_state(&state, &p_state, e_general);
-				word_start = -1;
-			}
-		}
-		else if (state == e_or && **input != '|')
-		{
-			//printf("pipe\n");
-			if (!(word = ft_strdup("|")))
-					return (0);
-			if (!(temp = ft_lstnew(word)))
-				return (0);
-			ft_lstadd_back(&list, temp);
-			update_state(&state, &p_state, e_general);
-			word_start = -1;
-			continue ;
-		}
-		else if (state == e_general && word_start == -1 && !is_white_space(**input))
-		{
-			word_start = counter;
-		}
-		else if (state == e_backslash && **input != '\\')
-			update_state(&state, &p_state, p_state);
-		//printf("state is `%d`\n", state);
-		counter++;
-		(*input)++;
-	}
-	if ( /*state == e_general &&*/ word_start != -1)
-	{
-		if (!(word = ft_strndup(*input - counter + word_start, counter - word_start)))
-			return (0);
-		if (!(temp = ft_lstnew(word)))
-			return (0);
-		ft_lstadd_back(&list, temp);
-	}
-
-	return (list);
-}
-
 void shift_from_index(char *line, int index)
 {
 	int i;
@@ -240,7 +118,86 @@ void shift_from_index(char *line, int index)
 		*(line + index + i) = *(line + index + i + 1);
 		i++;
 	}
-	//*(line + index + i) = 0;
+}
+
+void pop_substr(char *start, int amount)
+{
+	while (*(start + amount))
+	{
+		*start = *(start + amount);
+		start++;
+	}
+	*start = 0;
+}
+
+int is_name_char(char c)
+{
+	return (ft_isalnum(c) || c ==  '_');
+}
+
+int insert_word(t_lexer *lex, char *word, char **first, char *check)
+{
+	char *key;
+	char *exp;
+	char *concat;
+
+	while (is_name_char(*word))
+		word++;
+	if (!(key = ft_substr(check, 0, word - check)))
+		return (FAILURE);
+	exp = get_var_value(lex->env_list, key);
+	free(key);
+	pop_substr(check - 1, word - check + 1);
+	word = check - 1;
+
+	if (exp)
+	{
+		if (!(concat = ft_strnew(ft_strlen(*first) + ft_strlen(exp))))
+			return (FAILURE);
+		ft_strncpy(concat, *first, check - 1 - *first);
+		ft_strcat(concat, exp);
+		ft_strcat(concat, word);
+		free(*first);
+		*first = concat;
+		word = *first + ft_strlen(concat) - ft_strlen(word);
+	}
+	return (expand_word(lex, word, first));
+}
+
+int expand_word(t_lexer *lex, char *word, char **first)
+{
+	while (*word)
+	{
+		//keeps literal value outside of word
+		if (lex->state == e_backslash && lex->prev_state == e_word)
+		{
+			shift_from_index(word - 1, 0);
+			lex->state = e_word;
+		}
+		else if (lex->state == e_backslash && lex->prev_state == e_d_quote && (*word == '\\' || *word == '$'))
+		{
+			if (*word == '\\' || *word == '$')
+				shift_from_index(word - 1, 0);
+			lex->state = e_d_quote;
+			lex->prev_state = e_word;
+		}
+		else if (*word == '\'' && (lex->state == e_word || lex->state == e_s_quote))
+			lex->state = lex->state == e_word? e_s_quote : e_word;
+		else if (*word == '"' && (lex->state == e_word || lex->state == e_d_quote))
+			lex->state = lex->state == e_word? e_d_quote : e_word;
+		else if (*word == '\\' && lex->state != e_s_quote)
+		{
+			lex->prev_state = lex->state;
+			lex->state = e_backslash;
+		}
+		else if (*word == '$' && lex->state != e_s_quote)
+		{
+			if ((ft_isalpha(*(word + 1)) || *(word + 1) == '_'))
+				return (insert_word(lex, word + 2, first, word + 1));
+		}
+		word++;
+	}
+	return (SUCCESS);
 }
 
 void filter_word(char *word)
@@ -275,29 +232,3 @@ void filter_word(char *word)
 		counter++;
 	}
 }
-
-t_list *lex_parse_line(char **line)
-{
-	char *word;
-	char open;
-	//char *user_input;
-	
-	open = 0;
-	if (!(word = get_next_word(line, &open)))
-		return (0);
-	// if (open)
-	// {
-	// 	ft_putstr("> ");
-	// 	if (!get_next_line(0, &user_input))
-	//  		return (0);
-		
-	// }
-	filter_word(word);
-	printf("%s\n", word);
-	return 0;
-}
-
-// void check_token_list(t_list *tokens)
-// {
-	
-// }
