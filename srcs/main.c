@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/06 13:45:23 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/06 14:03:45 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -392,9 +392,10 @@ int main(int ac, char **av, char **envac)
 		reset_lexer(&lex, copy);
 		if(fetch_input_words(&lex))
 			continue;
-		ft_lstiter(lex.tokens, &print_words);
-		generate_tree(&lex);
-		print_tree(lex.tree, 0, 2);
+		//ft_lstiter(lex.tokens, &print_words);
+		if (generate_tree(&lex))
+			continue;
+		//print_tree(lex.tree, 0, 2);
 		execute_tree(&lex, lex.tree);
 	}
 
