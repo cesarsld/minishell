@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/24 18:58:10 by lgrellie          #+#    #+#             */
-/*   Updated: 2020/03/02 00:08:38 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/06 13:49:06 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@ void					from_and(t_lexer *lex)
 		lex->state = e_d_quote;
 	else if (lex->input[lex->token_start + lex->token_len] == '\\')
 		lex->state = e_backslash;
-	else if (is_white_space(lex->input[lex->token_start + lex->token_len]))
+	else if (is_white_space(lex->input[lex->token_start + lex->token_len]) ||
+		!lex->input[lex->token_start + lex->token_len])
 		lex->state = e_general;
 	else if (lex->input[lex->token_start + lex->token_len] == '>')
 		lex->state = e_supp;
@@ -116,7 +117,8 @@ void					from_or(t_lexer *lex)
 		lex->state = e_d_quote;
 	else if (lex->input[lex->token_start + lex->token_len] == '\\')
 		lex->state = e_backslash;
-	else if (is_white_space(lex->input[lex->token_start + lex->token_len]))
+	else if (is_white_space(lex->input[lex->token_start + lex->token_len]) ||
+		!lex->input[lex->token_start + lex->token_len])
 		lex->state = e_general;
 	else if (lex->input[lex->token_start + lex->token_len] == '>')
 		lex->state = e_supp;
@@ -140,7 +142,8 @@ void					from_semi_colon(t_lexer *lex)
 		lex->state = e_d_quote;
 	else if (lex->input[lex->token_start + lex->token_len] == '\\')
 		lex->state = e_backslash;
-	else if (is_white_space(lex->input[lex->token_start + lex->token_len]))
+	else if (is_white_space(lex->input[lex->token_start + lex->token_len]) ||
+		!lex->input[lex->token_start + lex->token_len])
 		lex->state = e_general;
 	else if (lex->input[lex->token_start + lex->token_len] == '>')
 		lex->state = e_supp;
@@ -164,7 +167,8 @@ void					from_supp(t_lexer *lex)
 		lex->state = e_d_quote;
 	else if (lex->input[lex->token_start + lex->token_len] == '\\')
 		lex->state = e_backslash;
-	else if (is_white_space(lex->input[lex->token_start + lex->token_len]))
+	else if (is_white_space(lex->input[lex->token_start + lex->token_len]) ||
+		!lex->input[lex->token_start + lex->token_len])
 		lex->state = e_general;
 	else if (lex->input[lex->token_start + lex->token_len] == '>')
 		lex->state = e_supp;
@@ -188,7 +192,8 @@ void					from_inf(t_lexer *lex)
 		lex->state = e_d_quote;
 	else if (lex->input[lex->token_start + lex->token_len] == '\\')
 		lex->state = e_backslash;
-	else if (is_white_space(lex->input[lex->token_start + lex->token_len]))
+	else if (is_white_space(lex->input[lex->token_start + lex->token_len]) ||
+		!lex->input[lex->token_start + lex->token_len])
 		lex->state = e_general;
 	else if (lex->input[lex->token_start + lex->token_len] == '>')
 		lex->state = e_supp;
@@ -212,7 +217,8 @@ void					from_error(t_lexer *lex)
 		lex->state = e_d_quote;
 	else if (lex->input[lex->token_start + lex->token_len] == '\\')
 		lex->state = e_backslash;
-	else if (is_white_space(lex->input[lex->token_start + lex->token_len]))
+	else if (is_white_space(lex->input[lex->token_start + lex->token_len]) ||
+		!lex->input[lex->token_start + lex->token_len])
 		lex->state = e_general;
 	else if (lex->input[lex->token_start + lex->token_len] == '>')
 		lex->state = e_supp;

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 18:03:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/06 12:07:55 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/06 13:40:08 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	is_redirection(const char *redir, char *token)
 	return (0);
 }
 
+// TODO Allow redirections without command names
 int	generate_tree(t_lexer *lex)
 {
 	t_list *token;
@@ -118,8 +119,8 @@ int	generate_tree(t_lexer *lex)
 			// if tree and stack is null, throw parse error
 			if (!stack_head)
 			{
-				ft_putstr("minishell: syntax error near unexpected token `|'\n: ");
-				break ;
+				ft_printf_err("minishell: syntax error near unexpected token `|'\n: ");
+				return (1);
 			}
 			if (!(temp = create_new_node(e_t_pipe)))
 				return (0);
@@ -128,7 +129,7 @@ int	generate_tree(t_lexer *lex)
 			stack = 0;
 			cur_cmd = 0;
 			redir_head = 0;
-			redir_head = 0;
+			redir = 0;
 			lex->previous_token = e_t_pipe;
 		}
 		else if (ft_strcmp(";", token->content) == 0)
@@ -164,7 +165,7 @@ int	generate_tree(t_lexer *lex)
 			stack = 0;
 			cur_cmd = 0;
 			redir_head = 0;
-			redir_head = 0;
+			redir = 0;
 			lex->previous_token = e_t_semi_colon;
 		}
 		else

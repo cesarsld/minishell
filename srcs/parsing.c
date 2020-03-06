@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:29:41 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/02/25 16:12:12 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/06 13:32:02 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,3 +296,8 @@ t_list *lex_parse_line(char **line)
 	printf("%s\n", word);
 	return 0;
 }
+
+// void check_token_list(t_list *tokens)
+// {
+	
+// }
