@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/19 14:55:10 by cjaimes           #+#    #+#              #
-#    Updated: 2020/03/04 12:56:12 by cjaimes          ###   ########.fr        #
+#    Updated: 2020/03/06 12:29:23 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -92,7 +92,8 @@ FILES	=	ft_memset.c \
 			ft_printf/safe_appends.c \
 			ft_printf/flag_handlers.c \
 			ft_printf/flag_handlers_2.c \
-			ft_printf/flag_checkers.c
+			ft_printf/flag_checkers.c \
+			ft_printf/init.c
 
 SRCS	=	$(addprefix ${ROOT}, ${FILES})
 

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/08 16:37:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/11 16:04:03 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/06 12:30:36 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	hd_handler(const char **entry, t_conv *conv, va_list ap)
 	return (flag_handler(conv, **entry));
 }
 
-int	std_handler(const char **entry, t_conv *conv, va_list ap)
+int	std_handler(const char **entry, t_conv *conv, va_list ap, int fd)
 {
 	int s_conv_err;
 
@@ -84,7 +84,7 @@ int	std_handler(const char **entry, t_conv *conv, va_list ap)
 		safe_strcat_char_arg(conv, '%');
 	else if (**entry)
 	{
-		safe_strcat_char(conv, **entry);
+		safe_strcat_char(conv, **entry, fd);
 		return (1);
 	}
 	if (!s_conv_err)

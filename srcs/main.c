@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/04 17:07:48 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/06 13:14:59 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,6 +259,16 @@ void init_lexer(t_lexer *lex, char *input, char **envac, t_list *env_list)
 	lex->env_list = env_list;
 }
 
+void chuck_tree(t_node *tree)
+{
+	if (tree)
+	{
+		chuck_tree(tree->right);
+		chuck_tree(tree->left);
+		free(tree);
+	}
+}
+
 void reset_lexer(t_lexer *lex, char *input)
 {
 	lex->token_start = 0;
@@ -268,6 +278,7 @@ void reset_lexer(t_lexer *lex, char *input)
 	lex->input = input;
 	lex->state = e_general;
 	lex->prev_state = lex->state;
+	chuck_tree(lex->tree);
 	lex->tree = 0;
 	lex->previous_token = e_t_word;
 }
@@ -279,13 +290,18 @@ int fetch_input_words(t_lexer *lex)
 	input_len = (size_t)ft_strlen(lex->input);
 	while (lex->token_start + lex->token_len <= input_len /*&& lex->input[lex->token_start + lex->token_len]*/)
 	{
-		//lex->transitions[lex->state](lex);
 		if (lex->actions[lex->state](lex))
 			return (1);
 		lex->transitions[lex->state](lex);
 	}
 	if (lex->token_len)
 		push_token(lex);
+	if (lex->state == e_s_quote || lex->state == e_d_quote)
+	{
+		ft_printf_err("minishell: syntax error missing %s quote end\n",
+			lex->state == e_s_quote? "single" : "double");
+		return (1);
+	}
 	return (0);
 }
 
@@ -374,7 +390,8 @@ int main(int ac, char **av, char **envac)
 		copy = user_input;
 		skip_whitespace(&user_input);
 		reset_lexer(&lex, copy);
-		fetch_input_words(&lex);
+		if(fetch_input_words(&lex))
+			continue;
 		generate_tree(&lex);
 		execute_tree(&lex, lex.tree);
 	}

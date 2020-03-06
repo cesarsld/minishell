@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 21:20:23 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/11 15:32:08 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/06 12:33:42 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct		s_conv
 }					t_conv;
 
 int					ft_printf(const char *entry, ...);
+int					ft_printf_err(const char *entry, ...);
 
 int					inc_str_len(t_conv *conv);
 
@@ -50,7 +51,8 @@ int					lld_handler(const char **entry, t_conv *conv, va_list ap);
 int					ld_handler(const char **entry, t_conv *conv, va_list ap);
 int					hhd_handler(const char **entry, t_conv *conv, va_list ap);
 int					hd_handler(const char **entry, t_conv *conv, va_list ap);
-int					std_handler(const char **entry, t_conv *conv, va_list ap);
+int					std_handler(const char **entry, t_conv *conv,
+								va_list ap, int fd);
 
 int					flag_handler(t_conv *conv, char arg);
 
@@ -68,10 +70,10 @@ int					inject(t_conv *conv, unsigned int amount,
 
 void				safe_strcat_char_arg(t_conv *conv, unsigned char c);
 int					safe_strcat_arg(t_conv *conv, const char *str);
-int					safe_strcat_char(t_conv *conv, unsigned char c);
+int					safe_strcat_char(t_conv *conv, unsigned char c, int fd);
 
-void				flush_stream(t_conv *conv);
-void				flush_buffer(t_conv *conv);
+void				flush_stream(t_conv *conv, int fd);
+void				flush_buffer(t_conv *conv, int fd);
 
 int					handle_prefix_ox(t_conv *conv, char arg);
 void				handle_signed(t_conv *conv, char arg);
@@ -86,8 +88,12 @@ int					check_precision(const char **entry,
 int					check_field_width(const char **entry,
 									t_flag_options *options, va_list va);
 int					check_length_modifiers(const char **entry,
-											t_conv *conv, va_list va);
+											t_conv *conv, va_list va, int fd);
 int					check_flags(const char **entry,
 								t_flag_options *options, va_list va);
+
+void				init_options(t_flag_options *options);
+t_conv				*init_conv(void);
+void				free_obj(t_conv *conv);
 
 #endif

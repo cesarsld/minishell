@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/08 17:19:55 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/11 14:34:39 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/06 12:31:09 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ int		check_field_width(const char **entry,
 	return (check_precision(entry, options, va));
 }
 
-int		check_length_modifiers(const char **entry, t_conv *conv, va_list va)
+int		check_length_modifiers(const char **entry,
+		t_conv *conv, va_list va, int fd)
 {
 	int res;
 
@@ -80,7 +81,7 @@ int		check_length_modifiers(const char **entry, t_conv *conv, va_list va)
 			res = ld_handler(entry, conv, va);
 	}
 	else
-		res = std_handler(entry, conv, va);
+		res = std_handler(entry, conv, va, fd);
 	return (res);
 }
 
