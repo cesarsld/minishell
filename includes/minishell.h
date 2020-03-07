@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/07 14:27:38 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/07 19:06:19 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,28 +97,18 @@ typedef struct			s_env_var
 	int					is_env;
 }						t_var;
 
-t_list					*lex_parse_line(char **line);
-t_list					*lex_it(char **input);
-int						lex_it_(t_lexer *lex);
-
 int						is_white_space(char c);
 void					skip_whitespace(char **line);
 int						print_ouput(char *out);
 int						starts_with(const char *input, const char *match);
+int						is_name_char(char c);
 
 t_var					*new_env(char *name, char *value, int is_env);
 
-void					pwd_error();
 char					*get_pwd();
 int						update_pwd(t_list *env_list);
 
-int						get_cd(const char *dir, t_list *env_list);
-void					cd_error(const char *dir);
-void					cd_pwd_error(char *dir);
-void					cd_dir_error(char *err, const char *dir);
-
 void					print_env_vars(t_list *env_list);
-void					env_error();
 t_var					*get_var(t_list *env_list, char *key);
 
 int	is_number_n(char *input, int size);
@@ -162,15 +152,15 @@ int						act_inf(t_lexer *lex);
 int						act_error(t_lexer *lex);
 
 int						generate_tree(t_lexer *lex);
-int         push_token(t_lexer *lex);
-char	*get_command_path(char *path_line, char *command);
-void	execute_tree(t_lexer *lex, t_node *node);
-void	handle_redir(t_lexer *lex, t_node *node);
+int						push_token(t_lexer *lex);
+char					*get_command_path(char *path_line, char *command);
+void					execute_tree(t_lexer *lex, t_node *node);
+void					handle_redir(t_lexer *lex, t_node *node);
 
-
-void	cd_exec(t_lexer *lex, t_node *node);
-void	env_exec(t_lexer *lex, t_node *node);
-void	pwd_exec(t_lexer *lex, t_node *node);
-void	exit_exec(t_lexer *lex, t_node *node);
+void					cd_exec(t_lexer *lex, t_node *node);
+void					env_exec(t_lexer *lex, t_node *node);
+void					pwd_exec(t_lexer *lex, t_node *node);
+void					exit_exec(t_lexer *lex, t_node *node);
+void					export_exec(t_lexer *lex, t_node *node);
 
 #endif

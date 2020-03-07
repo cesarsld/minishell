@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:18:17 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/07 14:07:13 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/07 16:05:57 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,6 @@ char	*get_pwd(void)
 	path_name = NULL;
 	path_name = getcwd(path_name, 0);
 	return (path_name);
-}
-
-void	pwd_error(void)
-{
-	ft_putstr("pwd: too many arguments");
-	return ;
 }
 
 int		update_pwd(t_list *env_list)

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/07 13:39:35 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/07 16:08:09 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,130 +17,6 @@
 int starts_with(const char *input, const char *match)
 {
 	return (ft_strncmp(input, match, ft_strlen(match)) == 0);  
-}
-
-int count_words(const char *input)
-{
-	int count;
-
-	count = 0;
-	while (*input)
-	{
-		if (!is_white_space(*input))
-		{
-			count++;
-			while (*input && !is_white_space(*input))
-				input++;
-		}
-		if (*input)
-			input++;
-	}
-	return (count);
-}
-
-void command_error(char* err)
-{
-	ft_putstr("minishell: command not found: ");
-	ft_putstr(err);
-	ft_putstr("\n");
-	return ;
-}
-
-int contains_char(const char *input)
-{
-	while (*input)
-		if (!is_white_space(*input++))
-			return (1);
-	return (0);
-}
-
-char	*get_first_word(char *input)
-{
-	int count;
-	char *first;
-	char *word;
-
-	count = 0;
-	first = input;
-	while (*input)
-	{
-		if (is_white_space(*input++))
-			break ;
-		count++;
-	}
-	if (!(word = ft_strndup(first, count)))
-				return (0);
-	return (word);
-}
-//TODO delete this? leaks + unused elsewhere
-void wrong_command(char **input)
-{
-	get_first_word(*input);
-}
-
-void handle_command(char **input, t_list *env_list)
-{
-	char *output;
-	char *command;
-
-	output = 0;
-	if (!(command = get_first_word(*input)))
-		return ;
-	if (ft_strlen(command) == 0)
-		return ;
-	if (ft_strcmp(command, "pwd") == 0)
-	{
-		if ((!is_white_space(*((*input) + 3)) && *((*input) + 3)))
-			return (command_error(command));
-		if (contains_char((*input) + 3))
-			pwd_error();
-		else
-			output = get_pwd();
-		print_ouput(output);
-		// eventually add pipes here
-		free(command);
-		free(output);
-	}
-	else if (ft_strcmp(command, "cd") == 0)
-	{
-		if (!is_white_space(*((*input) + 2)) && *((*input) + 2))
-			return (command_error(command));
-		*input += 2;
-		skip_whitespace(input);
-		if (count_words(*input) > 1)
-			cd_pwd_error(*input);
-		else
-		{
-			// -L is by default
-			// -P must be specified
-			if (ft_strlen(*input) == 0 ?
-				get_cd("~", env_list) == -1 : get_cd(*input, env_list) == -1)
-			{
-				cd_dir_error(strerror(errno), *input);
-				errno = 0;
-			}
-			update_pwd(env_list);
-		}
-		// eventually add pipes here
-		free(output);
-		free(command);
-	}
-	else if (ft_strcmp(command, "env") == 0)
-	{
-		*input += 3;
-		skip_whitespace(input);
-		if (**input)
-			env_error();
-		else
-			print_env_vars(env_list);
-	}
-	else if (ft_strcmp(command, "export") == 0)
-	{
-		*input += 6;
-		skip_whitespace(input);
-	}
-	else
-		command_error(command); 
 }
 
 t_var *new_env(char *name, char *value, int is_env)
@@ -203,14 +79,8 @@ void kill_current_process(int signal)
 {
 	pid_t pid;
 
-	printf("Killing process... signal %d\n", signal);
 	if ((pid = get_set_pid(0, 0)) != 0)
 		kill(pid, signal);
-		
-	// if (id == 0)
-	// {
-	// 	kill(id, signal);
-	// }
 }
 
 void print_words(void *content)

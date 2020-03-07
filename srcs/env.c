@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 10:55:04 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/07 13:45:38 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/07 16:02:56 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,6 @@ char	*get_var_value(t_list *env_list, char *key)
 void    print_env_vars(t_list *env_list)
 {
 	ft_lstiter(env_list, &print_env_var);
-}
-
-void	env_error()
-{
-	ft_putstr("env: no arguments or options allowed\n");
 }
 
 void env_exec(t_lexer *lex, t_node *node)

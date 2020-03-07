@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 17:24:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/07 14:27:56 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/07 19:05:58 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,8 +189,8 @@ int	is_builtin(t_lexer *lex, t_node *node)
 		return (FAILURE);
 	else if (ft_strcmp("cd", node->content) == 0)
 		cd_exec(lex, node);
-	// else if (ft_strcmp("export", node->content) == 0)
-	// 	;
+	else if (ft_strcmp("export", node->content) == 0)
+		export_exec(lex, node);
 	// else if (ft_strcmp("unset", node->content) == 0)
 	// 	;
 	else if (ft_strcmp("pwd", node->content) == 0)

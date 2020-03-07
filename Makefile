@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2020/03/07 14:33:24 by cjaimes          ###   ########.fr        #
+#    Updated: 2020/03/07 19:06:31 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,8 @@ SRC			=	main.c \
 				utils.c \
 				command.c \
 				execution.c \
-				exit.c
+				exit.c \
+				export.c
 				
 
 SRCS		=	${addprefix ${SRC_DIR}, ${SRC}}
