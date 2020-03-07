@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/07 13:34:34 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/07 14:27:38 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,5 +170,7 @@ void	handle_redir(t_lexer *lex, t_node *node);
 
 void	cd_exec(t_lexer *lex, t_node *node);
 void	env_exec(t_lexer *lex, t_node *node);
+void	pwd_exec(t_lexer *lex, t_node *node);
+void	exit_exec(t_lexer *lex, t_node *node);
 
 #endif

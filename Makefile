@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2020/03/03 15:20:02 by cjaimes          ###   ########.fr        #
+#    Updated: 2020/03/07 14:29:01 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,8 @@ SRC			=	main.c \
 				node.c \
 				utils.c \
 				command.c \
-				execution.c
+				execution.c \
+				exit.c
 				
 
 SRCS		=	${addprefix ${SRC_DIR}, ${SRC}}
@@ -65,7 +66,8 @@ ${NAME}: ${OBJS}
 	${CC} ${CFLAGS} -o ${NAME} ${OBJS}  -L${LIB_DIR} -lft
 
 run : all
-	./${NAME}
+	# ./${NAME}
+	bash
 
 bonus: all
 
