@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/07 12:22:31 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/07 13:34:34 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,10 @@ int expand_word(t_lexer *lex, char *word, char **first);
 void filter_word(char *word);
 int	treat_word(t_lexer *lex, t_node *node);
 
+void	free_split(char **split);
+
+char **get_env_list(t_lexer *lex);
+
 /*
 ** Transitions and actions
 */
@@ -165,5 +169,6 @@ void	handle_redir(t_lexer *lex, t_node *node);
 
 
 void	cd_exec(t_lexer *lex, t_node *node);
+void	env_exec(t_lexer *lex, t_node *node);
 
 #endif

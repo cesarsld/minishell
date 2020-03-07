@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/07 11:12:20 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/07 13:39:35 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,7 +244,7 @@ void init_lexer_functions(t_lexer *lex)
 	lex->transitions[e_error] = &from_error;
 }
 
-void init_lexer(t_lexer *lex, char *input, char **envac, t_list *env_list)
+void init_lexer(t_lexer *lex, char *input, t_list *env_list)
 {
 	init_lexer_functions(lex);
 	lex->tokens = 0;
@@ -255,7 +255,7 @@ void init_lexer(t_lexer *lex, char *input, char **envac, t_list *env_list)
 	lex->prev_state = lex->state;
 	lex->tree = 0;
 	lex->previous_token = e_t_word;
-	lex->envac = envac;
+	lex->envac = 0;
 	lex->env_list = env_list;
 }
 
@@ -379,7 +379,7 @@ int main(int ac, char **av, char **envac)
 	// n->content = ft_strdup("hello");
 	// handle_supp_redir(n);
 	
-	init_lexer(&lex, 0, envac, env_list);
+	init_lexer(&lex, 0, env_list);
 	//lex.state = e_word;
 	//lex.prev_state = e_word;
 	//expand_word(&lex, test, &test);

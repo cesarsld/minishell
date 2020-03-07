@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 10:55:04 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/06 18:34:13 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/07 13:45:38 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,16 @@ void    print_env_vars(t_list *env_list)
 void	env_error()
 {
 	ft_putstr("env: no arguments or options allowed\n");
+}
+
+void env_exec(t_lexer *lex, t_node *node)
+{
+	if(node->right)
+		handle_redir(lex, node->right);
+	if (node->left)
+	{
+		ft_printf_err("bash: env: too many arguments or options\n");
+		return ;
+	}
+	print_env_vars(lex->env_list);
 }

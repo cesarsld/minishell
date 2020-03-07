@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 17:24:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/07 12:34:03 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/07 13:42:26 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,49 @@ char **generate_arguments(t_lexer *lex, t_node *args)
 	arg_list[count_args(args)] = 0;
 	fill_args(lex, args, arg_list, 0);
 	return (arg_list);
+}
+
+char	*ft_strjoin_equal(char const *s1, char const *s2)
+{
+	char	*new;
+	size_t	len;
+
+	if (s1 && !s2)
+		return (ft_strdup(s1));
+	if (!s1 && s2)
+		return (ft_strdup(s2));
+	len = ft_strlen(s1) + ft_strlen(s2);
+	if (!(new = malloc((len + 2) * sizeof(char))))
+		return (NULL);
+	ft_strlcpy(new, s1, len + 2);
+	ft_strlcat(new, "=", len + 2);
+	ft_strlcat(new, s2, len + 2);
+	return (new);
+}
+
+char **get_env_list(t_lexer *lex)
+{
+	char **new_list;
+	t_list *first;
+	int counter;
+	t_var *var;
+
+	if(!(new_list = malloc(sizeof(char*) * (ft_lstsize(lex->env_list) + 1))))
+		return (NULL);
+	new_list[ft_lstsize(lex->env_list)] = 0;
+	first = lex->env_list;
+	counter = 0;
+	while (first)
+	{
+		var = first->content;
+		if(!(new_list[counter++] = ft_strjoin_equal(var->name, var->value)))
+			return (NULL);
+		first = first->next;
+	}
+	if (lex->envac)
+		free_split(lex->envac);
+	lex->envac = new_list;
+	return (new_list);
 }
 
 void handle_d_supp_redir(t_lexer *lex, t_node *node)
@@ -133,9 +176,34 @@ void	execute_command(t_node *cmd_node, t_lexer *lex)
 	}
 	else if (!(ex_name = get_command_path(get_var(lex->env_list, "PATH")->value, cmd_node->content)))
 		exit(1);
+	if(!get_env_list(lex))
+		exit(1);
 	execve(ex_name, args, lex->envac);
 	ft_printf_err("execve failed\n");
 	exit(1);
+}
+
+int	is_builtin(t_lexer *lex, t_node *node)
+{
+	if (!node->content || treat_word(lex, node) == FAILURE)
+		return (FAILURE);
+	else if (ft_strcmp("cd", node->content) == 0)
+		cd_exec(lex, node);
+	// else if (ft_strcmp("export", node->content) == 0)
+	// 	;
+	// else if (ft_strcmp("unset", node->content) == 0)
+	// 	;
+	// else if (ft_strcmp("pwd", node->content) == 0)
+	// 	;
+	else if (ft_strcmp("env", node->content) == 0)
+		env_exec(lex, node);
+	// else if (ft_strcmp("echo", node->content) == 0)
+	// 	;
+	// else if (ft_strcmp("exit", node->content) == 0)
+	// 	;
+	else
+		return (FAILURE);
+	return (SUCCESS);
 }
 
 void	execute_pipe(t_node *tree, t_lexer *lex, int out_fd)
@@ -160,6 +228,8 @@ void	execute_pipe(t_node *tree, t_lexer *lex, int out_fd)
 			dup2(out_fd, STDOUT_FILENO); //bind output to out_fd which would be input of superior level or 1 if level 0
         dup2(pfd[0], STDIN_FILENO); // bind input to end of pipe
     	close(pfd[1]);				// ignore pipe pipe entry
+		if(is_builtin(lex, tree->right) == SUCCESS)
+			exit(1) ;
     	return (execute_command(tree->right, lex)); //right child end
    	}
 	if (out_fd != STDOUT_FILENO)
@@ -175,6 +245,8 @@ void	execute_pipe(t_node *tree, t_lexer *lex, int out_fd)
     	{
     	    dup2(pfd[1], STDOUT_FILENO);	// bind output to pipe entry
 			close(pfd[0]);					// close end of pipe as left child sends output to right child
+			if(is_builtin(lex, tree->left) == SUCCESS)
+				exit(1) ;
     	    return (execute_command(tree->left, lex)); // left child end
     	}
 		// we are in parent process, child will never reach this line,  ENF OF FLOW 
@@ -189,29 +261,6 @@ void	execute_pipe(t_node *tree, t_lexer *lex, int out_fd)
 		execute_pipe(tree->left, lex, pfd[1]); // recursion
 		waitpid(pid_right, &status, 0);
 	}
-}
-
-int	is_builtin(t_lexer *lex, t_node *node)
-{
-	if (!node->content || treat_word(lex, node) == FAILURE)
-		return (FAILURE);
-	else if (ft_strcmp("cd", node->content) == 0)
-		cd_exec(lex, node);
-	// else if (ft_strcmp("export", node->content) == 0)
-	// 	;
-	// else if (ft_strcmp("unset", node->content) == 0)
-	// 	;
-	// else if (ft_strcmp("pwd", node->content) == 0)
-	// 	;
-	// else if (ft_strcmp("env", node->content) == 0)
-	// 	;
-	// else if (ft_strcmp("echo", node->content) == 0)
-	// 	;
-	// else if (ft_strcmp("exit", node->content) == 0)
-	// 	;
-	else
-		return (FAILURE);
-	return (SUCCESS);
 }
 
 void	execute_tree(t_lexer *lex, t_node *node)
