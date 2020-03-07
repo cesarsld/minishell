@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 17:24:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/07 10:48:12 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/07 12:34:03 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,25 +119,22 @@ void	execute_command(t_node *cmd_node, t_lexer *lex)
 
 	if(cmd_node->right)
 		handle_redir(lex, cmd_node->right);
+	if (!cmd_node->content)
+		return ;
 	if (treat_word(lex, cmd_node) == FAILURE)
 		exit(1);
+	if (!(args = generate_arguments(lex, cmd_node)))
+			exit(1);
 	if (starts_with(cmd_node->content, "./"))
 	{
-		if (!(args = generate_arguments(lex, cmd_node)))
-			exit(1);
 		if (!(ex_name = ft_strdup(cmd_node->content)))
 			exit(1);
 		pop_word(ex_name, 2);
 	}
-	else
-	{
-		if (!(args = generate_arguments(lex, cmd_node)))
-			exit(1);
-		if (!(ex_name = get_command_path(get_var(lex->env_list, "PATH")->value, cmd_node->content)))
-			exit(1);
-	}
+	else if (!(ex_name = get_command_path(get_var(lex->env_list, "PATH")->value, cmd_node->content)))
+		exit(1);
 	execve(ex_name, args, lex->envac);
-	ft_printf("execve failed\n");
+	ft_printf_err("execve failed\n");
 	exit(1);
 }
 
@@ -194,6 +191,29 @@ void	execute_pipe(t_node *tree, t_lexer *lex, int out_fd)
 	}
 }
 
+int	is_builtin(t_lexer *lex, t_node *node)
+{
+	if (!node->content || treat_word(lex, node) == FAILURE)
+		return (FAILURE);
+	else if (ft_strcmp("cd", node->content) == 0)
+		cd_exec(lex, node);
+	// else if (ft_strcmp("export", node->content) == 0)
+	// 	;
+	// else if (ft_strcmp("unset", node->content) == 0)
+	// 	;
+	// else if (ft_strcmp("pwd", node->content) == 0)
+	// 	;
+	// else if (ft_strcmp("env", node->content) == 0)
+	// 	;
+	// else if (ft_strcmp("echo", node->content) == 0)
+	// 	;
+	// else if (ft_strcmp("exit", node->content) == 0)
+	// 	;
+	else
+		return (FAILURE);
+	return (SUCCESS);
+}
+
 void	execute_tree(t_lexer *lex, t_node *node)
 {
 	pid_t	new_id;
@@ -208,11 +228,13 @@ void	execute_tree(t_lexer *lex, t_node *node)
 	}
 	else if (node->type == e_t_cmd_name)
 	{
+		if(is_builtin(lex, node) == SUCCESS)
+			return ;
 		if((new_id = fork()) == 0)
 			execute_command(node, lex);
 		else
 			waitpid(new_id, &a, 0);
 	}
-	if (node->type == e_t_pipe)
+	else if (node->type == e_t_pipe)
 		return (execute_pipe(node, lex, STDOUT_FILENO));
 }
