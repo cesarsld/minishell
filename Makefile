@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2020/03/07 20:11:54 by cjaimes          ###   ########.fr        #
+#    Updated: 2020/03/07 20:26:27 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,19 +22,20 @@ SRC_DIR		=	srcs/
 INCLUDE		=	includes
 
 SRC			=	main.c \
-				pwd.c \
 				parsing.c \
-				cd.c \
-				env.c \
 				transitions_1.c \
 				actions.c\
 				node.c \
 				utils.c \
 				command.c \
 				execution.c \
-				exit.c \
-				export.c \
-				unset.c
+				builtin/pwd.c \
+				builtin/cd.c \
+				builtin/env.c \
+				builtin/exit.c \
+				builtin/export.c \
+				builtin/unset.c \
+				builtin/echo.c
 				
 
 SRCS		=	${addprefix ${SRC_DIR}, ${SRC}}
@@ -60,6 +61,7 @@ all:	${NAME}
 
 ${OBJ_DIR}%.o :	${SRC_DIR}%.c
 			@mkdir -p ${OBJ_DIR}
+			@mkdir -p ${OBJ_DIR}/builtin
 			@${CC} ${CFLAGS} -I ${INCLUDE} -I ${LIB_DIR}/includes -c $< -o $@
 			@printf "%-60b\r" "${_CYAN}${ECHO}${_CYAN} Compiling $@"
 

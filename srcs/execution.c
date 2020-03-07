@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 17:24:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/07 20:13:12 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/07 20:31:34 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,8 +197,8 @@ int	is_builtin(t_lexer *lex, t_node *node)
 	 	pwd_exec(lex, node);
 	else if (ft_strcmp("env", node->content) == 0)
 		env_exec(lex, node);
-	// else if (ft_strcmp("echo", node->content) == 0)
-	// 	;
+	else if (ft_strcmp("echo", node->content) == 0)
+		echo_exec(lex, node);
 	else if (ft_strcmp("exit", node->content) == 0)
 		exit_exec(lex, node);
 	else
