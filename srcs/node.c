@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 18:03:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/06 14:09:52 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/07 21:34:06 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ int	generate_tree(t_lexer *lex)
 			if (!(temp = create_new_node(e_t_inf)))
 				return (1);
 			temp->fd = get_number(token->content, ft_strlen(token->content) - 1);
+			if (temp->fd == 1)
+				temp->fd = 0;
 			if (!redir_head)
 			{
 				redir_head = temp;
