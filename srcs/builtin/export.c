@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 12:04:32 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/08 00:13:21 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/08 00:23:21 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	export_exec(t_lexer *lex, t_node *node)
 {
 	char	*word;
 	pid_t	pid;
-	int		a;
+	//int		a;
 	
 	if((pid = fork()) == 0)
 		if (node->right)

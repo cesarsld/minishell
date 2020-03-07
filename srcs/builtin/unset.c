@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/07 19:53:07 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/07 20:11:31 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/08 00:24:00 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	remove_var(t_list **env_list, char *key)
 		first = first->next;
 	}
 }
-
+//this function needs to be reworked to remove the recursion since fork is happeing
 void	unset_exec(t_lexer *lex, t_node *node)
 {
 	char *word;
@@ -57,6 +57,6 @@ void	unset_exec(t_lexer *lex, t_node *node)
 			ft_printf_err("minishell: unset: %s: not a valid identifier\n",
 				word);
 		if (node->left->left)
-			return (export_exec(lex, node->left));
+			return (unset_exec(lex, node->left));
 	}
 }

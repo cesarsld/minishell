@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/07 20:26:58 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/07 23:10:40 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/08 00:22:09 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,4 @@ void	echo_exec(t_lexer *lex, t_node *node)
 	}
 	else
 		waitpid(pid, &is_opt, 0);
-	
-	//if(node->right)
-		//close(node->right->fd);
 }
