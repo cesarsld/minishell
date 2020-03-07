@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2020/03/07 14:29:01 by cjaimes          ###   ########.fr        #
+#    Updated: 2020/03/07 14:33:24 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,8 +66,7 @@ ${NAME}: ${OBJS}
 	${CC} ${CFLAGS} -o ${NAME} ${OBJS}  -L${LIB_DIR} -lft
 
 run : all
-	# ./${NAME}
-	bash
+	./${NAME}
 
 bonus: all
 
