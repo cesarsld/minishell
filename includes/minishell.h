@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/07 19:06:19 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/07 20:14:02 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,17 +111,18 @@ int						update_pwd(t_list *env_list);
 void					print_env_vars(t_list *env_list);
 t_var					*get_var(t_list *env_list, char *key);
 
-int	is_number_n(char *input, int size);
-int	get_number(char *input, int size);
+int						is_number_n(char *input, int size);
+int						get_number(char *input, int size);
+int						is_valid_assign_n(char *word, int len);
 
-char	*get_var_value(t_list *env_list, char *key);
-int expand_word(t_lexer *lex, char *word, char **first);
-void filter_word(char *word);
-int	treat_word(t_lexer *lex, t_node *node);
+char					*get_var_value(t_list *env_list, char *key);
+int						expand_word(t_lexer *lex, char *word, char **first);
+void					filter_word(char *word);
+int						treat_word(t_lexer *lex, t_node *node);
 
-void	free_split(char **split);
+void					free_split(char **split);
 
-char **get_env_list(t_lexer *lex);
+char					**get_env_list(t_lexer *lex);
 
 /*
 ** Transitions and actions
@@ -162,5 +163,6 @@ void					env_exec(t_lexer *lex, t_node *node);
 void					pwd_exec(t_lexer *lex, t_node *node);
 void					exit_exec(t_lexer *lex, t_node *node);
 void					export_exec(t_lexer *lex, t_node *node);
+void					unset_exec(t_lexer *lex, t_node *node);
 
 #endif
