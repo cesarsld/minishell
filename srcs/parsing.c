@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:29:41 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/06 21:00:24 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/07 10:18:12 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,57 +54,6 @@ char	*ft_strjoin_input(char const *s1, char const *s2)
 	ft_strlcat(new, "\n", len + 2);
 	ft_strlcat(new, s2, len + 2);
 	return (new);
-}
-
-
-char	*get_next_word(char **input, char *q_type)
-{
-	int count;
-	char *first;
-	char *word;
-	char *new_input;
-	char *temp;
-	char cur;
-	int beg;
-
-	beg = 0;
-	cur = 0;
-	count = 0;
-	temp = 0;
-	new_input = 0;
-	first = *input;
-	while (**input)
-	{
-		if ((**input == '\'' || **input == '"') && !cur)
-		{
-			beg = count;
-			cur = **input;
-		}
-		else if ((**input == '\'' || **input == '"') && **input  == cur)
-		{
-			cur = 0;
-		}
-		if (is_white_space(*(*input)++) && !cur)
-			break ;
-		count++;
-	}
-	if (!(word = ft_strndup(first, count)))
-		return (0);
-	if (cur)
-	{
-		*q_type = 0;
-		ft_putstr("> ");
-		if (!get_next_line(0, &new_input))
-	 		return (0);
-		if (!(temp = ft_strjoin_input(word, new_input)))
-			return (0);
-		free(new_input);
-		free(word);
-		free(first);
-		*input = temp;
-		return (get_next_word(input, q_type));
-	}
-	return (word);
 }
 
 
@@ -231,4 +180,12 @@ void filter_word(char *word)
 		word++;
 		counter++;
 	}
+}
+
+int	treat_word(t_lexer *lex, t_node *node)
+{
+	if (expand_word(lex, node->content, (char **)&(node->content)) == FAILURE)
+		return (FAILURE);
+	filter_word(node->content);
+	return (SUCCESS);
 }

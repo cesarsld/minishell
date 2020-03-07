@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 17:24:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/04 22:47:09 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/07 10:48:12 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,27 +30,30 @@ int	count_args(t_node *args)
 		return (0);
 }
 
-void	fill_args(t_node *args, char **list, int level)
+void	fill_args(t_lexer *lex, t_node *args, char **list, int level)
 {
-	//printf("content is %s\n", args->content);
 	if (args)
-		fill_args(args->left, list, level + 1);
+		fill_args(lex, args->left, list, level + 1);
 	if (args && args->content)
+	{
+		if (treat_word(lex, args) == FAILURE)
+			exit(1);
 		list[level] = args->content;
+	}
 }
 
-char **generate_arguments(t_node *args)
+char **generate_arguments(t_lexer *lex, t_node *args)
 {
 	char **arg_list;
 
 	if (!(arg_list = malloc(sizeof(char*) * (count_args(args) + 1))))
 		return (0);
 	arg_list[count_args(args)] = 0;
-	fill_args(args, arg_list, 0);
+	fill_args(lex, args, arg_list, 0);
 	return (arg_list);
 }
 
-void handle_d_supp_redir(t_node *node)
+void handle_d_supp_redir(t_lexer *lex, t_node *node)
 {
 	int fd;
 
@@ -60,12 +63,12 @@ void handle_d_supp_redir(t_node *node)
 	if (node->left)
 	{
 		close(fd);
-		return (handle_redir(node->left));
+		return (handle_redir(lex, node->left));
 	}
 	dup2(fd, STDOUT_FILENO);
 }
 
-void handle_supp_redir(t_node *node)
+void handle_supp_redir(t_lexer *lex, t_node *node)
 {
 	int fd;
 
@@ -75,12 +78,12 @@ void handle_supp_redir(t_node *node)
 	if (node->left)
 	{
 		close(fd);
-		return (handle_redir(node->left));
+		return (handle_redir(lex, node->left));
 	}
 	dup2(fd, STDOUT_FILENO);
 }
 
-void handle_inf_redir(t_node *node)
+void handle_inf_redir(t_lexer *lex, t_node *node)
 {
 	int fd;
 
@@ -92,19 +95,21 @@ void handle_inf_redir(t_node *node)
 	if (node->left)
 	{
 		close(fd);
-		return (handle_redir(node->left));
+		return (handle_redir(lex, node->left));
 	}
 	dup2(fd, STDIN_FILENO);
 }
 
-void handle_redir(t_node *node)
+void handle_redir(t_lexer *lex, t_node *node)
 {
+	if (treat_word(lex, node) == FAILURE)
+		exit(1);
 	if (node->type == e_t_supp)
-		handle_supp_redir(node);
+		handle_supp_redir(lex, node);
 	else if (node->type == e_t_inf)
-		handle_inf_redir(node);
+		handle_inf_redir(lex, node);
 	else if (node->type == e_t_d_supp)
-		handle_d_supp_redir(node);
+		handle_d_supp_redir(lex, node);
 }
 
 void	execute_command(t_node *cmd_node, t_lexer *lex)
@@ -113,10 +118,12 @@ void	execute_command(t_node *cmd_node, t_lexer *lex)
 	char	*ex_name;
 
 	if(cmd_node->right)
-		handle_redir(cmd_node->right);
+		handle_redir(lex, cmd_node->right);
+	if (treat_word(lex, cmd_node) == FAILURE)
+		exit(1);
 	if (starts_with(cmd_node->content, "./"))
 	{
-		if (!(args = generate_arguments(cmd_node)))
+		if (!(args = generate_arguments(lex, cmd_node)))
 			exit(1);
 		if (!(ex_name = ft_strdup(cmd_node->content)))
 			exit(1);
@@ -124,7 +131,7 @@ void	execute_command(t_node *cmd_node, t_lexer *lex)
 	}
 	else
 	{
-		if (!(args = generate_arguments(cmd_node)))
+		if (!(args = generate_arguments(lex, cmd_node)))
 			exit(1);
 		if (!(ex_name = get_command_path(get_var(lex->env_list, "PATH")->value, cmd_node->content)))
 			exit(1);

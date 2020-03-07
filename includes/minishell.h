@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/06 21:01:53 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/07 10:31:35 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ typedef struct			s_env_var
 	int					is_env;
 }						t_var;
 
-char					*get_next_word(char **input, char *q_type);
 t_list					*lex_parse_line(char **line);
 t_list					*lex_it(char **input);
 int						lex_it_(t_lexer *lex);
@@ -128,6 +127,7 @@ int	get_number(char *input, int size);
 char	*get_var_value(t_list *env_list, char *key);
 int expand_word(t_lexer *lex, char *word, char **first);
 void filter_word(char *word);
+int	treat_word(t_lexer *lex, t_node *node);
 
 /*
 ** Transitions and actions
@@ -161,5 +161,5 @@ int						generate_tree(t_lexer *lex);
 int         push_token(t_lexer *lex);
 char	*get_command_path(char *path_line, char *command);
 void	execute_tree(t_lexer *lex, t_node *node);
-void	handle_redir(t_node *node);
+void	handle_redir(t_lexer *lex, t_node *node);
 #endif
