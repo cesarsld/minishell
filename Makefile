@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2020/03/07 20:26:27 by cjaimes          ###   ########.fr        #
+#    Updated: 2020/03/08 11:18:19 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,12 +23,12 @@ INCLUDE		=	includes
 
 SRC			=	main.c \
 				parsing.c \
-				transitions_1.c \
-				actions.c\
-				node.c \
 				utils.c \
 				command.c \
-				execution.c \
+				lexer/transitions_1.c \
+				lexer/actions.c\
+				tree/node.c \
+				tree/execution.c \
 				builtin/pwd.c \
 				builtin/cd.c \
 				builtin/env.c \
@@ -62,6 +62,8 @@ all:	${NAME}
 ${OBJ_DIR}%.o :	${SRC_DIR}%.c
 			@mkdir -p ${OBJ_DIR}
 			@mkdir -p ${OBJ_DIR}/builtin
+			@mkdir -p ${OBJ_DIR}/tree
+			@mkdir -p ${OBJ_DIR}/lexer
 			@${CC} ${CFLAGS} -I ${INCLUDE} -I ${LIB_DIR}/includes -c $< -o $@
 			@printf "%-60b\r" "${_CYAN}${ECHO}${_CYAN} Compiling $@"
 

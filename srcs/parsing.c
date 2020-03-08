@@ -6,26 +6,11 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:29:41 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/07 10:18:12 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/08 11:17:21 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int		parse_error(char *err)
-{
-	ft_putstr("Error\n");
-	ft_putstr(err);
-	ft_putstr("\n");
-	return (0);
-}
-
-int		print_ouput(char *out)
-{
-	ft_putstr(out);
-	ft_putstr("\n");
-	return (1);
-}
 
 int		is_white_space(char c)
 {
