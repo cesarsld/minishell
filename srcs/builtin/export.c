@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 12:04:32 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/08 00:23:21 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/08 11:06:46 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,19 +56,13 @@ int add_var(t_list *env_list, char *input)
 	return (SUCCESS);
 }
 
-//this function needs to be reworked to remove the recursion since fork is happeing
-void	export_exec(t_lexer *lex, t_node *node)
+void check_exports(t_lexer *lex, t_node *node, pid_t pid)
 {
 	char	*word;
-	pid_t	pid;
-	//int		a;
-	
-	if((pid = fork()) == 0)
-		if (node->right)
-			handle_redir(lex, node->right);
+
 	if (node->left)
 	{
-		if (treat_word(lex, node) == FAILURE)
+		if (treat_word(lex, node->left) == FAILURE)
 			return ;
 		word = node->left->content;
 		if ((ft_isalpha(*word) || *word == '_') &&
@@ -86,8 +80,24 @@ void	export_exec(t_lexer *lex, t_node *node)
 				word);
 		}
 		if (node->left->left)
-			return (export_exec(lex, node->left));
+			return (check_exports(lex, node->left, pid));
+	}
+}
+
+void	export_exec(t_lexer *lex, t_node *node)
+{
+	pid_t	pid;
+	int		a;
+	
+	if((pid = fork()) == 0)
+		if (node->right)
+			handle_redir(lex, node->right);
+	check_exports(lex, node, pid);
+	if (!node->left && !pid)
+	{
+		print_env_vars(lex->env_list);
+		exit(EXIT_SUCCESS);
 	}
 	else
-		print_env_vars(lex->env_list);
+		waitpid(pid, &a, 0);
 }
