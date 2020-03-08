@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 18:03:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/07 21:34:06 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/08 18:08:40 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int	generate_tree(t_lexer *lex)
 		else if (ft_strcmp("|", token->content) == 0)
 		{
 			// if tree and stack is null, throw parse error
-			if (!stack_head)
+			if (!stack_head && !cur_cmd && !redir_head)
 			{
 				ft_printf_err("minishell: syntax error near unexpected token `|'\n");
 				return (1);
@@ -132,6 +132,10 @@ int	generate_tree(t_lexer *lex)
 			}
 			if (!(temp = create_new_node(e_t_pipe)))
 				return (1);
+			if (!cur_cmd && redir_head)
+			{
+				;
+			}
 			temp->left = stack_head;
 			stack_head = temp;
 			stack = 0;
@@ -143,7 +147,7 @@ int	generate_tree(t_lexer *lex)
 		else if (ft_strcmp(";", token->content) == 0)
 		{
 			// if tree and stack is null, throw parse error
-			if (!stack_head && !lex->tree)
+			if (!stack_head && !lex->tree && !redir_head)
 			{
 				// throw error
 				ft_putstr("minishell: syntax error near unexpected token `;'\n");
@@ -161,10 +165,15 @@ int	generate_tree(t_lexer *lex)
 			if (lex->tree && lex->tree->type == e_t_semi_colon)
 			{
 				temp->left = lex->tree;
-				lex->tree->right = stack_head;
+				if (cur_cmd)
+					lex->tree->right = stack_head;
+				else if (redir_head)
+					lex->tree->right = redir_head;
 			}
 			else
+			{
 				temp->left = stack_head;
+			}
 			lex->tree = temp;
 			stack_head = 0;
 			stack = 0;
@@ -229,6 +238,13 @@ int	generate_tree(t_lexer *lex)
 	{
 		ft_printf_err("minishell: syntax error near unexpected token `|'\n");
 		return (1);
+	}
+	if (!lex->tree && redir_head)
+	{
+		if (!(stack = create_new_node(e_t_cmd_name)))
+			return (1);
+		stack->right = redir_head;
+		lex->tree = stack;
 	}
 	return (0);
 }

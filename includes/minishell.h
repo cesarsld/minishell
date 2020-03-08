@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/07 20:31:14 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/08 15:04:06 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ typedef struct			s_env_var
 
 int						is_white_space(char c);
 void					skip_whitespace(char **line);
-int						print_ouput(char *out);
 int						starts_with(const char *input, const char *match);
 int						is_name_char(char c);
 
