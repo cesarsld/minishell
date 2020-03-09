@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 17:24:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/09 13:17:04 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/09 18:52:37 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,11 +153,23 @@ void handle_redir(t_lexer *lex, t_node *node)
 		handle_d_supp_redir(lex, node);
 }
 
+int		is_dir(char *name)
+{
+	printf("name is %s\n", name);
+	if(opendir(name))
+	{
+		ft_printf_err("minishell: %s: %s\n", name, "is a directory");
+		exit(1);
+	}
+	return (0);
+}
+
 void	execute_command(t_node *cmd_node, t_lexer *lex)
 {
 	char	**args;
 	char	*ex_name;
 
+	ex_name = 0;
 	if(cmd_node->right)
 	{
 		handle_redir(lex, cmd_node->right);
@@ -166,22 +178,39 @@ void	execute_command(t_node *cmd_node, t_lexer *lex)
 	}
 	if (!cmd_node->content)
 		return ;
-	if (treat_word(lex, cmd_node) == FAILURE)
+	if (treat_word(lex, cmd_node) == FAILURE ||
+		!(args = generate_arguments(lex, cmd_node)))
 		exit(1);
-	if (!(args = generate_arguments(lex, cmd_node)))
-			exit(1);
 	if (starts_with(cmd_node->content, "./"))
 	{
 		if (!(ex_name = ft_strdup(cmd_node->content)))
 			exit(1);
+		is_dir(ex_name);
 		pop_word(ex_name, 2);
 	}
-	else if (!(ex_name = get_command_path(get_var(lex->env_list, "PATH")->value, cmd_node->content)))
-		exit(1);
+	else if (starts_with(cmd_node->content, "/"))
+	{
+		is_dir(ex_name);
+		if (!(ex_name = get_command_path(get_var(lex->env_list, "PATH")->value, cmd_node->content)))
+			exit(1);
+	}
+	else
+	{
+		if (!(ex_name = get_command_path(get_var(lex->env_list, "PATH")->value, cmd_node->content)))
+			exit(1);
+	}
+	
+	// else if (!(ex_name = get_command_path(get_var(lex->env_list, "PATH")->value, cmd_node->content)))
+	// 	exit(1);
+	// if(opendir(ex_name))
+	// {
+	// 	ft_printf_err("minishell: %s: %s\n", ex_name, "is a directory");
+	// 	exit(1);
+	// }
 	if(!get_env_list(lex))
 		exit(1);
 	execve(ex_name, args, lex->envac);
-	ft_printf_err("execve failed\n");
+	ft_printf_err("minishell: %s: %s\n", cmd_node->content, strerror(errno));
 	exit(1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/09 12:33:15 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/09 18:46:32 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <string.h>
 # include <stdio.h>
 # include <signal.h>
+# include <dirent.h>
 
 # define LEX_STATES 11
 # define FAILURE 1
@@ -122,6 +123,7 @@ int						treat_word(t_lexer *lex, t_node *node);
 void					free_split(char **split);
 
 char					**get_env_list(t_lexer *lex);
+int		is_dir(char *name);
 
 /*
 ** Transitions and actions

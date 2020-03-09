@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 18:03:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/09 17:29:39 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/09 17:50:39 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,7 @@ int	generate_tree(t_lexer *lex)
 			if (lex->tree && lex->tree->type == e_t_semi_colon)
 			{
 				temp->left = lex->tree;
-				lex->tree->right = stack_head; stack_head;
+				lex->tree->right = stack_head;
 			}
 			else
 				temp->left = stack_head;
