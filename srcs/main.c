@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/08 16:02:55 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/09 17:27:16 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,7 +257,7 @@ int main(int ac, char **av, char **envac)
 	while (1)
 	{
 		ft_putstr("(｡◕‿◕｡✿) ");
-		if (!get_next_line(0, &user_input))
+		if (!get_next_line(STDIN_FILENO, &user_input))
 		{
 			ft_printf("exit\n");
 			return (0);

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 17:24:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/07 21:59:50 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/09 13:17:04 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ void handle_d_supp_redir(t_lexer *lex, t_node *node)
 
 	if ((fd = open(node->content, O_CREAT | O_WRONLY | O_APPEND, 0644)) == -1)
 		return (perror("open()"));
-
 	if (node->left)
 	{
 		close(fd);
@@ -117,7 +116,6 @@ void handle_supp_redir(t_lexer *lex, t_node *node)
 
 	if ((fd = open(node->content, O_CREAT | O_WRONLY | O_TRUNC, 0644)) == -1)
 		return (perror("open()"));
-
 	if (node->left)
 	{
 		close(fd);
@@ -161,7 +159,11 @@ void	execute_command(t_node *cmd_node, t_lexer *lex)
 	char	*ex_name;
 
 	if(cmd_node->right)
+	{
 		handle_redir(lex, cmd_node->right);
+		if (!cmd_node->content)
+			exit(EXIT_SUCCESS);
+	}
 	if (!cmd_node->content)
 		return ;
 	if (treat_word(lex, cmd_node) == FAILURE)

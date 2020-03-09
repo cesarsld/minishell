@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 18:03:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/08 18:08:40 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/09 17:29:39 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,17 @@ int	generate_tree(t_lexer *lex)
 			}
 			if (cur_cmd)
 				cur_cmd->right = redir_head;
+			else
+			{
+				if (!(stack = create_new_node(e_t_cmd_name)))
+					return (1);
+				stack->right = redir_head;
+				cur_cmd = stack;
+				if (stack_head && stack_head->type == e_t_pipe)
+					stack_head->right = stack;
+				else
+					stack_head = stack;
+			}
 			lex->previous_token = e_t_supp;
 		}
 		else if (is_redirection("<", token->content))
@@ -95,6 +106,17 @@ int	generate_tree(t_lexer *lex)
 			}
 			if (cur_cmd)
 				cur_cmd->right = redir_head;
+			else
+			{
+				if (!(stack = create_new_node(e_t_cmd_name)))
+					return (1);
+				stack->right = redir_head;
+				cur_cmd = stack;
+				if (stack_head && stack_head->type == e_t_pipe)
+					stack_head->right = stack;
+				else
+					stack_head = stack;
+			}
 			lex->previous_token = e_t_inf;
 		}
 		else if (is_redirection(">>", token->content))
@@ -114,6 +136,17 @@ int	generate_tree(t_lexer *lex)
 			}
 			if (cur_cmd)
 				cur_cmd->right = redir_head;
+			else
+			{
+				if (!(stack = create_new_node(e_t_cmd_name)))
+					return (1);
+				stack->right = redir_head;
+				cur_cmd = stack;
+				if (stack_head && stack_head->type == e_t_pipe)
+					stack_head->right = stack;
+				else
+					stack_head = stack;
+			}
 			lex->previous_token = e_t_d_supp;
 		}
 		else if (ft_strcmp("|", token->content) == 0)
@@ -132,11 +165,7 @@ int	generate_tree(t_lexer *lex)
 			}
 			if (!(temp = create_new_node(e_t_pipe)))
 				return (1);
-			if (!cur_cmd && redir_head)
-			{
-				;
-			}
-			temp->left = stack_head;
+				temp->left = stack_head;
 			stack_head = temp;
 			stack = 0;
 			cur_cmd = 0;
@@ -165,15 +194,10 @@ int	generate_tree(t_lexer *lex)
 			if (lex->tree && lex->tree->type == e_t_semi_colon)
 			{
 				temp->left = lex->tree;
-				if (cur_cmd)
-					lex->tree->right = stack_head;
-				else if (redir_head)
-					lex->tree->right = redir_head;
+				lex->tree->right = stack_head; stack_head;
 			}
 			else
-			{
 				temp->left = stack_head;
-			}
 			lex->tree = temp;
 			stack_head = 0;
 			stack = 0;
@@ -189,9 +213,9 @@ int	generate_tree(t_lexer *lex)
 				redir->content = token->content;
 				lex->previous_token = e_t_word;
 			}
-			else if (!stack)
+			else if (!stack || !stack->content)
 			{
-				if (!(stack = create_new_node(e_t_cmd_name)))
+				if (!stack && !(stack = create_new_node(e_t_cmd_name)))
 					return (1);
 				if (stack_head && stack_head->type == e_t_pipe)
 					stack_head->right = stack;
@@ -233,18 +257,16 @@ int	generate_tree(t_lexer *lex)
 	}
 	if (stack_head)
 		if (lex->tree->type == e_t_semi_colon)
+		{
 			lex->tree->right = stack_head;
+			stack = 0;
+		}
 	if (lex->previous_token == e_t_pipe)
 	{
 		ft_printf_err("minishell: syntax error near unexpected token `|'\n");
 		return (1);
 	}
-	if (!lex->tree && redir_head)
-	{
-		if (!(stack = create_new_node(e_t_cmd_name)))
-			return (1);
-		stack->right = redir_head;
-		lex->tree = stack;
-	}
+	if (lex->tree->type == e_t_semi_colon && stack)
+		lex->tree->right = stack;
 	return (0);
 }
