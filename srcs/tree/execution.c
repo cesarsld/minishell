@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 17:24:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/09 18:52:37 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/09 23:00:36 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,6 @@ void handle_redir(t_lexer *lex, t_node *node)
 
 int		is_dir(char *name)
 {
-	printf("name is %s\n", name);
 	if(opendir(name))
 	{
 		ft_printf_err("minishell: %s: %s\n", name, "is a directory");
