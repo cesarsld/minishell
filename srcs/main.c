@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/09 17:27:16 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/10 12:25:49 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,6 +275,7 @@ int main(int ac, char **av, char **envac)
 		lex.state = e_word;
 		lex.prev_state = e_word;
 		execute_tree(&lex, lex.tree);
+		//printf("exec success\n");
 	}
 
 

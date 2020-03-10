@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 12:18:42 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/07 23:59:24 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/10 12:41:37 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,23 @@ void	cd_exec(t_lexer *lex, t_node *node)
 		{
 			if (!(path = ft_strjoin(get_var(lex->env_list, "HOME")->value, path + 1)))
 				return ;
+			//printf("path is %s\n", path);
+			//write(1, "he\n", 3);
+			//printf("nani\n");
 			free(node->left->content);
+			//printf("nani2\n");
+			//write(1, "ho\n", 3);
 			node->left->content = path;
 		}
-		if (chdir(node->left->content) == -1)
+		if (chdir(path) == -1)
 		{
 			err = strerror(errno);
 			if (!pid)
-				ft_printf_err("bash: cd: %s: %s\n", node->left->content, err);
-			return ;
+			{
+				ft_printf_err("minishell: cd: %s: %s\n", node->left->content, err);
+				exit(EXIT_SUCCESS);
+			}
+			//return ;
 		}
 	}
 	else
@@ -47,9 +55,14 @@ void	cd_exec(t_lexer *lex, t_node *node)
 		path = get_var(lex->env_list, "HOME")->value;
 		chdir(path);
 	}
-	update_pwd(lex->env_list);
+	printf("nani5\n");
 	if (pid)
+		update_pwd(lex->env_list);
+	printf("nani6\n");
+	if (pid)
+	{
 		waitpid(pid, &a, 0);
+	}
 	else
 		exit(EXIT_SUCCESS);
 }
