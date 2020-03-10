@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 17:24:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/09 23:00:36 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/10 10:42:22 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,25 +187,11 @@ void	execute_command(t_node *cmd_node, t_lexer *lex)
 		is_dir(ex_name);
 		pop_word(ex_name, 2);
 	}
-	else if (starts_with(cmd_node->content, "/"))
-	{
-		is_dir(ex_name);
-		if (!(ex_name = get_command_path(get_var(lex->env_list, "PATH")->value, cmd_node->content)))
-			exit(1);
-	}
 	else
 	{
 		if (!(ex_name = get_command_path(get_var(lex->env_list, "PATH")->value, cmd_node->content)))
 			exit(1);
 	}
-	
-	// else if (!(ex_name = get_command_path(get_var(lex->env_list, "PATH")->value, cmd_node->content)))
-	// 	exit(1);
-	// if(opendir(ex_name))
-	// {
-	// 	ft_printf_err("minishell: %s: %s\n", ex_name, "is a directory");
-	// 	exit(1);
-	// }
 	if(!get_env_list(lex))
 		exit(1);
 	execve(ex_name, args, lex->envac);

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/29 21:45:38 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/09 23:07:04 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/10 10:54:06 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,27 +43,26 @@ void	free_split(char **split)
 	free(copy);
 }
 
+char	*check_path(char *command)
+{
+	struct stat	buf;
+	
+	is_dir(command);
+	if (stat(command, &buf) == 0)
+		return (command);
+	ft_printf_err("minishell: %s: No such file or directory\n", command);
+	return (0);
+}
+
 char	*get_command_path(char *path_line, char *command)
 {
-	char **paths;
-	char **copy;
-	struct stat buf;
-	char *full;
-	DIR	*dir;
-		
-	if (starts_with(command, "/"))
-		is_dir(command);
-	if (stat(command, &buf) == 0)
-	{
-		//is_dir(command);
-		if ((dir = opendir(command)))
-		{
-			ft_printf_err("minishell: %s: command not found\n", command);
-			return (0);
-		}
-		return (command);
-	}
-	printf("ji\n");
+	char		**paths;
+	char		**copy;
+	struct stat	buf;
+	char		*full;
+
+	if (starts_with(command, "/"))	
+		check_path(command);
 	if (!(paths = ft_split(path_line, ':')))
 		return (0);
 	copy = paths;
