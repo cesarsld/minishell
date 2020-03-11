@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 17:24:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/10 10:42:22 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/11 14:51:58 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,12 +180,12 @@ void	execute_command(t_node *cmd_node, t_lexer *lex)
 	if (treat_word(lex, cmd_node) == FAILURE ||
 		!(args = generate_arguments(lex, cmd_node)))
 		exit(1);
-	if (starts_with(cmd_node->content, "./"))
+	if (ft_strchr(cmd_node->content, '/'))
 	{
 		if (!(ex_name = ft_strdup(cmd_node->content)))
 			exit(1);
 		is_dir(ex_name);
-		pop_word(ex_name, 2);
+		//pop_word(ex_name, 2);
 	}
 	else
 	{
@@ -194,6 +194,7 @@ void	execute_command(t_node *cmd_node, t_lexer *lex)
 	}
 	if(!get_env_list(lex))
 		exit(1);
+		//printf("to be exec %s\n", ex_name);
 	execve(ex_name, args, lex->envac);
 	ft_printf_err("minishell: %s: %s\n", cmd_node->content, strerror(errno));
 	exit(1);

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/07 20:26:58 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/08 00:22:09 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/11 14:37:23 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	echo_exec(t_lexer *lex, t_node *node)
 		if (!node->left || treat_word(lex, node->left) == FAILURE)
 		{
 			ft_printf("\n");
-			return ;
+			exit(EXIT_SUCCESS);
 		}
 		if (ft_strcmp(node->left->content, "-n") == 0)
 			is_opt = 1;
