@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/10 12:25:49 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/03/11 16:45:25 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,27 @@ pid_t get_set_pid(int opt, pid_t value)
 	return (0);
 }
 
-void kill_current_process(int signal)
+int	*is_in_cmd(void)
 {
-	pid_t pid;
+	static int i = 0;
 
-	if ((pid = get_set_pid(0, 0)) != 0)
-		kill(pid, signal);
+	return (&i);
+}
+
+void handle_signals(int signal)
+{
+	if (signal == SIGINT)
+	{
+		if (*is_in_cmd())
+			ft_putstr("\n");
+		else
+			ft_putstr("\n(｡◕‿◕｡✿) ");
+	}
+	else if (signal == SIGQUIT)
+	{
+		if (*is_in_cmd())
+			ft_putstr("Quit: 3\n");
+	}
 }
 
 void print_words(void *content)
@@ -216,9 +231,6 @@ int main(int ac, char **av, char **envac)
 
 	ac = 0;
 	av = 0;
-	//while (*av)
-		//printf("%s\n", *av++);
-
 	if(!(env_list = get_env_vars(envac)))
 		return (0);
 
@@ -248,7 +260,8 @@ int main(int ac, char **av, char **envac)
 	// t_node *n = create_new_node(e_t_supp);
 	// n->content = ft_strdup("hello");
 	// handle_supp_redir(n);
-	
+	signal(SIGINT, &handle_signals);
+	signal(SIGQUIT, &handle_signals);
 	init_lexer(&lex, 0, env_list);
 	//lex.state = e_word;
 	//lex.prev_state = e_word;
@@ -257,11 +270,13 @@ int main(int ac, char **av, char **envac)
 	while (1)
 	{
 		ft_putstr("(｡◕‿◕｡✿) ");
+		*is_in_cmd() = 0;
 		if (!get_next_line(STDIN_FILENO, &user_input))
 		{
 			ft_printf("exit\n");
 			return (0);
 		}
+		*is_in_cmd() = 1;
 		copy = user_input;
 		skip_whitespace(&user_input);
 		reset_lexer(&lex, copy);
@@ -277,41 +292,5 @@ int main(int ac, char **av, char **envac)
 		execute_tree(&lex, lex.tree);
 		//printf("exec success\n");
 	}
-
-
-
-	//t_list *words = lex_it(&test);
-	//printf("word: |%s|\n", get_next_word("test'so'mm\"hhhhhhiiii\"h\\    this is the first line"));
-	//ft_lstiter(lex.tokens, &print_words);
-	//printf("\n\n");
-	//ft_lstiter(words, &print_words);
-	//char *test = ft_strdup("'e'\"c\"\"\"'ho'\" boo\" \"   koki");
-	//lex_parse_line(&test);
-	copy = 0;
-
-
-	// pid_t new_id = fork();
-	// if (new_id == 0)
-	// {
-	// 	printf("id is %d\n", new_id);
-		// char *name = strdup("echo");
-		// char **arg = malloc(sizeof(char *) * 2);
-		// arg[1] = 0;
-		// arg[0] = name;
-
-		// execve("echo", arg, envac);
-	// 	perror("");
-
-	// }
-	// else
-	// {
-	// 	int a = 0;
-	// 	get_set_pid(1, new_id);
-	// 	signal(SIGINT, &kill_current_process);
-	// 	signal(SIGQUIT, &kill_current_process);
-	// 	//signal(SIG, &kill_current_process);
-	// 	waitpid(new_id, &a , 0);
-
-	// }
 	return (0);
 }
