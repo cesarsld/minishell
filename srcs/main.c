@@ -159,7 +159,6 @@ void reset_lexer(t_lexer *lex, char *input)
 	lex->token_start = 0;
 	lex->token_len = 0;
 	ft_lstclear(&(lex->tokens), &free);
-	free(lex->input);
 	lex->input = input;
 	lex->state = e_general;
 	lex->prev_state = lex->state;
@@ -183,7 +182,7 @@ int fetch_input_words(t_lexer *lex)
 		push_token(lex);
 	if (lex->state == e_s_quote || lex->state == e_d_quote)
 	{
-		ft_printf_err("minishell: syntax error missing %s quote end\n",
+		ft_printf_err("minishell: syntax error: missing %s quote end\n",
 			lex->state == e_s_quote? "single" : "double");
 		return (1);
 	}
@@ -226,7 +225,7 @@ void print_tree(t_node *node, int level, int lr)
 int main(int ac, char **av, char **envac)
 {
 	char *user_input;
-	char *copy;
+	//char *copy;
 	t_list *env_list;
 
 	ac = 0;
@@ -269,6 +268,8 @@ int main(int ac, char **av, char **envac)
 	//filter_word(test);
 	while (1)
 	{
+		free(user_input);
+		user_input = 0;
 		ft_putstr("(｡◕‿◕｡✿) ");
 		*is_in_cmd() = 0;
 		if (!get_next_line(STDIN_FILENO, &user_input))
@@ -277,10 +278,10 @@ int main(int ac, char **av, char **envac)
 			return (0);
 		}
 		*is_in_cmd() = 1;
-		copy = user_input;
-		skip_whitespace(&user_input);
-		reset_lexer(&lex, copy);
-		if(fetch_input_words(&lex))
+		//copy = user_input;
+		//skip_whitespace(&user_input);
+		reset_lexer(&lex, user_input);
+		if (fetch_input_words(&lex))
 			continue;
 		//ft_lstiter(lex.tokens, &print_words);
 		if (generate_tree(&lex))
