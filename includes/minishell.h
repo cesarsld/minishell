@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/09 18:46:32 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/19 19:47:05 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,12 @@ typedef struct			s_node
 ** typedef int				(*t_lex_action)(char, t_list **);
 */
 
+typedef struct			s_token
+{
+	char				*value;
+	int					literal;
+}						t_oken;
+
 typedef struct			s_lexer
 {
 	t_lex_state			prev_state;
@@ -89,6 +95,7 @@ typedef struct			s_lexer
 	t_oken_type			previous_token;
 	char				**envac;
 	t_list				*env_list;
+	t_list				*exp_list;
 }						t_lexer;
 
 typedef struct			s_env_var
@@ -108,8 +115,10 @@ t_var					*new_env(char *name, char *value, int is_env);
 char					*get_pwd();
 int						update_pwd(t_list *env_list);
 
-void					print_env_vars(t_list *env_list);
+void					print_env_vars(t_lexer *lex, int env);
 t_var					*get_var(t_list *env_list, char *key);
+
+void					remove_var_null(t_list **exp_list, char *key);
 
 int						is_number_n(char *input, int size);
 int						get_number(char *input, int size);

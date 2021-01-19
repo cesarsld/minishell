@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/24 18:58:10 by lgrellie          #+#    #+#             */
-/*   Updated: 2020/03/06 13:49:06 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/18 14:32:59 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,19 @@ void		from_d_quote(t_lexer *lex)
 	lex->prev_state = e_d_quote;
 	if (lex->input[lex->token_start + lex->token_len] == '"')
 		lex->state = e_word;
-
+	if (lex->input[lex->token_start + lex->token_len] == '\\')
+	{
+		lex->prev_state = lex->state;
+		lex->state = e_backslash;
+	}
 }
 void					from_backslash(t_lexer *lex)
 {
 	//lex->state = lex->prev_state;
-	lex->state = e_word;
+	if (lex->prev_state == e_d_quote)
+		lex->state = lex->prev_state;
+	else
+		lex->state = e_word;
 	lex->prev_state = e_backslash;
 }
 

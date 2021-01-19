@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/07 19:53:07 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/08 10:56:55 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/19 19:35:46 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,33 @@ void	remove_var(t_list **env_list, char *key)
 	}
 }
 
+void	remove_var_null(t_list **exp_list, char *key)
+{
+	t_var	*entry;
+	t_list	*first;
+	t_list	*previous;
+
+	previous = 0;
+	first = *exp_list;
+	while (first)
+	{
+		entry = first->content;
+		if (ft_strcmp(key, entry->name) == 0)
+		{
+			free(entry->name);
+			free(entry->value);
+			free(entry);
+			if (!previous)
+				*exp_list = first->next;
+			else
+				previous->next = first->next;
+			free(first);
+		}
+		previous = first;
+		first = first->next;
+	}
+}
+
 void check_vars(t_lexer *lex, t_node *node, pid_t pid)
 {
 	char *word;
@@ -50,7 +77,10 @@ void check_vars(t_lexer *lex, t_node *node, pid_t pid)
 		word = node->left->content;
 		if ((ft_isalpha(*word) || *word == '_') &&
 			is_valid_assign_n(word,ft_strlen(word)))
+		{
 			remove_var(&(lex->env_list), word);
+			remove_var_null(&(lex->exp_list), word);
+		}
 		else
 		{
 			if (pid)

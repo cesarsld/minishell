@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 10:55:04 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/08 00:21:35 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/19 19:43:56 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,39 @@ void print_env_var(void *content)
 	{
 		ft_putstr(var->name);
 		ft_putstr("=");
+		ft_putstr("\"");
 		ft_putstr(var->value);
+		ft_putstr("\"");
+		ft_putstr("\n");
+	}
+}
+
+void print_export_var(void *content)
+{
+	t_var *var;
+
+	var = content;
+	if (var->is_env)
+	{
+		ft_putstr("declare -x ");
+		ft_putstr(var->name);
+		ft_putstr("=");
+		ft_putstr("\"");
+		ft_putstr(var->value);
+		ft_putstr("\"");
+		ft_putstr("\n");
+	}
+}
+
+void print_export_var_null(void *content)
+{
+	t_var *var;
+
+	var = content;
+	if (var->is_env)
+	{
+		ft_putstr("declare -x ");
+		ft_putstr(var->name);
 		ft_putstr("\n");
 	}
 }
@@ -54,9 +86,15 @@ char	*get_var_value(t_list *env_list, char *key)
 	return (0);
 }
 
-void    print_env_vars(t_list *env_list)
+void    print_env_vars(t_lexer *lex, int env)
 {
-	ft_lstiter(env_list, &print_env_var);
+	if (env)
+		ft_lstiter(lex->env_list, &print_env_var);
+	else
+	{
+		ft_lstiter(lex->env_list, &print_export_var);
+		ft_lstiter(lex->exp_list, &print_export_var_null);
+	}
 }
 
 void env_exec(t_lexer *lex, t_node *node)
@@ -73,7 +111,7 @@ void env_exec(t_lexer *lex, t_node *node)
 			ft_printf_err("bash: env: too many arguments or options\n");
 			return ;
 		}
-		print_env_vars(lex->env_list);
+		print_env_vars(lex, 1);
 		exit(EXIT_SUCCESS);
 	}
 	else

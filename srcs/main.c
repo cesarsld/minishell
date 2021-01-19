@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/11 16:45:25 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/19 19:00:11 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,7 @@ void init_lexer(t_lexer *lex, char *input, t_list *env_list)
 	lex->previous_token = e_t_word;
 	lex->envac = 0;
 	lex->env_list = env_list;
+	lex->exp_list = 0;
 }
 
 void chuck_tree(t_node *tree)
@@ -174,8 +175,10 @@ int fetch_input_words(t_lexer *lex)
 	input_len = (size_t)ft_strlen(lex->input);
 	while (lex->token_start + lex->token_len <= input_len /*&& lex->input[lex->token_start + lex->token_len]*/)
 	{
+		//ft_printf("prev state: %d - state: %d - current char `%c`\n", lex->prev_state, lex->state, *(lex->input + lex->token_start + lex->token_len));
 		if (lex->actions[lex->state](lex))
 			return (1);
+		//ft_printf("prev state: %d - state: %d - current char `%c`\n\n", lex->prev_state, lex->state, *(lex->input + lex->token_start + lex->token_len));
 		lex->transitions[lex->state](lex);
 	}
 	if (lex->token_len)
@@ -238,6 +241,25 @@ int main(int ac, char **av, char **envac)
 	//char *test = ft_strdup("e$34cho$USER\"boo \\$nope here mal$ok\"$yo'hello''i wont be $called'");
 	//get_command_path(get_var(env_list, "PATH")->value, "cat");
 
+	//char *test = ft_strdup("echo \"lala\\nlala\"");
+
+	// echo "test"\""test" "lala"
+	// expected output is 'test` test"test lala
+	//char *test = ft_strdup("echo \"test\"\\\"\"test\" \"lala\"");
+	//echo "lala\nlala"
+	//char *test = ft_strdup("echo \"lala\\nlala\"");
+	//char *test = ft_strdup("echo \"\\\"boo\\n\"");
+	// echo "test"\"\""\"test" "lala"
+	//char *test = ft_strdup("echo \"test\"\\\"\\\"\"\\\"test\"");
+	// echo 'test'\'test'\''lala'
+	// expected test'test\lala
+	//char *test = ft_strdup("echo \'test\'\\\'test\'\\\'\'lala\'");
+	// echo "test"\"\""\"test" "lala"
+	//      "test"\"\""\"test"
+	// test"""test lala
+	//char *test = ft_strdup("echo \"test\"\\\"\\\"\"\\\"test\" \"lala\"");
+	//echo \\"\\"
+	//char *test = ft_strdup("echo \\\\\"\\\\\"";
 	//char *test = ft_strdup("e'c'h\"l\"o boo what\\\'s  babe;;I;got;thestyle  up|||||su|is je a>r>>rive ici |le pipe |c\\\'est cool  |\"Le cheval c'est trop genial\"'senpai'|  \\t    end  ");
 	//char *test = ft_strdup("echo boo haha bingo ; echo boo haha ; echo top; echo boom peck");
 	//char *test = ft_strdup("echo boo haha bingo | echo boo haha | echo boo ; echo top | echo boom peck ; echo tech beck");
@@ -262,10 +284,31 @@ int main(int ac, char **av, char **envac)
 	signal(SIGINT, &handle_signals);
 	signal(SIGQUIT, &handle_signals);
 	init_lexer(&lex, 0, env_list);
+	user_input = 0;
 	//lex.state = e_word;
 	//lex.prev_state = e_word;
 	//expand_word(&lex, test, &test);
 	//filter_word(test);
+
+	// reset_lexer(&lex, test);
+	// if (fetch_input_words(&lex))
+	// ;
+	// ft_lstiter(lex.tokens, &print_words);
+	// if (generate_tree(&lex))
+	// ;
+	// if (lex.tree)
+	// 	print_tree(lex.tree, 0, 2);
+	// lex.state = e_word;
+	// lex.prev_state = e_word;
+	// execute_tree(&lex, lex.tree);
+	// return 0;
+
+
+
+	// EXPORT I need to be able to assign no value
+
+
+
 	while (1)
 	{
 		free(user_input);
@@ -274,7 +317,7 @@ int main(int ac, char **av, char **envac)
 		*is_in_cmd() = 0;
 		if (!get_next_line(STDIN_FILENO, &user_input))
 		{
-			ft_printf("exit\n");
+			//ft_printf("exit\n");
 			return (0);
 		}
 		*is_in_cmd() = 1;

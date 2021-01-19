@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/07 20:26:58 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/11 14:37:23 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/18 13:13:23 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 
 void	print_args(t_lexer *lex, t_node *node)
 {
+	//ft_printf("print left side pre: %s\n", node->content);
 	if (!node->content || treat_word(lex, node) == FAILURE)
 		return;
+	//ft_printf("print left side post: %s\n", node->content);
 	ft_putstr(node->content);
 	if (node->left)
 	{
@@ -34,7 +36,7 @@ void	echo_exec(t_lexer *lex, t_node *node)
 		is_opt = 0;
 		if (node->right)
 			handle_redir(lex, node->right);
-		if (!node->left || treat_word(lex, node->left) == FAILURE)
+		if (!node->left /*|| treat_word(lex, node->left) == FAILURE*/)
 		{
 			ft_printf("\n");
 			exit(EXIT_SUCCESS);
