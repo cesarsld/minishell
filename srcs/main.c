@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/20 17:49:47 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/20 19:04:12 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void handle_signals(int signal)
 	else if (signal == SIGQUIT)
 	{
 		if (*is_in_cmd())
-			ft_putstr("Quit: 3\n");
+			ft_putstr("Quit: (core dumped)\n");
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 18:03:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/09 17:50:39 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/20 18:06:28 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,7 @@ int	generate_tree(t_lexer *lex)
 			}
 			if (!(temp = create_new_node(e_t_pipe)))
 				return (1);
-				temp->left = stack_head;
+			temp->left = stack_head;
 			stack_head = temp;
 			stack = 0;
 			cur_cmd = 0;
