@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 10:55:04 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/19 19:43:56 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/20 17:15:42 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,7 @@ void print_env_var(void *content)
 	{
 		ft_putstr(var->name);
 		ft_putstr("=");
-		ft_putstr("\"");
 		ft_putstr(var->value);
-		ft_putstr("\"");
 		ft_putstr("\n");
 	}
 }

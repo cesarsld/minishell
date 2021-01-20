@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:29:41 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/19 13:05:01 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/20 00:19:25 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ int insert_word(t_lexer *lex, char *word, char **first, char *check)
 	free(key);
 	pop_substr(check - 1, word - check + 1);
 	word = check - 1;
-
 	if (exp)
 	{
 		if (!(concat = ft_strnew(ft_strlen(*first) + ft_strlen(exp))))
@@ -95,7 +94,9 @@ int insert_word(t_lexer *lex, char *word, char **first, char *check)
 		*first = concat;
 		word = *first + ft_strlen(concat) - ft_strlen(word);
 	}
-	return (expand_word(lex, word, first));
+	else
+		return (0);
+	return (ft_strlen(exp));
 }
 
 void sub_filter_word(char *word, int len)
@@ -144,7 +145,7 @@ int expand_word(t_lexer *lex, char *word, char **first)
 	lex->state = e_word;
 	while (*word)
 	{
-		//ft_printf("Expanding: %s - state %d  - current word : %s - w_start %d - dur %d\n", *first, lex->state, word, w_start, len);
+		//ft_printf("Expanding: %s - state %d  - current word : |%s| - w_start %d - dur %d\n", *first, lex->state, word, w_start, len);
 		if (lex->state == e_backslash)
 		{
 			if (lex->prev_state == e_word)
@@ -156,9 +157,12 @@ int expand_word(t_lexer *lex, char *word, char **first)
 			}
 			else if (lex->prev_state == e_d_quote && (*word == '\\' || *word == '$' || *word == '"'))
 			{
-				//ft_printf("boo\n");
+				//ft_printf("before |%s|\n", word - 1);
+				//ft_printf("before |%s|\n", *first);
 				shift_from_index(word - 1, 0);
 				word--;
+				//ft_printf("after  |%s|\n", word - 1);
+				//ft_printf("after  |%s|\n", *first);
 				//w_start = word - *first;
 				len++;
 				lex->state = e_d_quote;
@@ -209,8 +213,13 @@ int expand_word(t_lexer *lex, char *word, char **first)
 		}
 		else if (*word == '$' && lex->state != e_s_quote)
 		{
-			if ((ft_isalpha(*(word + 1)) || *(word + 1) == '_'))
-				return (insert_word(lex, word + 2, first, word + 1));
+			if ((ft_isalpha(*(word + 1) ) || *(word + 1) == '_'))
+			{
+				// after word expansion, word isn't attached to first anymore
+				len += insert_word(lex, word + 2, first, word + 1);
+				word = *first + len - 1;
+				//word--;
+			}
 		}
 		else
 			len++;	
