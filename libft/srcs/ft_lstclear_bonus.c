@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/27 21:33:29 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/10/16 18:05:52 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/21 14:47:15 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 		ft_lstdelone(*lst, del);
 		*lst = next;
 	}
-	first = NULL;
+	if (first)
+		first = NULL;
 }

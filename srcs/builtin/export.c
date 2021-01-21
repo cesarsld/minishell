@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 12:04:32 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/19 20:16:44 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/21 01:07:51 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,20 +117,20 @@ void check_exports(t_lexer *lex, t_node *node, pid_t pid)
 	}
 }
 
-void	print_export_vars(t_lexer *lex)
-{
-	t_var *best;
-	t_list *top;
-	t_list *list;
+// void	print_export_vars(t_lexer *lex)
+// {
+// 	t_var *best;
+// 	t_list *top;
+// 	t_list *list;
 
-	list = lex->env_list;
-	best = list->content;
-	top = list->content;
-	while (top)
-	{
+// 	list = lex->env_list;
+// 	best = list->content;
+// 	top = list->content;
+// 	while (top)
+// 	{
 		
-	}
-}
+// 	}
+// }
 
 void	export_exec(t_lexer *lex, t_node *node)
 {

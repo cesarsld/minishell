@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 12:18:42 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/10 13:44:46 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/21 01:05:00 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,15 @@ void	cd_exec(t_lexer *lex, t_node *node)
 	else
 	{
 		path = get_var(lex->env_list, "HOME")->value;
-		chdir(path);
+		if (chdir(path) == -1)
+		{
+			err = strerror(errno);
+			if (!pid)
+			{
+				ft_printf_err("minishell: cd: %s: %s\n", path, err);
+				exit(EXIT_SUCCESS);
+			}
+		}
 	}
 	free(temp);
 	if (pid)

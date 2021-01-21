@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/19 19:47:05 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/21 01:03:56 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <stdio.h>
 # include <signal.h>
 # include <dirent.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 
 # define LEX_STATES 11
 # define FAILURE 1

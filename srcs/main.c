@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/20 19:04:12 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/21 21:23:29 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,6 +206,8 @@ const char* get_token_type(t_oken_type type)
 		return ("PIPE");
 	case e_t_supp:
 		return ("SUPP");
+	case e_t_inf:
+		return ("INF");
 	default:
 		return ("");
 	}
@@ -233,6 +235,9 @@ int main(int ac, char **av, char **envac)
 
 	ac = 0;
 	av = 0;
+	if (ac || av)
+	{
+	}
 	if(!(env_list = get_env_vars(envac)))
 		return (0);
 

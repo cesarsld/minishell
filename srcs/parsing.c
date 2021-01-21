@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:29:41 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/20 00:19:25 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/21 00:59:00 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,38 +101,11 @@ int insert_word(t_lexer *lex, char *word, char **first, char *check)
 
 void sub_filter_word(char *word, int len)
 {
-	int counter;
-	char cur;
-
-	cur = 0;
-	counter = 0;
 	//ft_printf("filtered world: %s\n", word);
 	shift_from_index(word, 0);
 	//ft_printf("filtered world: %s\n", word);
 	shift_from_index(word, len - 1);
 	//ft_printf("filtered world: %s\n", word);
-	// while (*word && len--)
-	// {
-	// 	if ((*word == '\'' || *word == '"'))
-	// 	{
-	// 		if (!cur)
-	// 			cur = *word;
-	// 		if (front == -1)
-	// 			front = counter;
-	// 		else if (*word == cur)
-	// 		{
-	// 			shift_from_index(word - counter, front);
-	// 			shift_from_index(word - 1, 0);
-	// 			word -= 2;
-	// 			counter -= 2;
-	// 			front = -1;
-	// 			cur = 0;
-	// 			continue;
-	// 		}
-	// 	}
-	// 	word++;
-	// 	counter++;
-	// }
 }
 
 int expand_word(t_lexer *lex, char *word, char **first)
