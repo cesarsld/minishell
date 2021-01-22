@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/21 21:23:29 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/22 10:31:46 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,7 @@ void print_tree(t_node *node, int level, int lr)
 	else
 		printf("Level %d | %-5s side | token type is %s%s%s\n",
 				level, lr? "Right" : "Left", get_token_type(node->type),
-				node->content? "->":"", node->content ? node->content:"");
+				node->content? "->":"", node->content ? (char*)node->content:"");
 	if (node->left)
 		print_tree(node->left, level + 1, 0);
 	if (node->right)

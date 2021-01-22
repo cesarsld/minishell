@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 17:24:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/21 21:06:10 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/22 11:06:48 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,10 @@ void handle_d_supp_redir(t_lexer *lex, t_node *node)
 	int fd;
 
 	if ((fd = open(node->content, O_CREAT | O_WRONLY | O_APPEND, 0644)) == -1)
-		return (perror("open()"));
+	{
+		perror("open()");
+		exit(1);
+	}
 	// if (!check_if_last_redir(node->left, e_t_supp, e_t_d_supp))
 	// {
 	// 	close(fd);
@@ -140,7 +143,10 @@ void handle_supp_redir(t_lexer *lex, t_node *node)
 	int fd;
 
 	if ((fd = open(node->content, O_CREAT | O_WRONLY | O_TRUNC, 0644)) == -1)
-		return (perror("open()"));
+	{
+		perror("open()");
+		exit(1);
+	}
 	// if (!check_if_last_redir(node->left, e_t_supp, e_t_d_supp) && 1 == 0)
 	// {
 	// 	handle_redir(lex, node->left);
@@ -169,7 +175,7 @@ void handle_inf_redir(t_lexer *lex, t_node *node)
 	if ((fd = open(node->content, O_RDONLY)) == -1)
 	{
 		ft_printf("minishell: %s: %s\n", strerror(errno), node->content);
-		return ;
+		exit(1);
 	}
 	// if (!check_if_last_redir(node->left, e_t_inf, e_t_inf) && 1 == 0)
 	// {
