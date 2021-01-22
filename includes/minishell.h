@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/21 01:03:56 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/22 15:25:57 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int						is_name_char(char c);
 t_var					*new_env(char *name, char *value, int is_env);
 
 char					*get_pwd();
-int						update_pwd(t_list *env_list);
+int						update_pwd(t_list *env_list, char *path);
 
 void					print_env_vars(t_lexer *lex, int env);
 t_var					*get_var(t_list *env_list, char *key);

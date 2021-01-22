@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 12:18:42 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/21 01:05:00 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/22 15:50:12 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	cd_exec(t_lexer *lex, t_node *node)
 	}
 	free(temp);
 	if (pid)
-		update_pwd(lex->env_list);
+		update_pwd(lex->env_list, path);
 	if (pid)
 		waitpid(pid, &a, 0);
 	else
