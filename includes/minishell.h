@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 20:21:53 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 22:30:07 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <dirent.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+#include <sys/errno.h>
 
 # define LEX_STATES 11
 # define FAILURE 1
@@ -115,6 +116,7 @@ int						is_name_char(char c);
 int 					contains_char(const char *input, char chr);
 
 t_var					*new_env(char *name, char *value, int is_env);
+t_list					*get_env_vars(char **env);
 
 char					*get_pwd();
 int						update_pwd(t_list *env_list, char *path);
@@ -134,11 +136,15 @@ void					filter_word(char *word);
 int						treat_word(t_lexer *lex, t_node *node);
 
 void					free_split(char **split);
+void					init_lexer(t_lexer *lex, char *input,
+						t_list *env_list);	
+void					reset_lexer(t_lexer *lex, char *input);
 
 char					**get_env_list(t_lexer *lex);
 int						is_dir(char *name);
 
 int 					*lst_rtn(void);
+int						*is_in_cmd(void);
 
 /*
 ** Transitions and actions
@@ -170,6 +176,8 @@ int						act_error(t_lexer *lex);
 
 int						generate_tree(t_lexer *lex);
 int						push_token(t_lexer *lex);
+int         			grow_token(t_lexer *lex);
+int						discard_one(t_lexer *lex);
 char					*get_command_path(char *path_line, char *command);
 void					execute_tree(t_lexer *lex, t_node *node);
 void					handle_redir(t_lexer *lex, t_node *node);

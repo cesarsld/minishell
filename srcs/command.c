@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/29 21:45:38 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/03/11 14:51:46 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 22:17:01 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,6 @@ char	*get_command_path(char *path_line, char *command)
 	struct stat	buf;
 	char		*full;
 
-	//if (starts_with(command, "/"))	
-	//	return check_path(command);
 	if (!(paths = ft_split(path_line, ':')))
 		return (0);
 	copy = paths;

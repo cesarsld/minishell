@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:29:41 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 17:33:38 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 22:45:12 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ char	*ft_strjoin_input(char const *s1, char const *s2)
 	ft_strlcat(new, s2, len + 2);
 	return (new);
 }
-
 
 void shift_from_index(char *line, int index)
 {
@@ -115,18 +114,36 @@ int insert_word(t_lexer *lex, char *word, char **first, char *check)
 		*first = concat;
 		word = *first + ft_strlen(concat) - ft_strlen(word);
 	}
-	else
-		return (0);
-	return (ft_strlen(exp));
+	return (exp ? ft_strlen(exp) : 0);
 }
 
 void sub_filter_word(char *word, int len)
 {
-	//ft_printf("filtered world: %s\n", word);
 	shift_from_index(word, 0);
-	//ft_printf("filtered world: %s\n", word);
 	shift_from_index(word, len - 1);
-	//ft_printf("filtered world: %s\n", word);
+}
+
+void expand_backslash_case(t_lexer *lex, char **first, int *w_start, int *len, char **word)
+{
+	if (lex->prev_state == e_word)
+	{
+		shift_from_index(*word - 1, 0);
+		*w_start = *word - *first;
+		(*word)--;
+		lex->state = e_word;
+	}
+	else if (lex->prev_state == e_d_quote && (**word == '\\' || **word == '$' || **word == '"'))
+	{
+		shift_from_index(*word - 1, 0);
+		(*word)--;
+		(*len)++;
+		lex->state = e_d_quote;
+	}
+	else
+	{
+		lex->state = lex->prev_state;
+		(*len) += 2;
+	}
 }
 
 int expand_word(t_lexer *lex, char *word, char **first)
@@ -142,35 +159,10 @@ int expand_word(t_lexer *lex, char *word, char **first)
 		//ft_printf("Expanding: %s - state %d  - current word : |%s| - w_start %d - dur %d\n", *first, lex->state, word, w_start, len);
 		if (lex->state == e_backslash)
 		{
-			if (lex->prev_state == e_word)
-			{
-				shift_from_index(word - 1, 0);
-				w_start = word - *first;
-				word--;
-				lex->state = e_word;
-			}
-			else if (lex->prev_state == e_d_quote && (*word == '\\' || *word == '$' || *word == '"'))
-			{
-				//ft_printf("before |%s|\n", word - 1);
-				//ft_printf("before |%s|\n", *first);
-				shift_from_index(word - 1, 0);
-				word--;
-				//ft_printf("after  |%s|\n", word - 1);
-				//ft_printf("after  |%s|\n", *first);
-				//w_start = word - *first;
-				len++;
-				lex->state = e_d_quote;
-			}
-			else
-			{
-				lex->state = lex->prev_state;
-				len += 2;
-			}
-			
+			expand_backslash_case(lex, first, &w_start, &len, &word);
 		}
 		else if (*word == '"' && (lex->state == e_word || lex->state == e_d_quote))
 		{
-			//ft_printf("d quote\n");
 			lex->state = lex->state == e_word? e_d_quote : e_word;
 			if (lex->state == e_d_quote) {
 				w_start = word - *first;
@@ -209,17 +201,13 @@ int expand_word(t_lexer *lex, char *word, char **first)
 		{
 			if ((ft_isalpha(*(word + 1) ) || *(word + 1) == '_'))
 			{
-				// after word expansion, word isn't attached to first anymore
 				len += insert_word(lex, word + 2, first, word + 1);
 				word = *first + w_start + len - 1;
-				//word--;
 			}
 			else if (*(word + 1) == '?')
 			{
 				len += insert_num_in_word(first, word, *lst_rtn());
-				//ft_printf("word: |%s|\n", *first);
 				word = *first + w_start + len - 1;
-				//ft_printf("Curr: |%s|\n", word);
 			}
 			else
 				len++;
@@ -229,39 +217,6 @@ int expand_word(t_lexer *lex, char *word, char **first)
 		word++;
 	}
 	return (SUCCESS);
-}
-
-void filter_word(char *word)
-{
-	int front;
-	int counter;
-	char cur;
-
-	cur = 0;
-	counter = 0;
-	front = -1;
-	while (*word)
-	{
-		if ((*word == '\'' || *word == '"'))
-		{
-			if (!cur)
-				cur = *word;
-			if (front == -1)
-				front = counter;
-			else if (*word == cur)
-			{
-				shift_from_index(word - counter, front);
-				shift_from_index(word - 1, 0);
-				word -= 2;
-				counter -= 2;
-				front = -1;
-				cur = 0;
-				continue;
-			}
-		}
-		word++;
-		counter++;
-	}
 }
 
 int	treat_word(t_lexer *lex, t_node *node)

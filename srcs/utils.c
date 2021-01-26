@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/29 20:31:11 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 20:21:14 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 22:16:00 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,9 @@ int contains_char(const char *input, char chr)
 		if (*input++ == chr)
 			return (1);
 	return (0);
+}
+
+int starts_with(const char *input, const char *match)
+{
+	return (ft_strncmp(input, match, ft_strlen(match)) == 0);  
 }
