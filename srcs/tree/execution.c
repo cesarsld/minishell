@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 17:24:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 18:10:21 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 19:20:44 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	pop_word(char *word, int amount)
 	*word = 0;
 }
 
-int	count_args(t_node *args)
+int		count_args(t_node *args)
 {
 	if (args)
 		return (count_args(args->left) + 1);
@@ -42,7 +42,7 @@ void	fill_args(t_lexer *lex, t_node *args, char **list, int level)
 	}
 }
 
-char **generate_arguments(t_lexer *lex, t_node *args)
+char	**generate_arguments(t_lexer *lex, t_node *args)
 {
 	char **arg_list;
 
@@ -71,7 +71,7 @@ char	*ft_strjoin_equal(char const *s1, char const *s2)
 	return (new);
 }
 
-char **get_env_list(t_lexer *lex)
+char	**get_env_list(t_lexer *lex)
 {
 	char **new_list;
 	t_list *first;
@@ -96,7 +96,8 @@ char **get_env_list(t_lexer *lex)
 	return (new_list);
 }
 
-int	check_if_last_redir(t_node *node, enum e_token_type type, enum e_token_type type2)
+int		check_if_last_redir(t_node *node, enum e_token_type type,
+	enum e_token_type type2)
 {
 	t_node *cur;
 
@@ -110,7 +111,7 @@ int	check_if_last_redir(t_node *node, enum e_token_type type, enum e_token_type 
 	return (1);
 }
 
-void handle_d_supp_redir(t_lexer *lex, t_node *node)
+void	handle_d_supp_redir(t_lexer *lex, t_node *node)
 {
 	int fd;
 
@@ -132,7 +133,7 @@ void handle_d_supp_redir(t_lexer *lex, t_node *node)
 		dup2(fd, STDOUT_FILENO);
 }
 
-void handle_supp_redir(t_lexer *lex, t_node *node)
+void	handle_supp_redir(t_lexer *lex, t_node *node)
 {
 	int fd;
 
@@ -154,8 +155,7 @@ void handle_supp_redir(t_lexer *lex, t_node *node)
 		dup2(fd, STDOUT_FILENO);
 }
 
-// need to handle dup in case of multiple different FDs
-void handle_inf_redir(t_lexer *lex, t_node *node)
+void	handle_inf_redir(t_lexer *lex, t_node *node)
 {
 	int fd;
 
@@ -177,7 +177,7 @@ void handle_inf_redir(t_lexer *lex, t_node *node)
 		dup2(fd, STDIN_FILENO);
 }
 
-void handle_redir(t_lexer *lex, t_node *node)
+void	handle_redir(t_lexer *lex, t_node *node)
 {
 	if (treat_word(lex, node) == FAILURE)
 		exit(1);
@@ -199,43 +199,36 @@ int		is_dir(char *name)
 	return (0);
 }
 
-void	execute_command(t_node *cmd_node, t_lexer *lex)
+void	execute_command(t_node *cmd_node, t_lexer *lex, char *ex_name)
 {
 	char	**args;
-	char	*ex_name;
 
-	ex_name = 0;
 	if(cmd_node->right)
 	{
 		handle_redir(lex, cmd_node->right);
-		if (!cmd_node->content)
-			exit(EXIT_SUCCESS);
+		!cmd_node->content ? exit(EXIT_SUCCESS) : 0;
 	}
 	if (!cmd_node->content)
 		return ;
 	if (treat_word(lex, cmd_node) == FAILURE ||
 		!(args = generate_arguments(lex, cmd_node)))
-		exit(1);
+		exit(FAILURE);
 	if (ft_strchr(cmd_node->content, '/'))
 	{
 		if (!(ex_name = ft_strdup(cmd_node->content)))
-			exit(1);
+			exit(FAILURE);
 		is_dir(ex_name);
-		//pop_word(ex_name, 2);
 	}
-	else
-	{
-		if (!(ex_name = get_command_path(get_var(lex->env_list, "PATH")->value, cmd_node->content)))
-			exit(1);
-	}
-	if(!get_env_list(lex))
-		exit(1);
+	else if (!(ex_name = get_command_path(
+			get_var(lex->env_list, "PATH")->value, cmd_node->content)))
+		exit(FAILURE);
+	!get_env_list(lex) ? exit(FAILURE) : 0;
 	execve(ex_name, args, lex->envac);
 	ft_printf_err("minishell: %s: %s\n", cmd_node->content, strerror(errno));
 	exit(errno);
 }
 
-int	is_builtin(t_lexer *lex, t_node *node)
+int		is_builtin(t_lexer *lex, t_node *node)
 {
 	if (!node->content || treat_word(lex, node) == FAILURE)
 		return (FAILURE);
@@ -282,7 +275,7 @@ void	execute_pipe(t_node *tree, t_lexer *lex, int out_fd)
     	close(pfd[1]);				// ignore pipe pipe entry
 		if(is_builtin(lex, tree->right) == SUCCESS)
 			exit(1) ;
-    	return (execute_command(tree->right, lex)); //right child end
+    	return (execute_command(tree->right, lex, 0)); //right child end
    	}
 	if (out_fd != STDOUT_FILENO)
 		close(out_fd);
@@ -299,7 +292,7 @@ void	execute_pipe(t_node *tree, t_lexer *lex, int out_fd)
 			close(pfd[0]);					// close end of pipe as left child sends output to right child
 			if(is_builtin(lex, tree->left) == SUCCESS)
 				exit(1) ;
-    	    return (execute_command(tree->left, lex)); // left child end
+    	    return (execute_command(tree->left, lex, 0)); // left child end
     	}
 		// we are in parent process, child will never reach this line,  ENF OF FLOW 
 		close(pfd[0]);
@@ -315,13 +308,13 @@ void	execute_pipe(t_node *tree, t_lexer *lex, int out_fd)
 	}
 }
 
-void handle_cmd_exec(t_lexer *lex, t_node *node)
+void	handle_cmd_exec(t_lexer *lex, t_node *node)
 {
 	pid_t	new_id;
 	int		a;
 
 	if((new_id = fork()) == 0)
-		execute_command(node, lex);
+		execute_command(node, lex, 0);
 	else
 	{
 		waitpid(new_id, &a, 0);

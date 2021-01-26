@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 18:03:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 18:00:11 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 19:21:25 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ int	generate_tree(t_lexer *lex)
 	{
 		if (is_redirection(">", token->content))
 		{
-			ft_printf_err("here, p is %d\n", lex->p_token);
 			if (lex->p_token == e_t_d_supp || lex->p_token == e_t_supp ||
 				lex->p_token == e_t_inf)
 			{
