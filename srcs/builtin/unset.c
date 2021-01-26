@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/07 19:53:07 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 16:04:12 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 18:18:29 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void check_vars(t_lexer *lex, t_node *node, pid_t pid, int ret)
 			if (pid)
 				ft_printf_err("minishell: unset: %s: not a valid identifier\n",
 				word);
-				ret = FAILURE;
+			ret = FAILURE;
 		}
 		if (node->left->left)
 			return (check_vars(lex, node->left, pid, ret));
