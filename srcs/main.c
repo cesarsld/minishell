@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 17:46:42 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 18:20:25 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -333,7 +333,7 @@ int main(int ac, char **av, char **envac)
 		*is_in_cmd() = 0;
 		if (!get_next_line(STDIN_FILENO, &user_input))
 		{
-			//ft_printf("exit\n");
+			ft_printf("exit\n");
 			return (0);
 		}
 		*is_in_cmd() = 1;

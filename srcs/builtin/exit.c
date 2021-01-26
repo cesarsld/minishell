@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/07 14:18:20 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/18 23:13:38 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 18:19:31 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void exit_exec(t_lexer *lex, t_node *node)
 		if (!node->left->content || treat_word(lex, node->left) == FAILURE)
 			return ;
 		arg = node->left->content;
-		//ft_printf_err("exit\n");
+		ft_printf_err("exit\n");
 		if (is_number_n(arg, ft_strlen(arg)))
 		{
 			if (node->left->left)
@@ -40,6 +40,6 @@ void exit_exec(t_lexer *lex, t_node *node)
 			exit(255);
 		}
 	}
-	//ft_printf_err("exit\n");
+	ft_printf_err("exit\n");
 	exit(EXIT_SUCCESS);
 }
