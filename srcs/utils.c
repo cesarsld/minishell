@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/29 20:31:11 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/18 23:10:12 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 20:21:14 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,20 @@ int	get_number(char *input, int size)
 	if (!is_number_n(input, size))
 		return (1);
 	return (ft_atoi(input));
+}
+
+int is_valid_assign_n(char *word, int len)
+{
+	while (len--)
+		if (!is_name_char(*word++))
+			return (0);
+	return (1);
+}
+
+int contains_char(const char *input, char chr)
+{
+	while (*input)
+		if (*input++ == chr)
+			return (1);
+	return (0);
 }

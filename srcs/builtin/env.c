@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 10:55:04 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 15:43:48 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 20:06:24 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,34 +54,6 @@ void print_export_var_null(void *content)
 		ft_putstr(var->name);
 		ft_putstr("\n");
 	}
-}
-
-t_var	*get_var(t_list *env_list, char *key)
-{
-	t_var *entry;
-	
-	while (env_list)
-	{
-		entry = env_list->content;
-		if (ft_strcmp(key, entry->name) == 0)
-			return (entry);
-		env_list = env_list->next;
-	}
-	return (0);
-}
-
-char	*get_var_value(t_list *env_list, char *key)
-{
-	t_var	*entry;
-	
-	while (env_list)
-	{
-		entry = env_list->content;
-		if (ft_strcmp(key, entry->name) == 0)
-			return (entry->value);
-		env_list = env_list->next;
-	}
-	return (0);
 }
 
 void    print_env_vars(t_lexer *lex, int env)

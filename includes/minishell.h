@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 17:46:40 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 20:21:53 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ int						is_white_space(char c);
 void					skip_whitespace(char **line);
 int						starts_with(const char *input, const char *match);
 int						is_name_char(char c);
+int 					contains_char(const char *input, char chr);
 
 t_var					*new_env(char *name, char *value, int is_env);
 

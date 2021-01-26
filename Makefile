@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2020/03/08 11:18:19 by cjaimes          ###   ########.fr        #
+#    Updated: 2021/01/26 20:07:00 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ SRC			=	main.c \
 				builtin/pwd.c \
 				builtin/cd.c \
 				builtin/env.c \
+				builtin/env_2.c \
 				builtin/exit.c \
 				builtin/export.c \
 				builtin/unset.c \
