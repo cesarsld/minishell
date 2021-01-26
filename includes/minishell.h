@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/22 15:25:57 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 17:46:40 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # define LEX_STATES 11
 # define FAILURE 1
 # define SUCCESS 0
+# define M_ERROR -1
 
 typedef enum			e_lex_state
 {
@@ -94,7 +95,7 @@ typedef struct			s_lexer
 	size_t				token_len;
 
 	t_node				*tree;
-	t_oken_type			previous_token;
+	t_oken_type			p_token;
 	char				**envac;
 	t_list				*env_list;
 	t_list				*exp_list;
@@ -134,7 +135,9 @@ int						treat_word(t_lexer *lex, t_node *node);
 void					free_split(char **split);
 
 char					**get_env_list(t_lexer *lex);
-int		is_dir(char *name);
+int						is_dir(char *name);
+
+int 					*lst_rtn(void);
 
 /*
 ** Transitions and actions

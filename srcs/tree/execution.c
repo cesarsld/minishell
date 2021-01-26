@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 17:24:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/22 11:06:48 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 18:10:21 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,17 +117,11 @@ void handle_d_supp_redir(t_lexer *lex, t_node *node)
 	if ((fd = open(node->content, O_CREAT | O_WRONLY | O_APPEND, 0644)) == -1)
 	{
 		perror("open()");
-		exit(1);
+		exit(FAILURE);
 	}
-	// if (!check_if_last_redir(node->left, e_t_supp, e_t_d_supp))
-	// {
-	// 	close(fd);
-	// 	return (handle_redir(lex, node->left));
-	// }
-	// dup2(fd, STDOUT_FILENO);
 	if (node->left)
 	{
-		if (check_if_last_redir(node->left, e_t_inf, e_t_inf))
+		if (check_if_last_redir(node->left, e_t_d_supp, e_t_supp))
 		{
 			dup2(fd, STDOUT_FILENO);
 		}
@@ -145,18 +139,11 @@ void handle_supp_redir(t_lexer *lex, t_node *node)
 	if ((fd = open(node->content, O_CREAT | O_WRONLY | O_TRUNC, 0644)) == -1)
 	{
 		perror("open()");
-		exit(1);
+		exit(FAILURE);
 	}
-	// if (!check_if_last_redir(node->left, e_t_supp, e_t_d_supp) && 1 == 0)
-	// {
-	// 	handle_redir(lex, node->left);
-	// 	close(fd);
-	// 	//return (handle_redir(lex, node->left));
-	// 	return ;
-	// }
 	if (node->left)
 	{
-		if (check_if_last_redir(node->left, e_t_inf, e_t_inf))
+		if (check_if_last_redir(node->left, e_t_d_supp, e_t_supp))
 		{
 			dup2(fd, STDOUT_FILENO);
 		}
@@ -175,14 +162,8 @@ void handle_inf_redir(t_lexer *lex, t_node *node)
 	if ((fd = open(node->content, O_RDONLY)) == -1)
 	{
 		ft_printf("minishell: %s: %s\n", strerror(errno), node->content);
-		exit(1);
+		exit(FAILURE);
 	}
-	// if (!check_if_last_redir(node->left, e_t_inf, e_t_inf) && 1 == 0)
-	// {
-	// 	handle_redir(lex, node->left);
-	// 	//close(fd);
-	// 	return ;
-	// }
 	if (node->left)
 	{
 		if (check_if_last_redir(node->left, e_t_inf, e_t_inf))
@@ -249,10 +230,9 @@ void	execute_command(t_node *cmd_node, t_lexer *lex)
 	}
 	if(!get_env_list(lex))
 		exit(1);
-		//printf("to be exec %s\n", ex_name);
 	execve(ex_name, args, lex->envac);
 	ft_printf_err("minishell: %s: %s\n", cmd_node->content, strerror(errno));
-	exit(1);
+	exit(errno);
 }
 
 int	is_builtin(t_lexer *lex, t_node *node)
@@ -335,11 +315,24 @@ void	execute_pipe(t_node *tree, t_lexer *lex, int out_fd)
 	}
 }
 
-void	execute_tree(t_lexer *lex, t_node *node)
+void handle_cmd_exec(t_lexer *lex, t_node *node)
 {
 	pid_t	new_id;
 	int		a;
 
+	if((new_id = fork()) == 0)
+		execute_command(node, lex);
+	else
+	{
+		waitpid(new_id, &a, 0);
+		// ft_printf("wexit is %d from %d, wife is %d\n", WEXITSTATUS(a), a, WIFEXITED(a));
+		if (WIFEXITED(a))
+			*lst_rtn()  = WEXITSTATUS(a);
+	}
+}
+
+void	execute_tree(t_lexer *lex, t_node *node)
+{
 	if (!node)
 		return ;
 	if (node->type == e_t_semi_colon)
@@ -348,14 +341,7 @@ void	execute_tree(t_lexer *lex, t_node *node)
 		execute_tree(lex, node->right);
 	}
 	else if (node->type == e_t_cmd_name)
-	{
-		if(is_builtin(lex, node) == SUCCESS)
-			return ;
-		if((new_id = fork()) == 0)
-			execute_command(node, lex);
-		else
-			waitpid(new_id, &a, 0);
-	}
+		is_builtin(lex, node) == SUCCESS ? 0 : handle_cmd_exec(lex, node);
 	else if (node->type == e_t_pipe)
 		return (execute_pipe(node, lex, STDOUT_FILENO));
 }

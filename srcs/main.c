@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/22 10:31:46 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 17:46:42 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,18 @@ int	*is_in_cmd(void)
 	return (&i);
 }
 
+int *lst_rtn(void)
+{
+	static int ret = 0;
+
+	return (&ret);
+}
+
 void handle_signals(int signal)
 {
 	if (signal == SIGINT)
 	{
+		*lst_rtn() = 130;
 		if (*is_in_cmd())
 			ft_putstr("\n");
 		else
@@ -94,7 +102,10 @@ void handle_signals(int signal)
 	else if (signal == SIGQUIT)
 	{
 		if (*is_in_cmd())
+		{
+			*lst_rtn() = 131;
 			ft_putstr("Quit: (core dumped)\n");
+		}
 	}
 }
 
@@ -139,7 +150,7 @@ void init_lexer(t_lexer *lex, char *input, t_list *env_list)
 	lex->state = e_general;
 	lex->prev_state = lex->state;
 	lex->tree = 0;
-	lex->previous_token = e_t_word;
+	lex->p_token = e_t_word;
 	lex->envac = 0;
 	lex->env_list = env_list;
 	lex->exp_list = 0;
@@ -165,7 +176,7 @@ void reset_lexer(t_lexer *lex, char *input)
 	lex->prev_state = lex->state;
 	chuck_tree(lex->tree);
 	lex->tree = 0;
-	lex->previous_token = e_t_word;
+	lex->p_token = e_t_word;
 }
 
 int fetch_input_words(t_lexer *lex)

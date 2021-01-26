@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:18:17 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/22 15:54:13 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 15:38:09 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int		update_pwd(t_list *env_list, char* path)
 	{
 		temp = ft_strpathjoin(pwd_var->value, path);
 		ft_printf_err("minishell: cd: error retrieving current directory:");
-		ft_printf_err(" getcwd: cannot access parent directores");
+		ft_printf_err(" getcwd: cannot access parent directories");
 		ft_printf_err(": No such file or directory\n");	
 	}
 	if ((old_pwd_var = get_var(env_list, "OLDPWD")))
@@ -82,11 +82,15 @@ void pwd_exec(t_lexer *lex, t_node *node)
 		if (node->left)
 		{
 			ft_printf_err("bash: pwd: too many arguments or options\n");
-			exit(EXIT_SUCCESS);
+			exit(FAILURE);
 		}
 		ft_printf("%s\n", get_var(lex->env_list, "PWD")->value);
 		exit(EXIT_SUCCESS);
 	}
 	else
+	{
 		waitpid(pid, &a, 0);
+		if (WIFEXITED(a))
+			*lst_rtn()  = WEXITSTATUS(a);
+	}
 }

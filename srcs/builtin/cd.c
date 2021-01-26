@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 12:18:42 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/22 15:50:12 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 15:20:46 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	cd_exec(t_lexer *lex, t_node *node)
 			if (!pid)
 			{
 				ft_printf_err("minishell: cd: %s: %s\n", path, err);
-				exit(EXIT_SUCCESS);
+				exit(FAILURE);
 			}
 		}
 	}
@@ -54,7 +54,7 @@ void	cd_exec(t_lexer *lex, t_node *node)
 			if (!pid)
 			{
 				ft_printf_err("minishell: cd: %s: %s\n", path, err);
-				exit(EXIT_SUCCESS);
+				exit(FAILURE);
 			}
 		}
 	}
@@ -62,7 +62,11 @@ void	cd_exec(t_lexer *lex, t_node *node)
 	if (pid)
 		update_pwd(lex->env_list, path);
 	if (pid)
+	{
 		waitpid(pid, &a, 0);
+		if (WIFEXITED(a))
+			*lst_rtn()  = WEXITSTATUS(a);
+	}
 	else
 		exit(EXIT_SUCCESS);
 }

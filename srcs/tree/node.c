@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 18:03:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/20 18:06:28 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 18:00:11 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,18 @@ int	generate_tree(t_lexer *lex)
 	{
 		if (is_redirection(">", token->content))
 		{
+			ft_printf_err("here, p is %d\n", lex->p_token);
+			if (lex->p_token == e_t_d_supp || lex->p_token == e_t_supp ||
+				lex->p_token == e_t_inf)
+			{
+				ft_printf_err("minishell: syntax error near unexpected token `>'\n");
+				return (1);
+			}
+			if (lex->p_token == e_t_semi_colon || lex->p_token == e_t_pipe)
+			{
+				ft_printf_err("minishell: syntax error near unexpected token `newline'\n");
+				return (1);
+			}
 			if (!(temp = create_new_node(e_t_supp)))
 				return (1);
 			temp->fd = get_number(token->content, ft_strlen(token->content) - 1);
@@ -85,10 +97,21 @@ int	generate_tree(t_lexer *lex)
 				else
 					stack_head = stack;
 			}
-			lex->previous_token = e_t_supp;
+			lex->p_token = e_t_supp;
 		}
 		else if (is_redirection("<", token->content))
 		{
+			if (lex->p_token == e_t_d_supp || lex->p_token == e_t_supp ||
+				lex->p_token == e_t_inf)
+			{
+				ft_printf_err("minishell: syntax error near unexpected token `<'\n");
+				return (1);
+			}
+			if (lex->p_token == e_t_semi_colon || lex->p_token == e_t_pipe)
+			{
+				ft_printf_err("minishell: syntax error near unexpected token `newline'\n");
+				return (1);
+			}
 			if (!(temp = create_new_node(e_t_inf)))
 				return (1);
 			temp->fd = get_number(token->content, ft_strlen(token->content) - 1);
@@ -117,10 +140,21 @@ int	generate_tree(t_lexer *lex)
 				else
 					stack_head = stack;
 			}
-			lex->previous_token = e_t_inf;
+			lex->p_token = e_t_inf;
 		}
 		else if (is_redirection(">>", token->content))
 		{
+			if (lex->p_token == e_t_d_supp || lex->p_token == e_t_supp ||
+				lex->p_token == e_t_inf)
+			{
+				ft_printf_err("minishell: syntax error near unexpected token `>>'\n");
+				return (1);
+			}
+			if (lex->p_token == e_t_semi_colon || lex->p_token == e_t_pipe)
+			{
+				ft_printf_err("minishell: syntax error near unexpected token `newline'\n");
+				return (1);
+			}
 			if (!(temp = create_new_node(e_t_d_supp)))
 				return (1);
 			temp->fd = get_number(token->content, ft_strlen(token->content) - 1);
@@ -147,7 +181,7 @@ int	generate_tree(t_lexer *lex)
 				else
 					stack_head = stack;
 			}
-			lex->previous_token = e_t_d_supp;
+			lex->p_token = e_t_d_supp;
 		}
 		else if (ft_strcmp("|", token->content) == 0)
 		{
@@ -157,7 +191,7 @@ int	generate_tree(t_lexer *lex)
 				ft_printf_err("minishell: syntax error near unexpected token `|'\n");
 				return (1);
 			}
-			if (lex->previous_token == e_t_pipe)
+			if (lex->p_token == e_t_pipe)
 			{
 				ft_printf_err("minishell: syntax error near unexpected token `|'\n");
 				//free tree fragments
@@ -171,7 +205,7 @@ int	generate_tree(t_lexer *lex)
 			cur_cmd = 0;
 			redir_head = 0;
 			redir = 0;
-			lex->previous_token = e_t_pipe;
+			lex->p_token = e_t_pipe;
 		}
 		else if (ft_strcmp(";", token->content) == 0)
 		{
@@ -183,7 +217,9 @@ int	generate_tree(t_lexer *lex)
 				// free
 				return (1);
 			}
-			if (lex->previous_token == e_t_semi_colon)
+			if (lex->p_token == e_t_semi_colon || lex->p_token == e_t_supp ||
+				lex->p_token == e_t_d_supp || lex->p_token == e_t_inf ||
+				lex->p_token == e_t_pipe)
 			{
 				ft_printf_err("minishell: syntax error near unexpected token `;'\n");
 				//free tree fragments
@@ -204,14 +240,14 @@ int	generate_tree(t_lexer *lex)
 			cur_cmd = 0;
 			redir_head = 0;
 			redir = 0;
-			lex->previous_token = e_t_semi_colon;
+			lex->p_token = e_t_semi_colon;
 		}
 		else
 		{
-			if (lex->previous_token == e_t_supp || lex->previous_token == e_t_inf || lex->previous_token == e_t_d_supp)
+			if (lex->p_token == e_t_supp || lex->p_token == e_t_inf || lex->p_token == e_t_d_supp)
 			{
 				redir->content = token->content;
-				lex->previous_token = e_t_word;
+				lex->p_token = e_t_word;
 			}
 			else if (!stack || !stack->content)
 			{
@@ -225,7 +261,7 @@ int	generate_tree(t_lexer *lex)
 				cur_cmd = stack;
 				if (redir_head)
 					cur_cmd->right = redir_head;
-				lex->previous_token = e_t_cmd_name;
+				lex->p_token = e_t_cmd_name;
 			}
 			else
 			{
@@ -245,7 +281,7 @@ int	generate_tree(t_lexer *lex)
 					stack->left = temp;
 					stack = stack->left;
 				}
-				lex->previous_token = e_t_cmd_word;
+				lex->p_token = e_t_cmd_word;
 			}
 		}
 		token = token->next;
@@ -261,7 +297,7 @@ int	generate_tree(t_lexer *lex)
 			lex->tree->right = stack_head;
 			stack = 0;
 		}
-	if (lex->previous_token == e_t_pipe)
+	if (lex->p_token == e_t_pipe)
 	{
 		ft_printf_err("minishell: syntax error near unexpected token `|'\n");
 		return (1);

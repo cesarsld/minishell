@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 12:04:32 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/21 01:07:51 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 16:02:49 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,10 @@ int add_var_null(t_lexer *lex, char *input)
 	return (SUCCESS);
 }
 
-void check_exports(t_lexer *lex, t_node *node, pid_t pid)
+void check_exports(t_lexer *lex, t_node *node, pid_t pid, int ret)
 {
 	char	*word;
+
 
 	if (node->left)
 	{
@@ -111,26 +112,14 @@ void check_exports(t_lexer *lex, t_node *node, pid_t pid)
 			if (!pid)
 				ft_printf_err("minishell: export: %s: not valid identifier\n",
 				word);
+				ret = FAILURE;
 		}
 		if (node->left->left)
-			return (check_exports(lex, node->left, pid));
+			return (check_exports(lex, node->left, pid, ret));
+		if (pid == 0)
+			exit(ret);
 	}
 }
-
-// void	print_export_vars(t_lexer *lex)
-// {
-// 	t_var *best;
-// 	t_list *top;
-// 	t_list *list;
-
-// 	list = lex->env_list;
-// 	best = list->content;
-// 	top = list->content;
-// 	while (top)
-// 	{
-		
-// 	}
-// }
 
 void	export_exec(t_lexer *lex, t_node *node)
 {
@@ -140,7 +129,7 @@ void	export_exec(t_lexer *lex, t_node *node)
 	if((pid = fork()) == 0)
 		if (node->right)
 			handle_redir(lex, node->right);
-	check_exports(lex, node, pid);
+	check_exports(lex, node, pid, 0);
 	if (!pid)
 	{
 		if (!node->left)
@@ -149,4 +138,6 @@ void	export_exec(t_lexer *lex, t_node *node)
 	}
 	else
 		waitpid(pid, &a, 0);
+	if (WIFEXITED(a))
+			*lst_rtn()  = WEXITSTATUS(a);
 }
