@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 12:04:32 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 16:02:49 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 18:17:25 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void check_exports(t_lexer *lex, t_node *node, pid_t pid, int ret)
 			if (!pid)
 				ft_printf_err("minishell: export: %s: not valid identifier\n",
 				word);
-				ret = FAILURE;
+			ret = FAILURE;
 		}
 		if (node->left->left)
 			return (check_exports(lex, node->left, pid, ret));
