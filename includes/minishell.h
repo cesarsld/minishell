@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 02:29:57 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 03:38:01 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,6 +206,11 @@ int						semi_colon_node(t_lexer *lex, t_node_creator *cr);
 int						d_supp_node(t_lexer *lex, t_list *token,
 							t_node_creator *cr);
 t_node					*create_new_node(t_oken_type type);
+
+int						handle_first(t_list *token, t_lexer *lex,
+							t_node_creator *cr);
+int						is_redir(const char *redir, char *token);
+
 
 /*
 ** Transitions and actions

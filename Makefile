@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2021/01/27 01:04:03 by cjaimes          ###   ########.fr        #
+#    Updated: 2021/01/27 03:37:31 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,7 @@ SRC			=	main.c \
 				tree/node.c \
 				tree/node_2.c \
 				tree/node_3.c \
+				tree/node_4.c \
 				tree/execution.c \
 				tree/exec.c \
 				tree/pipe.c \

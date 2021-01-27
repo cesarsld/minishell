@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 18:03:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 02:25:32 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 03:36:57 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,20 +49,26 @@ void	init_cr(t_node_creator *cr)
 
 int		handle_end(t_lexer *lex, t_node_creator *cr)
 {
+	if (!lex->tree && !cr->stack_head)
+		return (0);
 	if (!lex->tree && cr->stack_head)
 	{
 		lex->tree = cr->stack_head;
 		cr->stack_head = 0;
 	}
-	if (cr->stack_head)
-		if (lex->tree->type == e_t_semi_colon)
-		{
-			lex->tree->right = cr->stack_head;
-			cr->stack = 0;
-		}
+	if (cr->stack_head && lex->tree->type == e_t_semi_colon)
+	{
+		lex->tree->right = cr->stack_head;
+		cr->stack = 0;
+	}
 	if (lex->p_token == e_t_pipe)
 	{
 		ft_printf_err("minishell: syntax error near unexpected token `|'\n");
+		return (1);
+	}
+	if (lex->p_token == e_t_supp || lex->p_token == e_t_d_supp || lex->p_token == e_t_inf)
+	{
+		ft_printf_err("minishell: syntax error near unexpected token `newline'\n");
 		return (1);
 	}
 	if (lex->tree->type == e_t_semi_colon && cr->stack)
@@ -79,18 +85,7 @@ int		generate_tree(t_lexer *lex)
 	token = lex->tokens;
 	while (token)
 	{
-		if (is_redir(">", token->content) && supp_node(lex, token, &cr))
-			return (1);
-		else if (is_redir("<", token->content) && inf_node(lex, token, &cr))
-			return (1);
-		else if (is_redir(">>", token->content) &&
-			d_supp_node(lex, token, &cr))
-			return (1);
-		else if (!ft_strcmp("|", token->content) && pipe_node(lex, &cr))
-			return (1);
-		else if (!ft_strcmp(";", token->content) && semi_colon_node(lex, &cr))
-			return (1);
-		else if (cmd_node(lex, token, &cr))
+		if (handle_first(token, lex, &cr))
 			return (1);
 		token = token->next;
 	}
