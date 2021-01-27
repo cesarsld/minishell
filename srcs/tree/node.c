@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 18:03:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 03:36:57 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 03:43:12 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,11 @@ int		handle_end(t_lexer *lex, t_node_creator *cr)
 		lex->tree->right = cr->stack_head;
 		cr->stack = 0;
 	}
-	if (lex->p_token == e_t_pipe)
+	if (lex->p_token == e_t_supp || lex->p_token == e_t_d_supp ||
+		lex->p_token == e_t_inf || lex->p_token == e_t_pipe)
 	{
-		ft_printf_err("minishell: syntax error near unexpected token `|'\n");
-		return (1);
-	}
-	if (lex->p_token == e_t_supp || lex->p_token == e_t_d_supp || lex->p_token == e_t_inf)
-	{
-		ft_printf_err("minishell: syntax error near unexpected token `newline'\n");
+		ft_printf_err("minishell: syntax error near unexpected token `%s'\n",
+			lex->p_token == e_t_pipe ? "|" : "newline");
 		return (1);
 	}
 	if (lex->tree->type == e_t_semi_colon && cr->stack)
