@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 12:04:32 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 02:30:37 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 14:13:55 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,17 @@ int		add_var_null(t_lexer *lex, char *input)
 	return (SUCCESS);
 }
 
+void handle_var(t_lexer *lex, char *word)
+{
+	if (contains_char(word, '='))
+	{
+		if (add_var(lex, word) == FAILURE)
+			exit(FAILURE);
+	}
+	else if (add_var_null(lex, word) == FAILURE)
+		exit(EXIT_FAILURE);
+}
+
 void	check_exports(t_lexer *lex, t_node *node, pid_t pid, int ret)
 {
 	char	*word;
@@ -75,9 +86,7 @@ void	check_exports(t_lexer *lex, t_node *node, pid_t pid, int ret)
 			is_valid_assign_n(word, ft_strchr(word, '=') ?
 				ft_strchr(word, '=') - word : ft_strlen(word)))
 		{
-			if ((contains_char(word, '=') && add_var(lex, word) == FAILURE) ||
-				add_var_null(lex, word) == FAILURE)
-				exit(EXIT_FAILURE);
+			handle_var(lex, word);
 		}
 		else if (!pid)
 		{
