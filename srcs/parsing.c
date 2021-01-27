@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:29:41 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 01:12:52 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 01:51:44 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,28 +72,26 @@ void	sub_filter_word(char *word, int len)
 
 int	expand_word(t_lexer *lex, char *word, char **first)
 {
-	int w_start;
-	int len;
 
-	w_start = 0;
-	len = 0;
+	lex->w_start = 0;
+	lex->len = 0;
 	lex->state = e_word;
 	while (*word)
 	{
 		if (lex->state == e_backslash)
-			expand_backslash_state_case(lex, first, &w_start, &len, &word);
+			expand_backslash_state_case(lex, first, &word);
 		else if (*word == '"' &&
 			(lex->state == e_word || lex->state == e_d_quote))
-			expand_dquote_case(lex, first, &w_start, &len, &word);
+			expand_dquote_case(lex, first, &word);
 		else if (*word == '\'' &&
 			(lex->state == e_word || lex->state == e_s_quote))
-			expand_squote_case(lex, first, &w_start, &len, &word);
+			expand_squote_case(lex, first, &word);
 		else if (*word == '\\' && lex->state != e_s_quote)
 			expand_backslash_case(lex);
 		else if (*word == '$' && lex->state != e_s_quote)
-			expand_dollar_case(lex, first, &w_start, &len, &word);
+			expand_dollar_case(lex, first, &word);
 		else
-			len++;
+			lex->len++;
 		word++;
 	}
 	return (SUCCESS);

@@ -6,13 +6,13 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 22:25:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 22:26:34 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 01:47:10 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void handle_signals(int signal)
+void	handle_signals(int signal)
 {
 	if (signal == SIGINT)
 	{
@@ -32,7 +32,7 @@ void handle_signals(int signal)
 	}
 }
 
-void init_lexer_functions(t_lexer *lex)
+void	init_lexer_functions(t_lexer *lex)
 {
 	lex->actions[e_general] = &act_general;
 	lex->actions[e_word] = &act_word;
@@ -58,7 +58,7 @@ void init_lexer_functions(t_lexer *lex)
 	lex->transitions[e_error] = &from_error;
 }
 
-void init_lexer(t_lexer *lex, char *input, t_list *env_list)
+void	init_lexer(t_lexer *lex, char *input, t_list *env_list)
 {
 	signal(SIGINT, &handle_signals);
 	signal(SIGQUIT, &handle_signals);
@@ -74,9 +74,11 @@ void init_lexer(t_lexer *lex, char *input, t_list *env_list)
 	lex->envac = 0;
 	lex->env_list = env_list;
 	lex->exp_list = 0;
+	lex->w_start = 0;
+	lex->len = 0;
 }
 
-void chuck_tree(t_node *tree)
+void	chuck_tree(t_node *tree)
 {
 	if (tree)
 	{
@@ -86,7 +88,7 @@ void chuck_tree(t_node *tree)
 	}
 }
 
-void reset_lexer(t_lexer *lex, char *input)
+void	reset_lexer(t_lexer *lex, char *input)
 {
 	lex->token_start = 0;
 	lex->token_len = 0;

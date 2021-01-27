@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 01:04:40 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 01:52:15 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ typedef struct			s_lexer
 	char				**envac;
 	t_list				*env_list;
 	t_list				*exp_list;
+	int					w_start;
+	int					len;
 }						t_lexer;
 
 typedef struct			s_env_var
@@ -160,15 +162,14 @@ int 					*lst_rtn(void);
 int						*is_in_cmd(void);
 
 void					expand_backslash_state_case(t_lexer *lex, char **first,
-							int *w_start, int *len, char **word);
-void					expand_dquote_case(t_lexer *lex, char **first,
-							int *w_start, int *len,
 							char **word);
+void					expand_dquote_case(t_lexer *lex, char **first,
+														char **word);
 void					expand_squote_case(t_lexer *lex, char **first,
-							int *w_start, int *len, char **word);
+							char **word);
 void					expand_backslash_case(t_lexer *lex);
 void					expand_dollar_case(t_lexer *lex, char **first,
-							int *w_start, int *len, char **word);
+							char **word);
 
 int						insert_num_in_word(char **first, char *index, int num);
 void					sub_filter_word(char *word, int len);

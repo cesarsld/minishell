@@ -6,27 +6,27 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 23:05:30 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 01:43:35 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	*is_in_cmd(void)
+int		*is_in_cmd(void)
 {
 	static int i = 0;
 
 	return (&i);
 }
 
-int *lst_rtn(void)
+int		*lst_rtn(void)
 {
 	static int ret = 0;
 
 	return (&ret);
 }
 
-int fetch_input_words(t_lexer *lex)
+int 	fetch_input_words(t_lexer *lex)
 {
 	size_t input_len;
 
@@ -42,26 +42,26 @@ int fetch_input_words(t_lexer *lex)
 	if (lex->state == e_s_quote || lex->state == e_d_quote)
 	{
 		ft_printf_err("minishell: syntax error: missing %s quote end\n",
-			lex->state == e_s_quote? "single" : "double");
+			lex->state == e_s_quote ? "single" : "double");
 		return (1);
 	}
 	return (0);
 }
 
-void reset_loop(char **user_input)
+void	reset_loop(char **user_input)
 {
 	free(*user_input);
 	*user_input = 0;
-	// ft_putstr("(｡◕‿◕｡✿) ");
+	ft_putstr("(｡◕‿◕｡✿) ");
 	*is_in_cmd() = 0;
 	if (!get_next_line(STDIN_FILENO, user_input))
 	{
-		// ft_printf("exit\n");
+		ft_printf("exit\n");
 		exit(0);
 	}
 }
 
-int main(int ac, char **av, char **envac)
+int		main(int ac, char **av, char **envac)
 {
 	char *user_input;
 	t_lexer lex;
@@ -70,7 +70,7 @@ int main(int ac, char **av, char **envac)
 	if (ac || av)
 	{
 	}
-	if(!(env_list = get_env_vars(envac)))
+	if (!(env_list = get_env_vars(envac)))
 		return (0);
 	user_input = 0;
 	init_lexer(&lex, 0, env_list);

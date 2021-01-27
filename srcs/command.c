@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/29 21:45:38 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 22:17:01 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 01:41:54 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	free_split(char **split)
 char	*check_path(char *command)
 {
 	struct stat	buf;
-	
+
 	is_dir(command);
 	if (stat(command, &buf) == 0)
 		return (command);
