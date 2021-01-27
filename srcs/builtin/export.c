@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 12:04:32 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 14:13:55 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 14:57:42 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int		add_var_null(t_lexer *lex, char *input)
 	return (SUCCESS);
 }
 
-void handle_var(t_lexer *lex, char *word)
+void	handle_var(t_lexer *lex, char *word)
 {
 	if (contains_char(word, '='))
 	{
