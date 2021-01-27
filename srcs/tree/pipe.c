@@ -6,19 +6,19 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 23:42:54 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 02:13:07 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 02:25:10 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void exit_pipe(void)
+void	exit_pipe(void)
 {
 	perror("pipe");
 	exit(FAILURE);
 }
 
-void exit_fork(void)
+void	exit_fork(void)
 {
 	perror("fork");
 	exit(FAILURE);

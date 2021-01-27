@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 18:03:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 02:16:44 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 02:25:32 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@ int		generate_tree(t_lexer *lex)
 			return (1);
 		else if (is_redir("<", token->content) && inf_node(lex, token, &cr))
 			return (1);
-		else if (is_redir(">>", token->content) &&d_supp_node(lex, token, &cr))
+		else if (is_redir(">>", token->content) &&
+			d_supp_node(lex, token, &cr))
 			return (1);
 		else if (!ft_strcmp("|", token->content) && pipe_node(lex, &cr))
 			return (1);

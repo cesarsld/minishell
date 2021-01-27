@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 01:52:15 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 02:29:57 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <dirent.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-#include <sys/errno.h>
+# include <sys/errno.h>
 
 # define LEX_STATES 11
 # define FAILURE 1
@@ -56,7 +56,7 @@ typedef enum			e_token_type
 	e_t_d_supp,
 	e_t_inf,
 	e_t_append,
-	e_t_cd, 
+	e_t_cd,
 	e_t_echo,
 	e_t_export,
 	e_t_env,
@@ -72,7 +72,7 @@ typedef struct			s_node
 	int					fd;
 }						t_node;
 
-typedef struct 			s_node_handler
+typedef struct			s_node_handler
 {
 	t_node				*stack;
 	t_node				*temp;
@@ -81,7 +81,6 @@ typedef struct 			s_node_handler
 	t_node				*redir_head;
 	t_node				*cur_cmd;
 }						t_node_creator;
-
 
 /*
 ** These functions switch the lexer states depending on input
@@ -126,7 +125,7 @@ int						is_white_space(char c);
 void					skip_whitespace(char **line);
 int						starts_with(const char *input, const char *match);
 int						is_name_char(char c);
-int 					contains_char(const char *input, char chr);
+int						contains_char(const char *input, char chr);
 void					shift_from_index(char *line, int index);
 void					pop_substr(char *start, int amount);
 
@@ -152,13 +151,13 @@ int						treat_word(t_lexer *lex, t_node *node);
 
 void					free_split(char **split);
 void					init_lexer(t_lexer *lex, char *input,
-						t_list *env_list);	
+							t_list *env_list);
 void					reset_lexer(t_lexer *lex, char *input);
 
 char					**get_env_list(t_lexer *lex);
 int						is_dir(char *name);
 
-int 					*lst_rtn(void);
+int						*lst_rtn(void);
 int						*is_in_cmd(void);
 
 void					expand_backslash_state_case(t_lexer *lex, char **first,
@@ -173,11 +172,11 @@ void					expand_dollar_case(t_lexer *lex, char **first,
 
 int						insert_num_in_word(char **first, char *index, int num);
 void					sub_filter_word(char *word, int len);
-int						insert_word(t_lexer *lex, char *word, char **first, char *check);
-
+int						insert_word(t_lexer *lex, char *word, char **first,
+							char *check);
 
 void					handle_right_pipe(int out_fd, int pfd[2], t_lexer *lex,
-							 t_node *tree);
+							t_node *tree);
 
 void					handle_left_pipe(int pfd[2], t_lexer *lex,
 							t_node *tree);
@@ -196,12 +195,16 @@ void					execute_command(t_node *cmd_node, t_lexer *lex,
 
 int						is_builtin(t_lexer *lex, t_node *node);
 
-int						supp_node(t_lexer *lex, t_list *token, t_node_creator *cr);
-int						inf_node(t_lexer *lex, t_list *token, t_node_creator *cr);
+int						supp_node(t_lexer *lex, t_list *token,
+							t_node_creator *cr);
+int						inf_node(t_lexer *lex, t_list *token,
+							t_node_creator *cr);
 int						pipe_node(t_lexer *lex, t_node_creator *cr);
-int						cmd_node(t_lexer *lex, t_list *token, t_node_creator *cr);
+int						cmd_node(t_lexer *lex, t_list *token,
+							t_node_creator *cr);
 int						semi_colon_node(t_lexer *lex, t_node_creator *cr);
-int						d_supp_node(t_lexer *lex, t_list *token, t_node_creator *cr);
+int						d_supp_node(t_lexer *lex, t_list *token,
+							t_node_creator *cr);
 t_node					*create_new_node(t_oken_type type);
 
 /*
@@ -234,7 +237,7 @@ int						act_error(t_lexer *lex);
 
 int						generate_tree(t_lexer *lex);
 int						push_token(t_lexer *lex);
-int         			grow_token(t_lexer *lex);
+int						grow_token(t_lexer *lex);
 int						discard_one(t_lexer *lex);
 char					*get_command_path(char *path_line, char *command);
 void					execute_tree(t_lexer *lex, t_node *node);

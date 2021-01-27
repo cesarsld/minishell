@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 20:24:32 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 02:06:48 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 02:27:23 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int		push_token(t_lexer *lex)
 {
 	char	*str;
 	t_list	*token;
-	
+
 	if (lex->token_len == 0)
 		return (0);
 	if (!(str = ft_substr(lex->input, lex->token_start, lex->token_len)))
@@ -45,7 +45,7 @@ int		discard_one(t_lexer *lex)
 	return (0);
 }
 
-int			act_general(t_lexer *lex)
+int		act_general(t_lexer *lex)
 {
 	if (lex->token_len)
 		return (push_token(lex));

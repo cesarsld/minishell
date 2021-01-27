@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:29:41 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 01:54:11 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 02:24:11 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	sub_filter_word(char *word, int len)
 	shift_from_index(word, len - 1);
 }
 
-int	expand_word(t_lexer *lex, char *word, char **first)
+int		expand_word(t_lexer *lex, char *word, char **first)
 {
 	lex->w_start = 0;
 	lex->len = 0;
@@ -95,7 +95,7 @@ int	expand_word(t_lexer *lex, char *word, char **first)
 	return (SUCCESS);
 }
 
-int	treat_word(t_lexer *lex, t_node *node)
+int		treat_word(t_lexer *lex, t_node *node)
 {
 	if (expand_word(lex, node->content, (char **)&(node->content)) == FAILURE)
 		return (FAILURE);

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 01:43:35 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 02:26:48 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int		*lst_rtn(void)
 	return (&ret);
 }
 
-int 	fetch_input_words(t_lexer *lex)
+int		fetch_input_words(t_lexer *lex)
 {
 	size_t input_len;
 
@@ -63,9 +63,9 @@ void	reset_loop(char **user_input)
 
 int		main(int ac, char **av, char **envac)
 {
-	char *user_input;
-	t_lexer lex;
-	t_list *env_list;
+	char	*user_input;
+	t_lexer	lex;
+	t_list	*env_list;
 
 	if (ac || av)
 	{

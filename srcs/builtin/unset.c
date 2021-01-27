@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/07 19:53:07 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 02:02:15 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 02:26:26 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,5 @@ void	unset_exec(t_lexer *lex, t_node *node)
 	else
 		waitpid(pid, &a, 0);
 	if (WIFEXITED(a))
-		*lst_rtn()  = WEXITSTATUS(a);
+		*lst_rtn() = WEXITSTATUS(a);
 }

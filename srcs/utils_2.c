@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 22:58:43 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 01:54:54 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 02:25:46 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int		is_name_char(char c)
 {
-	return (ft_isalnum(c) || c ==  '_');
+	return (ft_isalnum(c) || c == '_');
 }
 
 int		is_white_space(char c)
