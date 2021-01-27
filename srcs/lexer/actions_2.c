@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 20:24:32 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 20:29:17 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 02:06:48 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 int		push_token(t_lexer *lex)
 {
-	char    *str;
-	t_list  *token;
+	char	*str;
+	t_list	*token;
+	
 	if (lex->token_len == 0)
 		return (0);
 	if (!(str = ft_substr(lex->input, lex->token_start, lex->token_len)))
@@ -23,7 +24,7 @@ int		push_token(t_lexer *lex)
 	if (!(token = ft_lstnew(str)))
 	{
 		free(str);
-		return(1);
+		return (1);
 	}
 	ft_lstadd_back(&(lex->tokens), token);
 	lex->token_start += ft_strlen(str);

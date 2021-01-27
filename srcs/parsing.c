@@ -6,13 +6,13 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:29:41 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 01:51:44 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 01:54:11 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	insert_num_in_word(char **first, char *index, int num)
+int		insert_num_in_word(char **first, char *index, int num)
 {
 	char	*numstr;
 	char	*concat;
@@ -34,7 +34,7 @@ int	insert_num_in_word(char **first, char *index, int num)
 	return (num);
 }
 
-int	insert_word(t_lexer *lex, char *word, char **first, char *check)
+int		insert_word(t_lexer *lex, char *word, char **first, char *check)
 {
 	char	*key;
 	char	*exp;
@@ -42,8 +42,7 @@ int	insert_word(t_lexer *lex, char *word, char **first, char *check)
 
 	while (is_name_char(*word))
 		word++;
-	key = ft_substr(check, 0, word - check);
-	if (!key)
+	if (!(key = ft_substr(check, 0, word - check)))
 		return (M_ERROR);
 	exp = get_var_value(lex->env_list, key);
 	free(key);
@@ -72,7 +71,6 @@ void	sub_filter_word(char *word, int len)
 
 int	expand_word(t_lexer *lex, char *word, char **first)
 {
-
 	lex->w_start = 0;
 	lex->len = 0;
 	lex->state = e_word;

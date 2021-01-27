@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 17:24:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 23:58:11 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 02:11:52 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ char	*ft_strjoin_equal(char const *s1, char const *s2)
 
 char	**get_env_list(t_lexer *lex)
 {
-	char **new_list;
-	t_list *first;
-	int counter;
-	t_var *var;
+	char	**new_list;
+	t_list	*first;
+	int		counter;
+	t_var	*var;
 
-	if(!(new_list = malloc(sizeof(char*) * (ft_lstsize(lex->env_list) + 1))))
+	if (!(new_list = malloc(sizeof(char*) * (ft_lstsize(lex->env_list) + 1))))
 		return (NULL);
 	new_list[ft_lstsize(lex->env_list)] = 0;
 	first = lex->env_list;
@@ -45,7 +45,7 @@ char	**get_env_list(t_lexer *lex)
 	while (first)
 	{
 		var = first->content;
-		if(!(new_list[counter++] = ft_strjoin_equal(var->name, var->value)))
+		if (!(new_list[counter++] = ft_strjoin_equal(var->name, var->value)))
 			return (NULL);
 		first = first->next;
 	}
@@ -57,7 +57,7 @@ char	**get_env_list(t_lexer *lex)
 
 int		is_dir(char *name)
 {
-	if(opendir(name))
+	if (opendir(name))
 	{
 		ft_printf_err("minishell: %s: %s\n", name, "is a directory");
 		exit(1);
@@ -76,7 +76,7 @@ int		is_builtin(t_lexer *lex, t_node *node)
 	else if (ft_strcmp("unset", node->content) == 0)
 		unset_exec(lex, node);
 	else if (ft_strcmp("pwd", node->content) == 0)
-	 	pwd_exec(lex, node);
+		pwd_exec(lex, node);
 	else if (ft_strcmp("env", node->content) == 0)
 		env_exec(lex, node);
 	else if (ft_strcmp("echo", node->content) == 0)

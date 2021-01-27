@@ -6,13 +6,13 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 10:55:04 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 20:06:24 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 02:00:32 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void print_env_var(void *content)
+void	print_env_var(void *content)
 {
 	t_var *var;
 
@@ -26,7 +26,7 @@ void print_env_var(void *content)
 	}
 }
 
-void print_export_var(void *content)
+void	print_export_var(void *content)
 {
 	t_var *var;
 
@@ -43,7 +43,7 @@ void print_export_var(void *content)
 	}
 }
 
-void print_export_var_null(void *content)
+void	print_export_var_null(void *content)
 {
 	t_var *var;
 
@@ -56,7 +56,7 @@ void print_export_var_null(void *content)
 	}
 }
 
-void    print_env_vars(t_lexer *lex, int env)
+void	print_env_vars(t_lexer *lex, int env)
 {
 	if (env)
 		ft_lstiter(lex->env_list, &print_env_var);
@@ -67,14 +67,14 @@ void    print_env_vars(t_lexer *lex, int env)
 	}
 }
 
-void env_exec(t_lexer *lex, t_node *node)
+void	env_exec(t_lexer *lex, t_node *node)
 {
 	pid_t	pid;
 	int		a;
-	
-	if((pid = fork()) == 0)
+
+	if ((pid = fork()) == 0)
 	{
-		if(node->right)
+		if (node->right)
 			handle_redir(lex, node->right);
 		if (node->left)
 		{
@@ -87,5 +87,5 @@ void env_exec(t_lexer *lex, t_node *node)
 	else
 		waitpid(pid, &a, 0);
 	if (WIFEXITED(a))
-			*lst_rtn()  = WEXITSTATUS(a);
+		*lst_rtn()  = WEXITSTATUS(a);
 }

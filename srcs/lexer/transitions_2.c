@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 20:31:10 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 20:31:35 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 02:07:27 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void		from_or(t_lexer *lex)
 	else if (lex->input[lex->token_start + lex->token_len] == '>')
 		lex->state = e_supp;
 	else if (lex->input[lex->token_start + lex->token_len] == '<')
- 		lex->state = e_inf;
+		lex->state = e_inf;
 	else if (lex->input[lex->token_start + lex->token_len] == ';')
 		lex->state = e_semi_colon;
 	else if (lex->input[lex->token_start + lex->token_len] == '&')
@@ -53,7 +53,7 @@ void		from_semi_colon(t_lexer *lex)
 	else if (lex->input[lex->token_start + lex->token_len] == '>')
 		lex->state = e_supp;
 	else if (lex->input[lex->token_start + lex->token_len] == '<')
- 		lex->state = e_inf;
+		lex->state = e_inf;
 	else if (lex->input[lex->token_start + lex->token_len] == ';')
 		lex->state = e_semi_colon;
 	else if (lex->input[lex->token_start + lex->token_len] == '&')
@@ -79,7 +79,7 @@ void		from_supp(t_lexer *lex)
 	else if (lex->input[lex->token_start + lex->token_len] == '>')
 		lex->state = e_supp;
 	else if (lex->input[lex->token_start + lex->token_len] == '<')
- 		lex->state = e_inf;
+		lex->state = e_inf;
 	else if (lex->input[lex->token_start + lex->token_len] == ';')
 		lex->state = e_semi_colon;
 	else if (lex->input[lex->token_start + lex->token_len] == '&')
@@ -105,7 +105,7 @@ void		from_inf(t_lexer *lex)
 	else if (lex->input[lex->token_start + lex->token_len] == '>')
 		lex->state = e_supp;
 	else if (lex->input[lex->token_start + lex->token_len] == '<')
- 		lex->state = e_inf;
+		lex->state = e_inf;
 	else if (lex->input[lex->token_start + lex->token_len] == ';')
 		lex->state = e_semi_colon;
 	else if (lex->input[lex->token_start + lex->token_len] == '&')
@@ -131,7 +131,7 @@ void		from_error(t_lexer *lex)
 	else if (lex->input[lex->token_start + lex->token_len] == '>')
 		lex->state = e_supp;
 	else if (lex->input[lex->token_start + lex->token_len] == '<')
- 		lex->state = e_inf;
+		lex->state = e_inf;
 	else if (lex->input[lex->token_start + lex->token_len] == ';')
 		lex->state = e_semi_colon;
 	else if (lex->input[lex->token_start + lex->token_len] == '&')

@@ -6,13 +6,13 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 22:58:43 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 22:59:26 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 01:54:54 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int is_name_char(char c)
+int		is_name_char(char c)
 {
 	return (ft_isalnum(c) || c ==  '_');
 }
@@ -46,7 +46,7 @@ char	*ft_strjoin_input(char const *s1, char const *s2)
 	return (new);
 }
 
-void shift_from_index(char *line, int index)
+void	shift_from_index(char *line, int index)
 {
 	int i;
 

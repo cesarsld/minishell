@@ -6,24 +6,24 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 12:04:32 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 20:21:11 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 01:59:23 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int add_var(t_lexer *lex, char *input)
+int		add_var(t_lexer *lex, char *input)
 {
-	t_var   *new;
+	t_var	*new;
 	t_list	*temp;
 	t_var	*exist;
 	char	*name;
 	char	*value;
 
 	if (!(name = ft_strndup(input, ft_strchr(input, '=') - input)))
-			return (FAILURE);
+		return (FAILURE);
 	if (!(value = ft_strdup(ft_strchr(input, '=') + 1)))
-			return (FAILURE);
+		return (FAILURE);
 	if ((exist = get_var(lex->env_list, name)))
 	{
 		free(exist->value);
@@ -41,14 +41,14 @@ int add_var(t_lexer *lex, char *input)
 	return (SUCCESS);
 }
 
-int add_var_null(t_lexer *lex, char *input)
+int		add_var_null(t_lexer *lex, char *input)
 {
-	t_var   *new;
+	t_var	*new;
 	t_list	*temp;
 	char	*name;
 
 	if (!(name = ft_strdup(input)))
-			return (FAILURE);
+		return (FAILURE);
 	if (get_var(lex->env_list, name) || get_var(lex->exp_list, name))
 	{
 		free(name);
@@ -62,7 +62,7 @@ int add_var_null(t_lexer *lex, char *input)
 	return (SUCCESS);
 }
 
-void check_exports(t_lexer *lex, t_node *node, pid_t pid, int ret)
+void	check_exports(t_lexer *lex, t_node *node, pid_t pid, int ret)
 {
 	char	*word;
 
@@ -95,8 +95,8 @@ void	export_exec(t_lexer *lex, t_node *node)
 {
 	pid_t	pid;
 	int		a;
-	
-	if((pid = fork()) == 0)
+
+	if ((pid = fork()) == 0)
 		if (node->right)
 			handle_redir(lex, node->right);
 	check_exports(lex, node, pid, 0);
@@ -109,5 +109,5 @@ void	export_exec(t_lexer *lex, t_node *node)
 	else
 		waitpid(pid, &a, 0);
 	if (WIFEXITED(a))
-			*lst_rtn()  = WEXITSTATUS(a);
+		*lst_rtn()  = WEXITSTATUS(a);
 }

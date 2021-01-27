@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 20:31:13 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 20:31:42 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 02:07:37 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void		from_and(t_lexer *lex)
 	else if (lex->input[lex->token_start + lex->token_len] == '>')
 		lex->state = e_supp;
 	else if (lex->input[lex->token_start + lex->token_len] == '<')
- 		lex->state = e_inf;
+		lex->state = e_inf;
 	else if (lex->input[lex->token_start + lex->token_len] == ';')
 		lex->state = e_semi_colon;
 	else if (lex->input[lex->token_start + lex->token_len] == '&')

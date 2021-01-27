@@ -6,13 +6,13 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 00:59:50 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 01:01:34 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 02:15:20 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int handle_supp_err(t_lexer *lex)
+int	handle_supp_err(t_lexer *lex)
 {
 	if (lex->p_token == e_t_d_supp || lex->p_token == e_t_supp ||
 		lex->p_token == e_t_inf)
@@ -22,7 +22,8 @@ int handle_supp_err(t_lexer *lex)
 	}
 	if (lex->p_token == e_t_semi_colon || lex->p_token == e_t_pipe)
 	{
-		ft_printf_err("minishell: syntax error near unexpected token `newline'\n");
+		ft_printf_err(
+			"minishell: syntax error near unexpected token `newline'\n");
 		return (1);
 	}
 	return (0);
@@ -30,14 +31,14 @@ int handle_supp_err(t_lexer *lex)
 
 int	supp_node(t_lexer *lex, t_list *token, t_node_creator *cr)
 {
-	if(handle_supp_err(lex))
+	if (handle_supp_err(lex))
 		return (1);
 	if (!(cr->temp = create_new_node(e_t_supp)))
 		return (1);
 	cr->temp->fd = get_number(token->content, ft_strlen(token->content) - 1);
 	if (!cr->redir_head)
 		cr->redir_head = cr->temp;
-	else 
+	else
 		cr->redir->left = cr->temp;
 	cr->redir = cr->temp;
 	if (cr->cur_cmd)
@@ -57,7 +58,7 @@ int	supp_node(t_lexer *lex, t_list *token, t_node_creator *cr)
 	return (0);
 }
 
-int handle_inf_err(t_lexer *lex)
+int	handle_inf_err(t_lexer *lex)
 {
 	if (lex->p_token == e_t_d_supp || lex->p_token == e_t_supp ||
 		lex->p_token == e_t_inf)
@@ -67,13 +68,14 @@ int handle_inf_err(t_lexer *lex)
 	}
 	if (lex->p_token == e_t_semi_colon || lex->p_token == e_t_pipe)
 	{
-		ft_printf_err("minishell: syntax error near unexpected token `newline'\n");
+		ft_printf_err(
+			"minishell: syntax error near unexpected token `newline'\n");
 		return (1);
 	}
 	return (0);
 }
 
-int inf_node(t_lexer *lex, t_list *token, t_node_creator *cr)
+int	inf_node(t_lexer *lex, t_list *token, t_node_creator *cr)
 {
 	if (handle_inf_err(lex) || !(cr->temp = create_new_node(e_t_inf)))
 		return (1);
@@ -82,7 +84,7 @@ int inf_node(t_lexer *lex, t_list *token, t_node_creator *cr)
 		cr->temp->fd = 0;
 	if (!cr->redir_head)
 		cr->redir_head = cr->temp;
-	else 
+	else
 		cr->redir->left = cr->temp;
 	cr->redir = cr->temp;
 	if (cr->cur_cmd)
@@ -102,7 +104,7 @@ int inf_node(t_lexer *lex, t_list *token, t_node_creator *cr)
 	return (0);
 }
 
-int pipe_node(t_lexer *lex, t_node_creator *cr)
+int	pipe_node(t_lexer *lex, t_node_creator *cr)
 {
 	if (!cr->stack_head && !cr->cur_cmd && !cr->redir_head)
 	{

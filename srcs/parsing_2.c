@@ -6,13 +6,13 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 22:55:06 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 01:51:12 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 01:53:24 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void expand_backslash_state_case(t_lexer *lex, char **first, char **word)
+void	expand_backslash_state_case(t_lexer *lex, char **first, char **word)
 {
 	if (lex->prev_state == e_word)
 	{
@@ -36,10 +36,11 @@ void expand_backslash_state_case(t_lexer *lex, char **first, char **word)
 	}
 }
 
-void expand_dquote_case(t_lexer *lex, char **first, char **word)
+void	expand_dquote_case(t_lexer *lex, char **first, char **word)
 {
 	lex->state = lex->state == e_word ? e_d_quote : e_word;
-	if (lex->state == e_d_quote) {
+	if (lex->state == e_d_quote)
+	{
 		lex->w_start = *word - *first;
 		lex->len = 1;
 	}
@@ -52,7 +53,7 @@ void expand_dquote_case(t_lexer *lex, char **first, char **word)
 	}
 }
 
-void expand_squote_case(t_lexer *lex, char **first, char **word)
+void	expand_squote_case(t_lexer *lex, char **first, char **word)
 {
 	lex->state = lex->state == e_word ? e_s_quote : e_word;
 	if (lex->state == e_s_quote)
@@ -69,13 +70,13 @@ void expand_squote_case(t_lexer *lex, char **first, char **word)
 	}
 }
 
-void expand_backslash_case(t_lexer *lex)
+void	expand_backslash_case(t_lexer *lex)
 {
 	lex->prev_state = lex->state;
 	lex->state = e_backslash;
 }
 
-void expand_dollar_case(t_lexer *lex, char **first, char **word)
+void	expand_dollar_case(t_lexer *lex, char **first, char **word)
 {
 	if ((ft_isalpha(*(*word + 1)) || *(*word + 1) == '_'))
 	{

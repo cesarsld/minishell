@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/29 20:31:11 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 22:16:00 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 01:55:38 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	get_number(char *input, int size)
 	return (ft_atoi(input));
 }
 
-int is_valid_assign_n(char *word, int len)
+int	is_valid_assign_n(char *word, int len)
 {
 	while (len--)
 		if (!is_name_char(*word++))
@@ -37,7 +37,7 @@ int is_valid_assign_n(char *word, int len)
 	return (1);
 }
 
-int contains_char(const char *input, char chr)
+int	contains_char(const char *input, char chr)
 {
 	while (*input)
 		if (*input++ == chr)
@@ -45,7 +45,7 @@ int contains_char(const char *input, char chr)
 	return (0);
 }
 
-int starts_with(const char *input, const char *match)
+int	starts_with(const char *input, const char *match)
 {
-	return (ft_strncmp(input, match, ft_strlen(match)) == 0);  
+	return (ft_strncmp(input, match, ft_strlen(match)) == 0);
 }

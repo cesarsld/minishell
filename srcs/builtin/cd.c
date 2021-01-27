@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 12:18:42 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 19:51:11 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 02:03:29 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*cd_to_path(t_node *node, pid_t pid, t_lexer *lex)
 {
 	char	*temp;
 	char	*path;
-	
+
 	temp = 0;
 	if (!node->left->content || treat_word(lex, node->left) == FAILURE)
 		return (0);
@@ -35,7 +35,8 @@ char	*cd_to_path(t_node *node, pid_t pid, t_lexer *lex)
 		return (0);
 	if (starts_with(path, "~"))
 	{
-		if (!(temp = ft_strjoin(get_var(lex->env_list, "HOME")->value, path + 1)))
+		if (!(temp = ft_strjoin(get_var(lex->env_list, "HOME")->value,
+			path + 1)))
 			return (0);
 		free(path);
 		path = temp;
@@ -45,7 +46,7 @@ char	*cd_to_path(t_node *node, pid_t pid, t_lexer *lex)
 		ft_printf_err("minishell: cd: %s: %s\n", path, strerror(errno));
 		exit(FAILURE);
 	}
-	return path;
+	return (path);
 }
 
 void	cd_exec(t_lexer *lex, t_node *node)
@@ -55,14 +56,14 @@ void	cd_exec(t_lexer *lex, t_node *node)
 	int		a;
 
 	path = 0;
-	if((pid = fork()) == 0)
-		if(node->right)
+	if ((pid = fork()) == 0)
+		if (node->right)
 			handle_redir(lex, node->right);
 	if (node->left)
 	{
 		path = cd_to_path(node, pid, lex);
 		if (!path)
-			return;
+			return ;
 	}
 	else
 		cd_to_home(path, pid, lex);

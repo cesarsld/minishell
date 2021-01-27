@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 18:03:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 01:03:21 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 02:16:44 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_node	*create_new_node(t_oken_type type)
 	return (node);
 }
 
-int	is_redirection(const char *redir, char *token)
+int		is_redir(const char *redir, char *token)
 {
 	int len;
 
@@ -38,7 +38,7 @@ int	is_redirection(const char *redir, char *token)
 	return (0);
 }
 
-void init_cr(t_node_creator *cr)
+void	init_cr(t_node_creator *cr)
 {
 	cr->cur_cmd = 0;
 	cr->stack = 0;
@@ -47,7 +47,7 @@ void init_cr(t_node_creator *cr)
 	cr->redir_head = 0;
 }
 
-int	handle_end(t_lexer *lex, t_node_creator *cr)
+int		handle_end(t_lexer *lex, t_node_creator *cr)
 {
 	if (!lex->tree && cr->stack_head)
 	{
@@ -70,20 +70,20 @@ int	handle_end(t_lexer *lex, t_node_creator *cr)
 	return (0);
 }
 
-int	generate_tree(t_lexer *lex)
+int		generate_tree(t_lexer *lex)
 {
-	t_list 			*token;
+	t_list			*token;
 	t_node_creator	cr;
 
 	init_cr(&cr);
 	token = lex->tokens;
 	while (token)
 	{
-		if (is_redirection(">", token->content) && supp_node(lex, token, &cr))
+		if (is_redir(">", token->content) && supp_node(lex, token, &cr))
 			return (1);
-		else if (is_redirection("<", token->content) && inf_node(lex, token, &cr))
+		else if (is_redir("<", token->content) && inf_node(lex, token, &cr))
 			return (1);
-		else if (is_redirection(">>", token->content) && d_supp_node(lex, token, &cr))
+		else if (is_redir(">>", token->content) &&d_supp_node(lex, token, &cr))
 			return (1);
 		else if (!ft_strcmp("|", token->content) && pipe_node(lex, &cr))
 			return (1);

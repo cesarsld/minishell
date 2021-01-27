@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 20:04:17 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 22:18:42 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 02:03:59 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 char	*get_var_value(t_list *env_list, char *key)
 {
 	t_var	*entry;
-	
+
 	while (env_list)
 	{
 		entry = env_list->content;
@@ -29,7 +29,7 @@ char	*get_var_value(t_list *env_list, char *key)
 t_var	*get_var(t_list *env_list, char *key)
 {
 	t_var *entry;
-	
+
 	while (env_list)
 	{
 		entry = env_list->content;

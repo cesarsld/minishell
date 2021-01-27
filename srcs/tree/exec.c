@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 23:52:11 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 23:53:09 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 02:21:58 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	execute_command(t_node *cmd_node, t_lexer *lex, char *ex_name)
 {
 	char	**args;
 
-	if(cmd_node->right)
+	if (cmd_node->right)
 	{
 		handle_redir(lex, cmd_node->right);
 		!cmd_node->content ? exit(EXIT_SUCCESS) : 0;
@@ -59,9 +59,8 @@ void	execute_command(t_node *cmd_node, t_lexer *lex, char *ex_name)
 		exit(FAILURE);
 	if (ft_strchr(cmd_node->content, '/'))
 	{
-		if (!(ex_name = ft_strdup(cmd_node->content)))
+		if (!(ex_name = ft_strdup(cmd_node->content)) || is_dir(ex_name) == 1)
 			exit(FAILURE);
-		is_dir(ex_name);
 	}
 	else if (!(ex_name = get_command_path(
 			get_var(lex->env_list, "PATH")->value, cmd_node->content)))
@@ -78,12 +77,12 @@ void	handle_cmd_exec(t_lexer *lex, t_node *node)
 	pid_t	new_id;
 	int		a;
 
-	if((new_id = fork()) == 0)
+	if ((new_id = fork()) == 0)
 		execute_command(node, lex, 0);
 	else
 	{
 		waitpid(new_id, &a, 0);
 		if (WIFEXITED(a))
-			*lst_rtn()  = WEXITSTATUS(a);
+			*lst_rtn() = WEXITSTATUS(a);
 	}
 }

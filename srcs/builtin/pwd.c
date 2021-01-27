@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:18:17 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 15:38:09 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 01:57:39 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,11 @@ char	*ft_strpathjoin(char const *s1, char const *s2)
 	return (new);
 }
 
-int		update_pwd(t_list *env_list, char* path)
+int		update_pwd(t_list *env_list, char *path)
 {
-	t_var *pwd_var;
-	t_var *old_pwd_var;
-	char *temp;
+	t_var	*pwd_var;
+	t_var	*old_pwd_var;
+	char	*temp;
 
 	temp = get_pwd();
 	if (!(pwd_var = get_var(env_list, "PWD")))
@@ -55,7 +55,7 @@ int		update_pwd(t_list *env_list, char* path)
 		temp = ft_strpathjoin(pwd_var->value, path);
 		ft_printf_err("minishell: cd: error retrieving current directory:");
 		ft_printf_err(" getcwd: cannot access parent directories");
-		ft_printf_err(": No such file or directory\n");	
+		ft_printf_err(": No such file or directory\n");
 	}
 	if ((old_pwd_var = get_var(env_list, "OLDPWD")))
 	{
@@ -64,20 +64,20 @@ int		update_pwd(t_list *env_list, char* path)
 	}
 	else
 		free(pwd_var->value);
-	if(!(pwd_var->value = ft_strdup(temp)))
+	if (!(pwd_var->value = ft_strdup(temp)))
 		return (0);
 	free(temp);
 	return (1);
 }
 
-void pwd_exec(t_lexer *lex, t_node *node)
+void	pwd_exec(t_lexer *lex, t_node *node)
 {
 	pid_t	pid;
 	int		a;
 
-	if((pid = fork()) == 0)
+	if ((pid = fork()) == 0)
 	{
-		if(node->right)
+		if (node->right)
 			handle_redir(lex, node->right);
 		if (node->left)
 		{
@@ -91,6 +91,6 @@ void pwd_exec(t_lexer *lex, t_node *node)
 	{
 		waitpid(pid, &a, 0);
 		if (WIFEXITED(a))
-			*lst_rtn()  = WEXITSTATUS(a);
+			*lst_rtn() = WEXITSTATUS(a);
 	}
 }

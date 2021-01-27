@@ -6,13 +6,13 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 00:59:53 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 01:01:11 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 02:14:36 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int handle_d_supp_err(t_lexer *lex)
+int	handle_d_supp_err(t_lexer *lex)
 {
 	if (lex->p_token == e_t_d_supp || lex->p_token == e_t_supp ||
 		lex->p_token == e_t_inf)
@@ -22,20 +22,21 @@ int handle_d_supp_err(t_lexer *lex)
 	}
 	if (lex->p_token == e_t_semi_colon || lex->p_token == e_t_pipe)
 	{
-		ft_printf_err("minishell: syntax error near unexpected token `newline'\n");
+		ft_printf_err(
+			"minishell: syntax error near unexpected token `newline'\n");
 		return (1);
 	}
 	return (0);
 }
 
-int d_supp_node(t_lexer *lex, t_list *token, t_node_creator *cr)
+int	d_supp_node(t_lexer *lex, t_list *token, t_node_creator *cr)
 {
 	if (handle_d_supp_err(lex) || !(cr->temp = create_new_node(e_t_d_supp)))
 		return (1);
 	cr->temp->fd = get_number(token->content, ft_strlen(token->content) - 1);
 	if (!cr->redir_head)
 		cr->redir_head = cr->temp;
-	else 
+	else
 		cr->redir->left = cr->temp;
 	cr->redir = cr->temp;
 	if (cr->cur_cmd)
@@ -55,7 +56,7 @@ int d_supp_node(t_lexer *lex, t_list *token, t_node_creator *cr)
 	return (0);
 }
 
-int semi_colon_node(t_lexer *lex, t_node_creator *cr)
+int	semi_colon_node(t_lexer *lex, t_node_creator *cr)
 {
 	if ((!cr->stack_head && !lex->tree && !cr->redir_head) ||
 		lex->p_token == e_t_semi_colon || lex->p_token == e_t_supp ||
@@ -66,7 +67,7 @@ int semi_colon_node(t_lexer *lex, t_node_creator *cr)
 		return (1);
 	}
 	if (!(cr->temp = create_new_node(e_t_semi_colon)))
-			return (1);
+		return (1);
 	if (lex->tree && lex->tree->type == e_t_semi_colon)
 	{
 		cr->temp->left = lex->tree;
@@ -84,7 +85,7 @@ int semi_colon_node(t_lexer *lex, t_node_creator *cr)
 	return (0);
 }
 
-int cmd_name_node(t_lexer *lex, t_list *token, t_node_creator *cr)
+int	cmd_name_node(t_lexer *lex, t_list *token, t_node_creator *cr)
 {
 	if (!cr->stack && !(cr->stack = create_new_node(e_t_cmd_name)))
 		return (1);
@@ -100,9 +101,10 @@ int cmd_name_node(t_lexer *lex, t_list *token, t_node_creator *cr)
 	return (0);
 }
 
-int cmd_node(t_lexer *lex, t_list *token, t_node_creator *cr)
+int	cmd_node(t_lexer *lex, t_list *token, t_node_creator *cr)
 {
-	if (lex->p_token == e_t_supp || lex->p_token == e_t_inf || lex->p_token == e_t_d_supp)
+	if (lex->p_token == e_t_supp || lex->p_token == e_t_inf ||
+		lex->p_token == e_t_d_supp)
 	{
 		cr->redir->content = token->content;
 		lex->p_token = e_t_word;
