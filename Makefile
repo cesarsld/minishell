@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2021/01/26 22:29:36 by cjaimes          ###   ########.fr        #
+#    Updated: 2021/01/27 01:04:03 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,10 @@ INCLUDE		=	includes
 SRC			=	main.c \
 				main_2.c \
 				parsing.c \
+				parsing_2.c \
 				utils.c \
+				utils_2.c \
+				utils_3.c \
 				command.c \
 				lexer/transitions_1.c \
 				lexer/transitions_2.c \
@@ -33,7 +36,13 @@ SRC			=	main.c \
 				lexer/actions_2.c \
 				lexer/actions_3.c \
 				tree/node.c \
+				tree/node_2.c \
+				tree/node_3.c \
 				tree/execution.c \
+				tree/exec.c \
+				tree/pipe.c \
+				tree/pipe_2.c \
+				tree/redir.c \
 				builtin/pwd.c \
 				builtin/cd.c \
 				builtin/env.c \
