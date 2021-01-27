@@ -6,52 +6,11 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 17:24:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 19:20:44 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 23:58:11 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	pop_word(char *word, int amount)
-{
-	while (*(word + amount))
-	{
-		*word = *(word + amount);
-		word++;
-	}
-	*word = 0;
-}
-
-int		count_args(t_node *args)
-{
-	if (args)
-		return (count_args(args->left) + 1);
-	else
-		return (0);
-}
-
-void	fill_args(t_lexer *lex, t_node *args, char **list, int level)
-{
-	if (args)
-		fill_args(lex, args->left, list, level + 1);
-	if (args && args->content)
-	{
-		if (treat_word(lex, args) == FAILURE)
-			exit(1);
-		list[level] = args->content;
-	}
-}
-
-char	**generate_arguments(t_lexer *lex, t_node *args)
-{
-	char **arg_list;
-
-	if (!(arg_list = malloc(sizeof(char*) * (count_args(args) + 1))))
-		return (0);
-	arg_list[count_args(args)] = 0;
-	fill_args(lex, args, arg_list, 0);
-	return (arg_list);
-}
 
 char	*ft_strjoin_equal(char const *s1, char const *s2)
 {
@@ -96,99 +55,6 @@ char	**get_env_list(t_lexer *lex)
 	return (new_list);
 }
 
-int		check_if_last_redir(t_node *node, enum e_token_type type,
-	enum e_token_type type2)
-{
-	t_node *cur;
-
-	cur = node;
-	while (cur)
-	{
-		if (cur->type == type || cur->type == type2)
-			return (0);
-		cur = cur->left;
-	}
-	return (1);
-}
-
-void	handle_d_supp_redir(t_lexer *lex, t_node *node)
-{
-	int fd;
-
-	if ((fd = open(node->content, O_CREAT | O_WRONLY | O_APPEND, 0644)) == -1)
-	{
-		perror("open()");
-		exit(FAILURE);
-	}
-	if (node->left)
-	{
-		if (check_if_last_redir(node->left, e_t_d_supp, e_t_supp))
-		{
-			dup2(fd, STDOUT_FILENO);
-		}
-		handle_redir(lex, node->left);
-		close(fd);
-	}
-	else
-		dup2(fd, STDOUT_FILENO);
-}
-
-void	handle_supp_redir(t_lexer *lex, t_node *node)
-{
-	int fd;
-
-	if ((fd = open(node->content, O_CREAT | O_WRONLY | O_TRUNC, 0644)) == -1)
-	{
-		perror("open()");
-		exit(FAILURE);
-	}
-	if (node->left)
-	{
-		if (check_if_last_redir(node->left, e_t_d_supp, e_t_supp))
-		{
-			dup2(fd, STDOUT_FILENO);
-		}
-		handle_redir(lex, node->left);
-		close(fd);
-	}
-	else
-		dup2(fd, STDOUT_FILENO);
-}
-
-void	handle_inf_redir(t_lexer *lex, t_node *node)
-{
-	int fd;
-
-	if ((fd = open(node->content, O_RDONLY)) == -1)
-	{
-		ft_printf("minishell: %s: %s\n", strerror(errno), node->content);
-		exit(FAILURE);
-	}
-	if (node->left)
-	{
-		if (check_if_last_redir(node->left, e_t_inf, e_t_inf))
-		{
-			dup2(fd, STDIN_FILENO);
-		}
-		handle_redir(lex, node->left);
-		close(fd);
-	}
-	else
-		dup2(fd, STDIN_FILENO);
-}
-
-void	handle_redir(t_lexer *lex, t_node *node)
-{
-	if (treat_word(lex, node) == FAILURE)
-		exit(1);
-	if (node->type == e_t_supp)
-		handle_supp_redir(lex, node);
-	else if (node->type == e_t_inf)
-		handle_inf_redir(lex, node);
-	else if (node->type == e_t_d_supp)
-		handle_d_supp_redir(lex, node);
-}
-
 int		is_dir(char *name)
 {
 	if(opendir(name))
@@ -197,35 +63,6 @@ int		is_dir(char *name)
 		exit(1);
 	}
 	return (0);
-}
-
-void	execute_command(t_node *cmd_node, t_lexer *lex, char *ex_name)
-{
-	char	**args;
-
-	if(cmd_node->right)
-	{
-		handle_redir(lex, cmd_node->right);
-		!cmd_node->content ? exit(EXIT_SUCCESS) : 0;
-	}
-	if (!cmd_node->content)
-		return ;
-	if (treat_word(lex, cmd_node) == FAILURE ||
-		!(args = generate_arguments(lex, cmd_node)))
-		exit(FAILURE);
-	if (ft_strchr(cmd_node->content, '/'))
-	{
-		if (!(ex_name = ft_strdup(cmd_node->content)))
-			exit(FAILURE);
-		is_dir(ex_name);
-	}
-	else if (!(ex_name = get_command_path(
-			get_var(lex->env_list, "PATH")->value, cmd_node->content)))
-		exit(FAILURE);
-	!get_env_list(lex) ? exit(FAILURE) : 0;
-	execve(ex_name, args, lex->envac);
-	ft_printf_err("minishell: %s: %s\n", cmd_node->content, strerror(errno));
-	exit(errno);
 }
 
 int		is_builtin(t_lexer *lex, t_node *node)
@@ -249,79 +86,6 @@ int		is_builtin(t_lexer *lex, t_node *node)
 	else
 		return (FAILURE);
 	return (SUCCESS);
-}
-
-void	execute_pipe(t_node *tree, t_lexer *lex, int out_fd)
-{
-    int status;
-	int pfd[2];
-    int pid_left, pid_right;
-
-    if (pipe(pfd) == -1) // create pipe
-    {
-        perror("pipe");
-        exit(1);
-    }
-	if ((pid_right = fork()) == -1) //create right fork child
-    	{
-        	perror("fork");
-        	exit(1);
-    	}
-    if (pid_right == 0)		// executes if in right child
-	{
-		if (out_fd != STDOUT_FILENO)
-			dup2(out_fd, STDOUT_FILENO); //bind output to out_fd which would be input of superior level or 1 if level 0
-        dup2(pfd[0], STDIN_FILENO); // bind input to end of pipe
-    	close(pfd[1]);				// ignore pipe pipe entry
-		if(is_builtin(lex, tree->right) == SUCCESS)
-			exit(1) ;
-    	return (execute_command(tree->right, lex, 0)); //right child end
-   	}
-	if (out_fd != STDOUT_FILENO)
-		close(out_fd);
-	if (tree->left->type == e_t_cmd_name) // if left side is cmd, we are in deepest level
-	{
-    	if ((pid_left = fork()) < 0) //fork left child
-    	{
-    	    perror("fork");
-    	    exit(1);
-    	}
-   		if (pid_left == 0) // executes if in left child
-    	{
-    	    dup2(pfd[1], STDOUT_FILENO);	// bind output to pipe entry
-			close(pfd[0]);					// close end of pipe as left child sends output to right child
-			if(is_builtin(lex, tree->left) == SUCCESS)
-				exit(1) ;
-    	    return (execute_command(tree->left, lex, 0)); // left child end
-    	}
-		// we are in parent process, child will never reach this line,  ENF OF FLOW 
-		close(pfd[0]);
-		close(pfd[1]);
-		waitpid(pid_left, &status, 0);
-		waitpid(pid_right, &status, 0);
-	}
-	else // left is a pipe
-	{
-		close(pfd[0]); // close end of pipe data lost
-		execute_pipe(tree->left, lex, pfd[1]); // recursion
-		waitpid(pid_right, &status, 0);
-	}
-}
-
-void	handle_cmd_exec(t_lexer *lex, t_node *node)
-{
-	pid_t	new_id;
-	int		a;
-
-	if((new_id = fork()) == 0)
-		execute_command(node, lex, 0);
-	else
-	{
-		waitpid(new_id, &a, 0);
-		// ft_printf("wexit is %d from %d, wife is %d\n", WEXITSTATUS(a), a, WIFEXITED(a));
-		if (WIFEXITED(a))
-			*lst_rtn()  = WEXITSTATUS(a);
-	}
 }
 
 void	execute_tree(t_lexer *lex, t_node *node)

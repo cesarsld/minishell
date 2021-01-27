@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 22:37:59 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/26 23:05:30 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,41 +46,6 @@ int fetch_input_words(t_lexer *lex)
 		return (1);
 	}
 	return (0);
-}
-
-const char* get_token_type(t_oken_type type)
-{
-	switch (type)
-	{
-	case e_t_cmd_name:
-		return ("CMD_NAME");
-	case e_t_cmd_word:
-		return ("CMD_WORD");
-	case e_t_semi_colon:
-		return ("SEMI_COLON");
-	case e_t_pipe:
-		return ("PIPE");
-	case e_t_supp:
-		return ("SUPP");
-	case e_t_inf:
-		return ("INF");
-	default:
-		return ("");
-	}
-}
-
-void print_tree(t_node *node, int level, int lr)
-{
-	if(lr == 2)
-		printf("Level %d | %-10s | token type is %s\n", level, "root",get_token_type(node->type));
-	else
-		printf("Level %d | %-5s side | token type is %s%s%s\n",
-				level, lr? "Right" : "Left", get_token_type(node->type),
-				node->content? "->":"", node->content ? (char*)node->content:"");
-	if (node->left)
-		print_tree(node->left, level + 1, 0);
-	if (node->right)
-		print_tree(node->right, level + 1, 1);
 }
 
 void reset_loop(char **user_input)

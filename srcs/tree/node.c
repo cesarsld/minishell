@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 18:03:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 19:21:25 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/27 01:03:21 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,270 +38,60 @@ int	is_redirection(const char *redir, char *token)
 	return (0);
 }
 
-// TODO Allow redirections without command names
-int	generate_tree(t_lexer *lex)
+void init_cr(t_node_creator *cr)
 {
-	t_list *token;
-	t_node *stack;
-	t_node *temp;
-	t_node *stack_head;
-	t_node *redir;
-	t_node *redir_head;
-	t_node *cur_cmd;
+	cr->cur_cmd = 0;
+	cr->stack = 0;
+	cr->stack_head = 0;
+	cr->redir = 0;
+	cr->redir_head = 0;
+}
 
-	cur_cmd = 0;
-	token = lex->tokens;
-	stack = 0;
-	stack_head = 0;
-	redir = 0;
-	redir_head = 0;
-	while (token)
+int	handle_end(t_lexer *lex, t_node_creator *cr)
+{
+	if (!lex->tree && cr->stack_head)
 	{
-		if (is_redirection(">", token->content))
-		{
-			if (lex->p_token == e_t_d_supp || lex->p_token == e_t_supp ||
-				lex->p_token == e_t_inf)
-			{
-				ft_printf_err("minishell: syntax error near unexpected token `>'\n");
-				return (1);
-			}
-			if (lex->p_token == e_t_semi_colon || lex->p_token == e_t_pipe)
-			{
-				ft_printf_err("minishell: syntax error near unexpected token `newline'\n");
-				return (1);
-			}
-			if (!(temp = create_new_node(e_t_supp)))
-				return (1);
-			temp->fd = get_number(token->content, ft_strlen(token->content) - 1);
-			if (!redir_head)
-			{
-				redir_head = temp;
-				redir = temp;
-			}
-			else 
-			{
-				redir->left = temp;
-				redir = temp;
-			}
-			if (cur_cmd)
-				cur_cmd->right = redir_head;
-			else
-			{
-				if (!(stack = create_new_node(e_t_cmd_name)))
-					return (1);
-				stack->right = redir_head;
-				cur_cmd = stack;
-				if (stack_head && stack_head->type == e_t_pipe)
-					stack_head->right = stack;
-				else
-					stack_head = stack;
-			}
-			lex->p_token = e_t_supp;
-		}
-		else if (is_redirection("<", token->content))
-		{
-			if (lex->p_token == e_t_d_supp || lex->p_token == e_t_supp ||
-				lex->p_token == e_t_inf)
-			{
-				ft_printf_err("minishell: syntax error near unexpected token `<'\n");
-				return (1);
-			}
-			if (lex->p_token == e_t_semi_colon || lex->p_token == e_t_pipe)
-			{
-				ft_printf_err("minishell: syntax error near unexpected token `newline'\n");
-				return (1);
-			}
-			if (!(temp = create_new_node(e_t_inf)))
-				return (1);
-			temp->fd = get_number(token->content, ft_strlen(token->content) - 1);
-			if (temp->fd == 1)
-				temp->fd = 0;
-			if (!redir_head)
-			{
-				redir_head = temp;
-				redir = temp;
-			}
-			else 
-			{
-				redir->left = temp;
-				redir = temp;
-			}
-			if (cur_cmd)
-				cur_cmd->right = redir_head;
-			else
-			{
-				if (!(stack = create_new_node(e_t_cmd_name)))
-					return (1);
-				stack->right = redir_head;
-				cur_cmd = stack;
-				if (stack_head && stack_head->type == e_t_pipe)
-					stack_head->right = stack;
-				else
-					stack_head = stack;
-			}
-			lex->p_token = e_t_inf;
-		}
-		else if (is_redirection(">>", token->content))
-		{
-			if (lex->p_token == e_t_d_supp || lex->p_token == e_t_supp ||
-				lex->p_token == e_t_inf)
-			{
-				ft_printf_err("minishell: syntax error near unexpected token `>>'\n");
-				return (1);
-			}
-			if (lex->p_token == e_t_semi_colon || lex->p_token == e_t_pipe)
-			{
-				ft_printf_err("minishell: syntax error near unexpected token `newline'\n");
-				return (1);
-			}
-			if (!(temp = create_new_node(e_t_d_supp)))
-				return (1);
-			temp->fd = get_number(token->content, ft_strlen(token->content) - 1);
-			if (!redir_head)
-			{
-				redir_head = temp;
-				redir = temp;
-			}
-			else 
-			{
-				redir->left = temp;
-				redir = temp;
-			}
-			if (cur_cmd)
-				cur_cmd->right = redir_head;
-			else
-			{
-				if (!(stack = create_new_node(e_t_cmd_name)))
-					return (1);
-				stack->right = redir_head;
-				cur_cmd = stack;
-				if (stack_head && stack_head->type == e_t_pipe)
-					stack_head->right = stack;
-				else
-					stack_head = stack;
-			}
-			lex->p_token = e_t_d_supp;
-		}
-		else if (ft_strcmp("|", token->content) == 0)
-		{
-			// if tree and stack is null, throw parse error
-			if (!stack_head && !cur_cmd && !redir_head)
-			{
-				ft_printf_err("minishell: syntax error near unexpected token `|'\n");
-				return (1);
-			}
-			if (lex->p_token == e_t_pipe)
-			{
-				ft_printf_err("minishell: syntax error near unexpected token `|'\n");
-				//free tree fragments
-				return (1);
-			}
-			if (!(temp = create_new_node(e_t_pipe)))
-				return (1);
-			temp->left = stack_head;
-			stack_head = temp;
-			stack = 0;
-			cur_cmd = 0;
-			redir_head = 0;
-			redir = 0;
-			lex->p_token = e_t_pipe;
-		}
-		else if (ft_strcmp(";", token->content) == 0)
-		{
-			// if tree and stack is null, throw parse error
-			if (!stack_head && !lex->tree && !redir_head)
-			{
-				// throw error
-				ft_putstr("minishell: syntax error near unexpected token `;'\n");
-				// free
-				return (1);
-			}
-			if (lex->p_token == e_t_semi_colon || lex->p_token == e_t_supp ||
-				lex->p_token == e_t_d_supp || lex->p_token == e_t_inf ||
-				lex->p_token == e_t_pipe)
-			{
-				ft_printf_err("minishell: syntax error near unexpected token `;'\n");
-				//free tree fragments
-				return (1);
-			}
-			if (!(temp = create_new_node(e_t_semi_colon)))
-					return (1);
-			if (lex->tree && lex->tree->type == e_t_semi_colon)
-			{
-				temp->left = lex->tree;
-				lex->tree->right = stack_head;
-			}
-			else
-				temp->left = stack_head;
-			lex->tree = temp;
-			stack_head = 0;
-			stack = 0;
-			cur_cmd = 0;
-			redir_head = 0;
-			redir = 0;
-			lex->p_token = e_t_semi_colon;
-		}
-		else
-		{
-			if (lex->p_token == e_t_supp || lex->p_token == e_t_inf || lex->p_token == e_t_d_supp)
-			{
-				redir->content = token->content;
-				lex->p_token = e_t_word;
-			}
-			else if (!stack || !stack->content)
-			{
-				if (!stack && !(stack = create_new_node(e_t_cmd_name)))
-					return (1);
-				if (stack_head && stack_head->type == e_t_pipe)
-					stack_head->right = stack;
-				else
-					stack_head = stack;
-				stack->content = token->content;
-				cur_cmd = stack;
-				if (redir_head)
-					cur_cmd->right = redir_head;
-				lex->p_token = e_t_cmd_name;
-			}
-			else
-			{
-				if (stack->type == e_t_cmd_name)
-				{
-					if (!(temp = create_new_node(e_t_cmd_word)))
-					return (1);
-					temp->content = token->content;
-					stack->left = temp;
-					stack = stack->left;
-				}
-				else if (stack->type == e_t_cmd_word)
-				{
-					if (!(temp = create_new_node(e_t_cmd_word)))
-					return (1);
-					temp->content = token->content;
-					stack->left = temp;
-					stack = stack->left;
-				}
-				lex->p_token = e_t_cmd_word;
-			}
-		}
-		token = token->next;
+		lex->tree = cr->stack_head;
+		cr->stack_head = 0;
 	}
-	if (!lex->tree && stack_head)
-	{
-		lex->tree = stack_head;
-		stack_head = 0;
-	}
-	if (stack_head)
+	if (cr->stack_head)
 		if (lex->tree->type == e_t_semi_colon)
 		{
-			lex->tree->right = stack_head;
-			stack = 0;
+			lex->tree->right = cr->stack_head;
+			cr->stack = 0;
 		}
 	if (lex->p_token == e_t_pipe)
 	{
 		ft_printf_err("minishell: syntax error near unexpected token `|'\n");
 		return (1);
 	}
-	if (lex->tree->type == e_t_semi_colon && stack)
-		lex->tree->right = stack;
+	if (lex->tree->type == e_t_semi_colon && cr->stack)
+		lex->tree->right = cr->stack;
 	return (0);
+}
+
+int	generate_tree(t_lexer *lex)
+{
+	t_list 			*token;
+	t_node_creator	cr;
+
+	init_cr(&cr);
+	token = lex->tokens;
+	while (token)
+	{
+		if (is_redirection(">", token->content) && supp_node(lex, token, &cr))
+			return (1);
+		else if (is_redirection("<", token->content) && inf_node(lex, token, &cr))
+			return (1);
+		else if (is_redirection(">>", token->content) && d_supp_node(lex, token, &cr))
+			return (1);
+		else if (!ft_strcmp("|", token->content) && pipe_node(lex, &cr))
+			return (1);
+		else if (!ft_strcmp(";", token->content) && semi_colon_node(lex, &cr))
+			return (1);
+		else if (cmd_node(lex, token, &cr))
+			return (1);
+		token = token->next;
+	}
+	return (handle_end(lex, &cr));
 }
