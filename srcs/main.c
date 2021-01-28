@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/28 20:20:31 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/28 23:28:45 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,24 +70,21 @@ int		reset_loop(char **user_input, int *ctrl_d)
 
 int		main(int ac, char **av, char **envac)
 {
-	char	*user_input;
 	t_lexer	lex;
 	t_list	*env_list;
 
-	if (ac || av)
-	{
-	}
+	(void)av;
 	if (!(env_list = get_env_vars(envac)))
 		return (0);
-	user_input = 0;
+	g_user_input = 0;
 	ac = 0;
 	init_lexer(&lex, 0, env_list);
 	while (1)
 	{
-		if (reset_loop(&user_input, &ac))
+		if (reset_loop(&g_user_input, &ac))
 			continue;
 		*is_in_cmd() = 1;
-		reset_lexer(&lex, user_input);
+		reset_lexer(&lex, g_user_input);
 		if (fetch_input_words(&lex))
 			continue;
 		if (generate_tree(&lex))

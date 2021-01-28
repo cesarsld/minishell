@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/28 20:20:26 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/28 23:27:07 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,9 @@ typedef struct			s_env_var
 	char				*value;
 	int					is_env;
 }						t_var;
+
+char					g_buf[BUFFER_SIZE + 1];
+char					*g_user_input;
 
 int						is_white_space(char c);
 void					skip_whitespace(char **line);

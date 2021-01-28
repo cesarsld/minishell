@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/29 20:31:11 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 01:55:38 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/28 23:36:45 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 int	is_number_n(char *input, int size)
 {
 	if (*input == '+' || *input == '-')
+	{
 		input++;
+		size--;
+	}
 	while (size-- > 0)
 		if (!ft_isdigit(*input++))
 			return (0);

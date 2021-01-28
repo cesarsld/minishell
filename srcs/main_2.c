@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 22:25:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 01:47:10 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/28 23:27:45 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	handle_signals(int signal)
 {
 	if (signal == SIGINT)
 	{
+		ft_bzero(g_buf, BUFFER_SIZE + 1);
+		ft_bzero(g_user_input, ft_strlen(g_user_input));
 		*lst_rtn() = 130;
 		if (*is_in_cmd())
 			ft_putstr("\n");
