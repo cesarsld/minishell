@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2021/01/27 03:37:31 by cjaimes          ###   ########.fr        #
+#    Updated: 2021/01/28 20:20:45 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ SRC_DIR		=	srcs/
 INCLUDE		=	includes
 
 SRC			=	main.c \
+				gnl_shell.c \
 				main_2.c \
 				parsing.c \
 				parsing_2.c \

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 12:59:52 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/01/28 20:20:26 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ int						is_name_char(char c);
 int						contains_char(const char *input, char chr);
 void					shift_from_index(char *line, int index);
 void					pop_substr(char *start, int amount);
+int						get_next_line_shell(int fd, char **line);
 
 t_var					*new_env(char *name, char *value, int is_env);
 t_list					*get_env_vars(char **env);
