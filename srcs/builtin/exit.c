@@ -6,16 +6,20 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/07 14:18:20 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/28 23:39:31 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/01 10:59:25 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	exit_with_err(char const *msg, int val)
+int		is_num_exit(char const *arg, t_node *node)
 {
-	ft_printf_err(msg);
-	exit(val);
+	if (node->left->left)
+	{
+		ft_printf_err("minishell: exit: too many arguments\n", 255);
+		return (1);
+	}
+	exit(ft_atoi(arg) % 256);
 }
 
 int	is_number_n_e(char *input, int size)
@@ -49,9 +53,8 @@ void	exit_exec(t_lexer *lex, t_node *node)
 		ft_printf_err("exit\n");
 		if (is_number_n_e(arg, ft_strlen(arg)))
 		{
-			if (node->left->left)
-				exit_with_err("minishell: exit: too many arguments\n", 255);
-			exit(ft_atoi(arg) % 256);
+			if (is_num_exit(arg, node))
+				return;
 		}
 		else
 		{
