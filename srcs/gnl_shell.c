@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 20:19:43 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/28 23:30:18 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/01 10:13:29 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int		scan_buf_shell(char **line, char *buf, ssize_t size)
 		return (-1);
 	if (buf[i] == '\n')
 		return (shift_buf(buf, i + 1, size, 0));
-	if(ft_strlen(*line) == 0 && buf[i] == 0)
+	if (ft_strlen(*line) == 0 && buf[i] == 0)
 		return (0);
 	return (3);
 }
