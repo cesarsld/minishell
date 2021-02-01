@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/07 14:18:20 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/02/01 12:17:50 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/01 12:40:46 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int		is_num_exit(char const *arg, t_node *node)
 	exit(ft_atoi(arg) % 256);
 }
 
-int	is_number_n_e(char *input, int size)
+int		is_number_n_e(char *input, int size)
 {
 	char *start;
 	int neg;
@@ -60,7 +60,7 @@ void	exit_exec(t_lexer *lex, t_node *node)
 		if (is_number_n_e(arg, ft_strlen(arg)))
 		{
 			if (is_num_exit(arg, node))
-				return;
+				return ;
 		}
 		else
 		{
