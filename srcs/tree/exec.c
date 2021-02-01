@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 23:52:11 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 02:21:58 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/01 12:06:17 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	execute_command(t_node *cmd_node, t_lexer *lex, char *ex_name)
 	}
 	else if (!(ex_name = get_command_path(
 			get_var(lex->env_list, "PATH")->value, cmd_node->content)))
-		exit(FAILURE);
+		exit(127);
 	!get_env_list(lex) ? exit(FAILURE) : 0;
 	execve(ex_name, args, lex->envac);
 	ft_printf_err("minishell: %s: %s\n", cmd_node->content, strerror(errno));
