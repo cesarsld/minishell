@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 23:52:11 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/02/01 12:06:17 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/01 22:30:28 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ char	**generate_arguments(t_lexer *lex, t_node *args)
 	if (!(arg_list = malloc(sizeof(char*) * (count_args(args) + 1))))
 		return (0);
 	arg_list[count_args(args)] = 0;
-	fill_args(lex, args, arg_list, 0);
+	arg_list[0] = args->content;
+	fill_args(lex, args->left, arg_list, 1);
 	return (arg_list);
 }
 
@@ -54,8 +55,7 @@ void	execute_command(t_node *cmd_node, t_lexer *lex, char *ex_name)
 	}
 	if (!cmd_node->content)
 		return ;
-	if (treat_word(lex, cmd_node) == FAILURE ||
-		!(args = generate_arguments(lex, cmd_node)))
+	if (!(args = generate_arguments(lex, cmd_node)))
 		exit(FAILURE);
 	if (ft_strchr(cmd_node->content, '/'))
 	{
@@ -63,7 +63,8 @@ void	execute_command(t_node *cmd_node, t_lexer *lex, char *ex_name)
 			exit(FAILURE);
 	}
 	else if (!(ex_name = get_command_path(
-			get_var(lex->env_list, "PATH")->value, cmd_node->content)))
+			get_var(lex->env_list, "PATH") ?
+			get_var(lex->env_list, "PATH")->value : 0, cmd_node->content)))
 		exit(127);
 	!get_env_list(lex) ? exit(FAILURE) : 0;
 	execve(ex_name, args, lex->envac);

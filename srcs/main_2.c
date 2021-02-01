@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 22:25:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/28 23:27:45 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/01 21:43:54 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ void	chuck_tree(t_node *tree)
 	{
 		chuck_tree(tree->right);
 		chuck_tree(tree->left);
+		if (tree->content)
+			free(tree->content);
 		free(tree);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/29 21:45:38 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 01:41:54 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/01 22:34:49 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,9 @@ char	*get_command_path(char *path_line, char *command)
 	struct stat	buf;
 	char		*full;
 
+	!path_line ? ft_printf_err("minishell: path not found\n") : 0;
+	if (!path_line)
+		return (0);
 	if (!(paths = ft_split(path_line, ':')))
 		return (0);
 	copy = paths;
