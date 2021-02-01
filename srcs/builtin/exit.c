@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/07 14:18:20 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/02/01 12:40:46 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/01 13:07:17 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ int		is_num_exit(char const *arg, t_node *node)
 
 int		is_number_n_e(char *input, int size)
 {
-	char *start;
-	int neg;
+	char	*start;
+	int		neg;
 
 	neg = 0;
 	if (*input == '+' || *input == '-')
