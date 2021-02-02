@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 22:25:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/02/01 21:43:54 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/02 13:13:34 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,11 @@ void	handle_signals(int signal)
 	}
 	else if (signal == SIGQUIT)
 	{
+		ft_printf_err("\b\b  \b\b");
 		if (*is_in_cmd())
 		{
 			*lst_rtn() = 131;
-			ft_putstr("Quit: (core dumped)\n");
+			ft_putstr("\b\b  \b\bQuit: (core dumped)\n");
 		}
 	}
 }
