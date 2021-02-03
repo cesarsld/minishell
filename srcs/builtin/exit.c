@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/07 14:18:20 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/02/03 15:30:32 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/03 18:42:39 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,26 @@ int		is_number_n_e(char *input, int size)
 	return (1);
 }
 
+void	clean_env(void *env)
+{
+	t_var *var;
+
+	var = env;
+	if (var->name)
+		free(var->name);
+	if (var->value)
+		free(var->value);
+}
+
 void	exit_clean(t_lexer *lex, int ret)
 {
 	if (g_user_input)
 		free(g_user_input);
 	g_user_input = 0;
+	ft_lstiter(lex->env_list, &clean_env);
+	ft_lstiter(lex->exp_list, &clean_env);
+	ft_lstclear(&(lex->env_list), &free);
+	ft_lstclear(&(lex->exp_list), &free);
 	ft_lstclear(&(lex->tokens), &free);
 	chuck_tree(lex->tree);
 	exit(ret);
