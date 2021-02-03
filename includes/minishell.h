@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/02/01 22:18:50 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/03 18:12:15 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,8 @@ t_node					*create_new_node(t_oken_type type);
 int						handle_first(t_list *token, t_lexer *lex,
 							t_node_creator *cr);
 int						is_redir(const char *redir, char *token);
+void					exit_clean(t_lexer *lex, int ret);
+void					chuck_tree(t_node *tree);
 
 /*
 ** Transitions and actions

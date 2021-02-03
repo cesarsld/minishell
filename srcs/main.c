@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/28 23:28:45 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/03 18:10:58 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int		fetch_input_words(t_lexer *lex)
 	return (0);
 }
 
-int		reset_loop(char **user_input, int *ctrl_d)
+int		reset_loop(char **user_input, int *ctrl_d, t_lexer *lex)
 {
 	free(*user_input);
 	*user_input = 0;
@@ -63,7 +63,7 @@ int		reset_loop(char **user_input, int *ctrl_d)
 	if (!get_next_line_shell(STDIN_FILENO, user_input))
 	{
 		ft_printf("exit\n");
-		exit(0);
+		exit_clean(lex, 0);
 	}
 	return (0);
 }
@@ -81,7 +81,7 @@ int		main(int ac, char **av, char **envac)
 	init_lexer(&lex, 0, env_list);
 	while (1)
 	{
-		if (reset_loop(&g_user_input, &ac))
+		if (reset_loop(&g_user_input, &ac, &lex))
 			continue;
 		*is_in_cmd() = 1;
 		reset_lexer(&lex, g_user_input);
