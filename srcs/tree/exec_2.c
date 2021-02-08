@@ -6,12 +6,11 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/08 19:25:54 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/02/08 19:26:07 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/08 19:29:39 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 int		count_sub_words(char *word)
 {
@@ -34,7 +33,7 @@ int		expand_cmd(char **arg_list, char *word)
 
 	i = 0;
 	n = 0;
-	while(word[i])
+	while (word[i])
 	{
 		if (word[i] == ' ')
 		{
@@ -48,7 +47,6 @@ int		expand_cmd(char **arg_list, char *word)
 		}
 		i++;
 	}
-	
 	if (i)
 		if (!(arg_list[n++] = ft_strndup(word, i)))
 			return (-1);

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 23:52:11 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/02/08 19:26:15 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/08 19:29:05 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	**generate_arguments(t_lexer *lex, t_node *args)
 		arg_list[count_args(args) + count_sub_words(args->content) - 1] = 0;
 		fill_args(lex, args->left, arg_list, num);
 		return (arg_list);
-	}	
+	}
 }
 
 void	execute_command(t_node *cmd_node, t_lexer *lex, char *ex_name)
