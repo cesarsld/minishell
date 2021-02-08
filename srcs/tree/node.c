@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 18:03:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/02/07 17:09:19 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/08 17:47:32 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_node	*create_new_node(t_oken_type type)
 	node->left = 0;
 	node->right = 0;
 	node->type = type;
+	node->comp = 0;
 	node->fd = -1;
 	return (node);
 }

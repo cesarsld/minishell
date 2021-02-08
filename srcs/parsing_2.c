@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 22:55:06 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 01:53:24 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/08 17:50:55 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,9 @@ void	expand_backslash_state_case(t_lexer *lex, char **first, char **word)
 	}
 }
 
-void	expand_dquote_case(t_lexer *lex, char **first, char **word)
+void	expand_dquote_case(t_lexer *lex, t_node *nd, char **first, char **word)
 {
+	nd->comp = 1;
 	lex->state = lex->state == e_word ? e_d_quote : e_word;
 	if (lex->state == e_d_quote)
 	{

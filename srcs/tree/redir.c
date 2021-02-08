@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 23:50:20 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/26 23:50:42 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/08 17:01:11 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	handle_inf_redir(t_lexer *lex, t_node *node)
 	if ((fd = open(node->content, O_RDONLY)) == -1)
 	{
 		ft_printf("minishell: %s: %s\n", strerror(errno), node->content);
-		exit(FAILURE);
+		exit(errno);
 	}
 	if (node->left)
 	{

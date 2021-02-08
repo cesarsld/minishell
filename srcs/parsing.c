@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:29:41 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 02:24:11 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/08 17:52:43 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	sub_filter_word(char *word, int len)
 	shift_from_index(word, len - 1);
 }
 
-int		expand_word(t_lexer *lex, char *word, char **first)
+int		expand_word(t_lexer *lex, t_node *node, char *word, char **first)
 {
 	lex->w_start = 0;
 	lex->len = 0;
@@ -80,7 +80,7 @@ int		expand_word(t_lexer *lex, char *word, char **first)
 			expand_backslash_state_case(lex, first, &word);
 		else if (*word == '"' &&
 			(lex->state == e_word || lex->state == e_d_quote))
-			expand_dquote_case(lex, first, &word);
+			expand_dquote_case(lex, node, first, &word);
 		else if (*word == '\'' &&
 			(lex->state == e_word || lex->state == e_s_quote))
 			expand_squote_case(lex, first, &word);
@@ -97,7 +97,8 @@ int		expand_word(t_lexer *lex, char *word, char **first)
 
 int		treat_word(t_lexer *lex, t_node *node)
 {
-	if (expand_word(lex, node->content, (char **)&(node->content)) == FAILURE)
+	if (expand_word(lex, node, node->content,
+		(char **)&(node->content)) == FAILURE)
 		return (FAILURE);
 	return (SUCCESS);
 }

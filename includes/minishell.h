@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/02/08 13:42:33 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/08 19:26:37 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ typedef struct			s_node
 	struct s_node		*right;
 	void				*content;
 	int					fd;
+	int					comp;
 }						t_node;
 
 typedef struct			s_node_handler
@@ -152,7 +153,6 @@ int						get_number(char *input, int size);
 int						is_valid_assign_n(char *word, int len);
 
 char					*get_var_value(t_list *env_list, char *key);
-int						expand_word(t_lexer *lex, char *word, char **first);
 void					filter_word(char *word);
 int						treat_word(t_lexer *lex, t_node *node);
 char					*ft_strpathjoin(char const *s1, char const *s2);
@@ -170,8 +170,8 @@ int						*is_in_cmd(void);
 
 void					expand_backslash_state_case(t_lexer *lex, char **first,
 							char **word);
-void					expand_dquote_case(t_lexer *lex, char **first,
-														char **word);
+void					expand_dquote_case(t_lexer *lex, t_node *nd,
+							char **first, char **word);
 void					expand_squote_case(t_lexer *lex, char **first,
 							char **word);
 void					expand_backslash_case(t_lexer *lex);
@@ -221,6 +221,9 @@ int						handle_first(t_list *token, t_lexer *lex,
 int						is_redir(const char *redir, char *token);
 void					exit_clean(t_lexer *lex, int ret);
 void					chuck_tree(t_node *tree);
+
+int						count_sub_words(char *word);
+int						expand_cmd(char **arg_list, char *word);
 
 /*
 ** Transitions and actions

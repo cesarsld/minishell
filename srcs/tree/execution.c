@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 17:24:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 02:11:52 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/08 17:00:29 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int		is_dir(char *name)
 	if (opendir(name))
 	{
 		ft_printf_err("minishell: %s: %s\n", name, "is a directory");
-		exit(1);
+		exit(126);
 	}
 	return (0);
 }

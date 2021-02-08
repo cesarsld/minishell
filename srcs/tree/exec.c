@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 23:52:11 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/02/01 22:30:28 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/08 19:26:15 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,29 @@ void	fill_args(t_lexer *lex, t_node *args, char **list, int level)
 
 char	**generate_arguments(t_lexer *lex, t_node *args)
 {
-	char **arg_list;
+	char	**arg_list;
+	int		num;
 
-	if (!(arg_list = malloc(sizeof(char*) * (count_args(args) + 1))))
-		return (0);
-	arg_list[count_args(args)] = 0;
-	arg_list[0] = args->content;
-	fill_args(lex, args->left, arg_list, 1);
-	return (arg_list);
+	if (args->comp)
+	{
+		if (!(arg_list = malloc(sizeof(char*) * (count_args(args) + 1))))
+			return (0);
+		arg_list[count_args(args)] = 0;
+		arg_list[0] = args->content;
+		fill_args(lex, args->left, arg_list, 1);
+		return (arg_list);
+	}
+	else
+	{
+		if (!(arg_list = malloc(sizeof(char*) * (count_args(args) +
+			count_sub_words(args->content)))))
+			return (0);
+		if ((num = expand_cmd(arg_list, args->content)) == -1)
+			return (0);
+		arg_list[count_args(args) + count_sub_words(args->content) - 1] = 0;
+		fill_args(lex, args->left, arg_list, num);
+		return (arg_list);
+	}	
 }
 
 void	execute_command(t_node *cmd_node, t_lexer *lex, char *ex_name)
@@ -59,12 +74,12 @@ void	execute_command(t_node *cmd_node, t_lexer *lex, char *ex_name)
 		exit(FAILURE);
 	if (ft_strchr(cmd_node->content, '/'))
 	{
-		if (!(ex_name = ft_strdup(cmd_node->content)) || is_dir(ex_name) == 1)
+		if (!(ex_name = ft_strdup(*args)) || is_dir(ex_name) == 1)
 			exit(FAILURE);
 	}
 	else if (!(ex_name = get_command_path(
 			get_var(lex->env_list, "PATH") ?
-			get_var(lex->env_list, "PATH")->value : 0, cmd_node->content)))
+			get_var(lex->env_list, "PATH")->value : 0, *args)))
 		exit(127);
 	!get_env_list(lex) ? exit(FAILURE) : 0;
 	execve(ex_name, args, lex->envac);
