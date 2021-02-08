@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:18:17 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/02/08 13:41:09 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/08 14:08:12 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	pwd_exec(t_lexer *lex, t_node *node)
 {
 	pid_t	pid;
 	int		a;
-	//char	*pwd;
 
 	if ((pid = fork()) == 0)
 	{

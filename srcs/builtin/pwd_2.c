@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/08 13:32:14 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/02/08 13:43:21 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/08 14:08:54 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	print_cwd_err(void)
 	ft_printf_err(": No such file or directory\n");
 }
 
-int		create_pwd_var_if_null(t_lexer *lex, char const *var,char *pwd)
+int		create_pwd_var_if_null(t_lexer *lex, char const *var, char *pwd)
 {
 	char *temp;
 
