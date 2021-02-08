@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 00:59:50 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 02:15:20 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/07 13:35:56 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,14 @@ int	handle_supp_err(t_lexer *lex)
 		lex->p_token == e_t_inf)
 	{
 		ft_printf_err("minishell: syntax error near unexpected token `>'\n");
+		*lst_rtn() = 2;
 		return (1);
 	}
 	if (lex->p_token == e_t_semi_colon || lex->p_token == e_t_pipe)
 	{
 		ft_printf_err(
 			"minishell: syntax error near unexpected token `newline'\n");
+		*lst_rtn() = 2;
 		return (1);
 	}
 	return (0);
@@ -64,12 +66,14 @@ int	handle_inf_err(t_lexer *lex)
 		lex->p_token == e_t_inf)
 	{
 		ft_printf_err("minishell: syntax error near unexpected token `<'\n");
+		*lst_rtn() = 2;
 		return (1);
 	}
 	if (lex->p_token == e_t_semi_colon || lex->p_token == e_t_pipe)
 	{
 		ft_printf_err(
 			"minishell: syntax error near unexpected token `newline'\n");
+		*lst_rtn() = 2;
 		return (1);
 	}
 	return (0);
@@ -109,11 +113,13 @@ int	pipe_node(t_lexer *lex, t_node_creator *cr)
 	if (!cr->stack_head && !cr->cur_cmd && !cr->redir_head)
 	{
 		ft_printf_err("minishell: syntax error near unexpected token `|'\n");
+		*lst_rtn() = 2;
 		return (1);
 	}
 	if (lex->p_token == e_t_pipe)
 	{
 		ft_printf_err("minishell: syntax error near unexpected token `|'\n");
+		*lst_rtn() = 2;
 		return (1);
 	}
 	if (!(cr->temp = create_new_node(e_t_pipe)))

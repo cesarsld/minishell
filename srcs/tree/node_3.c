@@ -6,30 +6,32 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 00:59:53 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/02/01 21:40:51 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/07 13:38:34 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	handle_d_supp_err(t_lexer *lex)
+int		handle_d_supp_err(t_lexer *lex)
 {
 	if (lex->p_token == e_t_d_supp || lex->p_token == e_t_supp ||
 		lex->p_token == e_t_inf)
 	{
 		ft_printf_err("minishell: syntax error near unexpected token `>>'\n");
+		*lst_rtn() = 2;
 		return (1);
 	}
 	if (lex->p_token == e_t_semi_colon || lex->p_token == e_t_pipe)
 	{
 		ft_printf_err(
 			"minishell: syntax error near unexpected token `newline'\n");
+		*lst_rtn() = 2;
 		return (1);
 	}
 	return (0);
 }
 
-int	d_supp_node(t_lexer *lex, t_list *token, t_node_creator *cr)
+int		d_supp_node(t_lexer *lex, t_list *token, t_node_creator *cr)
 {
 	if (handle_d_supp_err(lex) || !(cr->temp = create_new_node(e_t_d_supp)))
 		return (1);
@@ -56,7 +58,16 @@ int	d_supp_node(t_lexer *lex, t_list *token, t_node_creator *cr)
 	return (0);
 }
 
-int	semi_colon_node(t_lexer *lex, t_node_creator *cr)
+void	reset_creator(t_node_creator *cr)
+{
+	cr->stack_head = 0;
+	cr->stack = 0;
+	cr->cur_cmd = 0;
+	cr->redir_head = 0;
+	cr->redir = 0;
+}
+
+int		semi_colon_node(t_lexer *lex, t_node_creator *cr)
 {
 	if ((!cr->stack_head && !lex->tree && !cr->redir_head) ||
 		lex->p_token == e_t_semi_colon || lex->p_token == e_t_supp ||
@@ -64,6 +75,7 @@ int	semi_colon_node(t_lexer *lex, t_node_creator *cr)
 		lex->p_token == e_t_pipe)
 	{
 		ft_printf_err("minishell: syntax error near unexpected token `;'\n");
+		*lst_rtn() = 2;
 		return (1);
 	}
 	if (!(cr->temp = create_new_node(e_t_semi_colon)))
@@ -76,11 +88,7 @@ int	semi_colon_node(t_lexer *lex, t_node_creator *cr)
 	else
 		cr->temp->left = cr->stack_head;
 	lex->tree = cr->temp;
-	cr->stack_head = 0;
-	cr->stack = 0;
-	cr->cur_cmd = 0;
-	cr->redir_head = 0;
-	cr->redir = 0;
+	reset_creator(cr);
 	lex->p_token = e_t_semi_colon;
 	return (0);
 }

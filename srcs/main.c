@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:12:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/02/03 18:10:58 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/08 14:03:13 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int		fetch_input_words(t_lexer *lex)
 	{
 		ft_printf_err("minishell: syntax error: missing %s quote end\n",
 			lex->state == e_s_quote ? "single" : "double");
+		*lst_rtn() = 2;
 		return (1);
 	}
 	return (0);
@@ -79,6 +80,9 @@ int		main(int ac, char **av, char **envac)
 	g_user_input = 0;
 	ac = 0;
 	init_lexer(&lex, 0, env_list);
+	lex.pwd = 0;
+	if (!(lex.pwd = getcwd(lex.pwd, 0)))
+		exit_clean(&lex, 1);
 	while (1)
 	{
 		if (reset_loop(&g_user_input, &ac, &lex))

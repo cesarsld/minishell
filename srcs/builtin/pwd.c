@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:18:17 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 13:00:02 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/08 13:41:09 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,45 +41,11 @@ char	*ft_strpathjoin(char const *s1, char const *s2)
 	return (new);
 }
 
-void	print_cwd_err(void)
-{
-	ft_printf_err("minishell: cd: error retrieving current directory:");
-	ft_printf_err(" getcwd: cannot access parent directories");
-	ft_printf_err(": No such file or directory\n");
-}
-
-int		update_pwd(t_list *env_list, char *path, pid_t pid)
-{
-	t_var	*pwd_var;
-	t_var	*old_pwd_var;
-	char	*temp;
-
-	temp = get_pwd();
-	if (!(pwd_var = get_var(env_list, "PWD")))
-		return (0);
-	if (!temp)
-	{
-		temp = ft_strpathjoin(pwd_var->value, path);
-		if (pid == 0)
-			print_cwd_err();
-	}
-	if ((old_pwd_var = get_var(env_list, "OLDPWD")))
-	{
-		free(old_pwd_var->value);
-		old_pwd_var->value = pwd_var->value;
-	}
-	else
-		free(pwd_var->value);
-	if (!(pwd_var->value = ft_strdup(temp)))
-		return (0);
-	free(temp);
-	return (1);
-}
-
 void	pwd_exec(t_lexer *lex, t_node *node)
 {
 	pid_t	pid;
 	int		a;
+	//char	*pwd;
 
 	if ((pid = fork()) == 0)
 	{
@@ -90,7 +56,7 @@ void	pwd_exec(t_lexer *lex, t_node *node)
 			ft_printf_err("bash: pwd: too many arguments or options\n");
 			exit(FAILURE);
 		}
-		ft_printf("%s\n", get_var(lex->env_list, "PWD")->value);
+		ft_printf("%s\n", lex->pwd);
 		exit(EXIT_SUCCESS);
 	}
 	else

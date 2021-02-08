@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 12:18:42 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 12:58:03 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/08 13:42:24 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,16 @@
 
 void	cd_to_home(char *path, pid_t pid, t_lexer *lex)
 {
-	path = get_var(lex->env_list, "HOME")->value;
+	t_var *var;
+
+	var = get_var(lex->env_list, "HOME");
+	if (var)
+		path = var->value;
+	else if (!pid)
+	{
+		ft_printf_err("minishell: cd: HOME not set\n");
+		exit(FAILURE);
+	}
 	if (chdir(path) == -1 && !pid)
 	{
 		ft_printf_err("minishell: cd: %s: %s\n", path, strerror(errno));
@@ -35,8 +44,7 @@ char	*cd_to_path(t_node *node, pid_t pid, t_lexer *lex)
 		return (0);
 	if (starts_with(path, "~"))
 	{
-		if (!(temp = ft_strjoin(get_var(lex->env_list, "HOME")->value,
-			path + 1)))
+		if (!(temp = ft_strjoin(lex->home, path + 1)))
 			return (0);
 		free(path);
 		path = temp;
@@ -67,7 +75,7 @@ void	cd_exec(t_lexer *lex, t_node *node)
 	}
 	else
 		cd_to_home(path, pid, lex);
-	update_pwd(lex->env_list, path, pid);
+	update_pwd(lex, path, pid);
 	free(path);
 	if (pid)
 	{

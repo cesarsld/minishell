@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 15:32:16 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/02/03 18:12:15 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/08 13:42:33 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,9 @@ typedef struct			s_lexer
 	char				**envac;
 	t_list				*env_list;
 	t_list				*exp_list;
+	char				*pwd;
+	char				*oldpwd;
+	char				*home;
 	int					w_start;
 	int					len;
 }						t_lexer;
@@ -137,7 +140,7 @@ t_var					*new_env(char *name, char *value, int is_env);
 t_list					*get_env_vars(char **env);
 
 char					*get_pwd();
-int						update_pwd(t_list *env_list, char *path, pid_t pid);
+int						update_pwd(t_lexer *lex, char *path, pid_t pid);
 
 void					print_env_vars(t_lexer *lex, int env);
 t_var					*get_var(t_list *env_list, char *key);
@@ -152,6 +155,7 @@ char					*get_var_value(t_list *env_list, char *key);
 int						expand_word(t_lexer *lex, char *word, char **first);
 void					filter_word(char *word);
 int						treat_word(t_lexer *lex, t_node *node);
+char					*ft_strpathjoin(char const *s1, char const *s2);
 
 void					free_split(char **split);
 void					init_lexer(t_lexer *lex, char *input,
@@ -196,6 +200,7 @@ void					handle_redir(t_lexer *lex, t_node *node);
 void					handle_cmd_exec(t_lexer *lex, t_node *node);
 void					execute_command(t_node *cmd_node, t_lexer *lex,
 							char *ex_name);
+int						add_var(t_lexer *lex, char *input);
 
 int						is_builtin(t_lexer *lex, t_node *node);
 

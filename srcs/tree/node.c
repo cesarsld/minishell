@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 18:03:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/01/27 03:43:12 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/07 17:09:19 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int		handle_end(t_lexer *lex, t_node_creator *cr)
 	{
 		ft_printf_err("minishell: syntax error near unexpected token `%s'\n",
 			lex->p_token == e_t_pipe ? "|" : "newline");
+		*lst_rtn() = 2;
 		return (1);
 	}
 	if (lex->tree->type == e_t_semi_colon && cr->stack)

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 22:25:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2021/02/02 13:13:34 by cjaimes          ###   ########.fr       */
+/*   Updated: 2021/02/07 17:37:10 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,15 @@ void	init_lexer(t_lexer *lex, char *input, t_list *env_list)
 	lex->exp_list = 0;
 	lex->w_start = 0;
 	lex->len = 0;
+	if (get_var(lex->env_list, "PWD"))
+		if (!(lex->pwd = ft_strdup(get_var(lex->env_list, "PWD")->value)))
+			exit_clean(lex, FAILURE);
+	if (get_var(lex->env_list, "OLDPWD"))
+		if (!(lex->oldpwd = ft_strdup(get_var(lex->env_list, "OLDPWD")->value)))
+			exit_clean(lex, FAILURE);
+	if (get_var(lex->env_list, "HOME"))
+		if (!(lex->home = ft_strdup(get_var(lex->env_list, "HOME")->value)))
+			exit_clean(lex, FAILURE);
 }
 
 void	chuck_tree(t_node *tree)
